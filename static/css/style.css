@@ -1,0 +1,59 @@
+a:link {color:blue; text-decoration:none}
+a:visited {text-decoration:none;}
+a:active {color:red; text-decoration:none}
+a:hover {color:red; text-decoration:none; position:relative; left:1px; top:1px}
+.login {
+    font-size: 18px;
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    /*border:1px solid #000*/
+}
+.menu {
+    float: left;
+    width: 150px;
+    height: 500px;
+    /*border: 1px solid #000;*/
+}
+
+.content {
+    position: absolute;
+    left: 200px;
+    top: 100px;
+    right: 40px;
+    height: 600px;
+    width: 900px
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+}
+/*ul{*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*list-style: none;*/
+/*}*/
+.user {
+    font-size: 18px;
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+table{
+    border-collapse:collapse;
+    *border-collapse: collapse;
+    border-spacing: 0;
+}
+table td{
+    border: 1px solid #666666;
+    background-color: #ffffff;
+}
+table th{
+    padding: 8px;
+    border: 1px solid #666666;
+    background-color: #dedede;
+}
+input.text{
+    border: 1px solid #CCC;
+
+}

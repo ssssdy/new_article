@@ -1,9 +1,9 @@
 <html>
 <?php
-require_once '/models/news_model.class.php';
-require_once '/models/tag_model.class.php';
-require_once '/helpers/globle_helper.php';
-require '/models/user_model.class.php';
+require_once '../models/news_model.class.php';
+require_once '../models/tag_model.class.php';
+require_once '../static/globle_helper.php';
+require '../models/user_model.class.php';
 session_start();
 if (!isset($_SESSION['username'])) {
     echo "<script>alert('请先登录！');window.location.href='login.php'</script>";
@@ -15,12 +15,12 @@ if (!isset($_SESSION['username'])) {
     <script type="text/javascript">
         function upChange(id) {
             if (confirm("确定要升级该游客为编辑吗？")) {
-                window.location = "action.php?action=changeRole1&id=" + id;
+                window.location = "../controllers/action.php?action=changeRole1&id=" + id;
             }
         }
         function downChange(id) {
             if (confirm("确定取消该用户编辑权吗？")) {
-                window.location = "action.php?action=changeRole1&id=" + id;
+                window.location = "../controllers/action.php?action=changeRole1&id=" + id;
             }
         }
     </script>
@@ -35,7 +35,7 @@ if (!isset($_SESSION['username'])) {
                 echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['username'] . " 登录！";
                 echo $_SESSION['role_id'];
                 echo "<br/>";
-                echo "<a href='action.php?action=logout'>注销登录  </a>";
+                echo "<a href='../controllers/action.php?action=logout'>注销登录  </a>";
                 echo "<a href='register.php'>  注册</a>";
             } else {
                 echo "您还没有登录！请先 ";
@@ -49,15 +49,15 @@ if (!isset($_SESSION['username'])) {
         <?php
         switch ($_SESSION['role_id']) {
             case "2":
-                echo "<ul><li><a href='views/index.php'>浏览文章</a></li>
+                echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='views/handle.php'>图片上传</a></li>
+                        <li><a href='handle.php'>图片上传</a></li>
                         <li><a href='add_tag.php'>添加文章分类</a></li></ul>";
                 break;
             case "3":
-                echo "<ul><li><a href='views/index.php'>浏览文章</a></li>
+                echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='views/handle.php'>图片上传</a></li>
+                        <li><a href='handle.php'>图片上传</a></li>
                         <li><a href='add_tag.php'>添加文章分类</a></li></ul>";
                 break;
         }

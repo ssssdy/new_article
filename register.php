@@ -5,35 +5,33 @@
     <title>用户注册页面</title>
 </head>
 <body>
-<center>
-    <h3>用户注册</h3>
     <form action="action.php?action=register_check" method="post">
         <table align="center" border="1">
+            <caption style="font-size: 22px">用户注册</caption>
             <tr>
                 <td>用 户 名:</td>
-                <td><input type="text" name="user_name"></td>
+                <td><input title="" type="text" name="user_name"></td>
             </tr>
             <tr>
                 <td>密 码:</td>
-                <td><input type="password" name="password"></td>
+                <td><input title="" type="password" name="password"></td>
             </tr>
             <tr>
                 <td>确认密码:</td>
-                <td><input type="password" name="confirm"></td>
+                <td><input title="" type="password" name="confirm"></td>
             </tr>
             <tr>
                 <td>电 话:</td>
-                <td><input type="text" name="phone"></td>
+                <td><input title="" type="text" name="phone"></td>
             </tr>
             <tr>
                 <td>地 址:</td>
-                <td><input type="text" name="address"></td>
+                <td><input title="" type="text" name="address"></td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><input type="submit" name="submit" value="注册"/></td>
             </tr>
         </table>
-    </form>
-</center>
+    </form>>
 </body>
 </html>

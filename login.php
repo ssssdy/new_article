@@ -5,20 +5,17 @@
     <title>用户登陆界面</title>
 </head>
 <body>
-<center>
-    <h3 class="title">用户登录</h3>
     <form action="action.php?action=login_check" method="post">
-        <table class="bd">
+        <table align="center">
+            <caption style="font-size: 22px">用户登录</caption>
             <tr>
-                <td>用户名：</td>
+                <td align="center">用户名：</td>
                 <td><input type="text" name="user_name" placeholder="请输入用户名"/></td>
             </tr>
-            <br/>
             <tr>
                 <td align="right">密码：</td>
                 <td><input type="password" name="password" placeholder="请输入密码"/></td>
             </tr>
-            <br/>
             <tr>
                 <td>验证码：</td>
                 <td><input type="text" name="code" placeholder="请输入验证码"/></td>
@@ -26,14 +23,12 @@
                     <img src="erWeiMa.php" alt="看不清楚，换一张" onclick="javascript:newgdcode(this,this.src)"/>
                 </td>
             </tr>
-            <br/>
             <tr>
                 <td align="center"><input type="submit" name="submit" value="登录"/></td>
                 <td align="center"><a href="register.php">立即注册</a></td>
             </tr>
         </table>
     </form>
-</center>
 <script language="javascript">
     function newgdcode(obj,url) {
         obj.src = url+ '?now_time=' + new Date().getTime();

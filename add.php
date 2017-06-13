@@ -44,19 +44,18 @@
         ?>
     </div>
     <div class="content">
-        <center>
             <?php
             $link = new Tag_Model();
             $tag = $link->get_all_tag_info();
             $total_num = count($tag);
             ?>
-            <h3>发布文章</h3>
             <form action="action.php?action=add" method="post">
                 <table width="800">
+                    <caption style="font-size: 26px">文章添加</caption>
                     <tr>
                         <td align="center">文章类别：</td>
                         <td>
-                            <select name='tag_id' id='tag_name'>
+                            <select name='tag_id' id='tag_name' title="">
                                 <option value=0>---请选择---</option>
                                 <?php
                                 for ($i = 0; $i < $total_num; $i++) {
@@ -68,19 +67,19 @@
                     </tr>
                     <tr>
                         <td align="center">标题：</td>
-                        <td><input type="text" name="title"/></td>
+                        <td><input type="text" name="title" title="label"/></td>
                     </tr>
                     <tr>
                         <td align="center">关键字：</td>
-                        <td><input type="text" name="keywords"/></td>
+                        <td><input type="text" name="keywords" title=""/></td>
                     </tr>
                     <tr>
                         <td align="center">作者：</td>
-                        <td><input type="text" name="author"/></td>
+                        <td><input type="text" name="author" title=""/></td>
                     </tr>
                     <tr>
                         <td align="center">内容：</td>
-                        <td><textarea name="content" id="content"></textarea>
+                        <td><textarea name="content" id="content" title=""></textarea>
                             <script type="text/javascript">
                                 um.getEditor(' content ')
                             </script>
@@ -88,7 +87,7 @@
                     </tr>
                     <tr>
                         <td align="center">图片名：</td>
-                        <td><input type="text" name="image_name"/></td>
+                        <td><input type="text" name="image_name" title=""/></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center">
@@ -98,7 +97,6 @@
                     </tr>
                 </table>
             </form>
-        </center>
     </div>
     <script type="text/javascript">
         var um = UE.getEditor('content',

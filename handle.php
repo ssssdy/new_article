@@ -1,4 +1,8 @@
 <html>
+<head>
+    <link href="./static/css/style.css" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+</head>
 <div class="login">
         <?php
         require_once './models/news_model.class.php';
@@ -12,7 +16,7 @@
 require_once './lib/php-sdk-7.1.3/autoload.php';
 header('Access-Control-Allow-Origin:*');
 use Qiniu\Auth;
-use Qiniu\Storage\UploadManager;
+//use Qiniu\Storage\UploadManager;
 
 $accessKey = 'o3xU45XwAtrKnq3uT_4WLW9teK6AgDU3LsQEtXLt';
 $secretKey = 'ViIRuxtVK98tk2l2Zrfj-FXqN3O8ABh2qb0ZoHgn';

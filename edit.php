@@ -11,9 +11,9 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require_once './models/news_model.class.php';
-        require_once './models/tag_model.class.php';
-        require_once './helpers/global_helper.php';
+        require './models/news_model.class.php';
+        require './models/tag_model.class.php';
+        require './helpers/global_helper.php';
         require './models/user_model.class.php';
         check_login();
         ?>
@@ -44,11 +44,7 @@
         ?>
     </div>
     <div class="content">
-        <center>
             <?php
-            include("./helpers/global_helper.php");
-            require("./models/news_model.class.php");
-            require("./models/tag_model.class.php");
             $link1 = new News_Model();
             $news = $link1->get_one_news_info($_GET['id']);
             $link2 = new Tag_Model();
@@ -60,10 +56,11 @@
             <form action="action.php?action=update" method="post">
                 <input type="hidden" name="id" value="<?php echo $news['id']; ?>"/>
                 <table width="800">
+                    <caption style="font-size: 26px">编辑文章</caption>
                     <tr>
                         <td align="center">文章类别：</td>
                         <td>
-                            <select name="tag_id" id="tag_name">
+                            <select name="tag_id" id="tag_name" title="">
                                 <option value=0><?php echo $tag['tag_name']; ?></option>
                                 <?php
                                 for ($i = 0; $i < $tag_num; $i++) {
@@ -75,15 +72,15 @@
                     </tr>
                     <tr>
                         <td align="center">标题:</td>
-                        <td width="90"><input type="text" name="title" value="<?php echo $news['title']; ?>"/></td>
+                        <td width="90"><input title="" type="text" name="title" value="<?php echo $news['title']; ?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">关键字:</td>
-                        <td><input type="text" name="keywords" value="<?php echo $news['keywords']; ?>"/></td>
+                        <td><input title="" type="text" name="keywords" value="<?php echo $news['keywords']; ?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">作者:</td>
-                        <td><input type="text" name="author" value="<?php echo $news['author']; ?>"/></td>
+                        <td><input title="" type="text" name="author" value="<?php echo $news['author']; ?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">内容:</td>
@@ -95,7 +92,7 @@
                     </tr>
                     <tr>
                         <td align='center'>修改图片：</td>
-                        <td><input type="text" name="image_name" value="<?php echo $news['image_name']; ?>"/></td>
+                        <td><input title="" type="text" name="image_name" value="<?php echo $news['image_name']; ?>"/></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center">
@@ -105,7 +102,6 @@
                     </tr>
                 </table>
             </form>
-        </center>
     </div>
     <script type="text/javascript">
         var um = UE.getEditor('content',

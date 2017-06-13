@@ -1,6 +1,5 @@
 <?php
 require_once("news_model.class.php");
-
 class User_Model
 {
     function check_user_exist($user_name)

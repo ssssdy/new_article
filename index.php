@@ -45,7 +45,7 @@
 </div>
 <div class="content">
     <table align="center" width="900">
-        <caption style="font-size: x-large">文章信息</caption>
+        <caption style="font-size: 26px">文章信息</caption>
         <tr>
             <th>文章id</th>
             <th>文章类别</th>

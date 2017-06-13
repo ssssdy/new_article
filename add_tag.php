@@ -14,6 +14,33 @@
     check_login();
     ?>
 </div>
+<div class="menu">
+    <?php
+    switch ($_SESSION['role_id']) {
+        case "0":
+            break;
+        case "1":
+            echo "<ul><li><a href='index.php'>文章首页</a></li>
+                        <li><a href='add.php'>添加文章</a></li></ul>";
+            break;
+        case "2":
+            echo "<ul><li><a href='index.php'>文章首页</a></li>
+                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='handle.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
+            break;
+        case "3":
+            echo "<ul><li><a href='index.php'>文章首页</a></li>
+                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='handle.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='addEidtor.php'>变更用户权限</a></li>
+                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
+            break;
+    }
+    ?>
+</div>
 <?php
 $link = new Tag_Model();
 $tag = $link->get_all_tag_info();
@@ -21,12 +48,8 @@ $tag_num = count($tag);
 ?>
 <div class="content">
     <form action="action.php?action=add_tag" method="post">
-        <tr>
-            <td>
                 <input type="text" name="tag_name" placeholder="输入您要添加的类别"/>
                 <input type="submit" value="添加"/>
-            </td>
-        </tr>
     </form>
     <table width="500">
         <tr>

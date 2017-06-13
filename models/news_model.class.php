@@ -3,7 +3,10 @@ define("HOST","localhost");
 define("USER","root");
 define("PASS","15827398906");
 define("DBNAME","newsdb");
-
+define('DS', DIRECTORY_SEPARATOR);                 // 设置目录分隔符
+define('LOG_PATH',dirname(__FILE__).DS.'news_log'.DS); // 日志文件目录
+require 'log.class.php';
+Log::set_size(1024*1024*10);
 class News_Model
 {
     public $host_name;
@@ -16,13 +19,15 @@ class News_Model
     {
         $config = mysqli_connect($host_name, $user_name, $password);
         if (!$config) {
-            echo '连接失败，请联系管理员';
+            Log::write('数据库用户名或密码错误！','error');
             exit;
+        }else{
+            Log::write('Connection success!','log');
         }
         $this->conn = $config;
         $res = mysqli_select_db($config, $db_name);
         if (!$res) {
-            echo '连接失败，请联系管理员';
+            Log::write('请检查您的数据库名！','error');
             exit;
         }
         mysqli_set_charset($config, $charset);
@@ -39,6 +44,8 @@ class News_Model
         $data = array();
         if (!empty($result)) {
             $data = mysqli_fetch_array($result);            //存储的为一维数组
+        }else{
+            Log::write('您查找的信息不存在!','error');
         }
         return $data;
     }

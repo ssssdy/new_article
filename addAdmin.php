@@ -1,49 +1,19 @@
 <html>
-<?php
-require_once '/models/news_model.class.php';
-require_once '/models/tag_model.class.php';
-require_once '/helpers/globle_helper.php';
-require '/models/user_model.class.php';
-session_start();
-if (!isset($_SESSION['username'])) {
-    echo "<script>alert('请先登录！');window.location.href='login.php'</script>";
-}
-?>
 <head>
-    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
+    <link href="./static/css/style.css" rel="stylesheet" type="text/css">
     <title>文章管理系统</title>
-    <script type="text/javascript">
-        function upChange(id) {
-            if (confirm("确定要升级该用户为管理员吗？")) {
-                window.location = "action.php?action=changeRole2&id=" + id;
-            }
-        }
-        function downChange(id) {
-            if (confirm("确定撤销该管理员吗？")) {
-                window.location = "action.php?action=changeRole2&id=" + id;
-            }
-        }
-    </script>
 </head>
 <body>
 <div>
     <h2>文章管理系统</h2>
     <div class="login">
-        <tr>
-            <?php
-            if (isset($_SESSION['username'])) {
-                echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['username'] . " 登录！";
-                echo $_SESSION['role_id'];
-                echo "<br/>";
-                echo "<a href='action.php?action=logout'>注销登录  </a>";
-                echo "<a href='register.php'>  注册</a>";
-            } else {
-                echo "您还没有登录！请先 ";
-                echo "<a href='login.php'>登录 </a>";
-                echo "<a href='register.php'>注册</a>";
-            }
-            ?>
-        </tr>
+        <?php
+        require_once './models/news_model.class.php';
+        require_once './models/tag_model.class.php';
+        require_once './helpers/global_helper.php';
+        require './models/user_model.class.php';
+        check_login();
+        ?>
     </div>
     <div class="menu">
         <?php
@@ -52,13 +22,13 @@ if (!isset($_SESSION['username'])) {
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>添加文章分类</a></li></ul>";
+                        <li><a href='add_tag.php'>文章分类</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>添加文章分类</a></li></ul>";
+                        <li><a href='add_tag.php'>文章分类</a></li></ul>";
                 break;
         }
         ?>
@@ -68,7 +38,7 @@ if (!isset($_SESSION['username'])) {
         <?php
         $link = new News_Model();
         $link1 = new User_Model();
-        $row1 = $link1->get_AllUser_info();
+        $row1 = $link1->get_all_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
         $pagesize = 3;
@@ -78,7 +48,7 @@ if (!isset($_SESSION['username'])) {
             exit;
         }
         $offset = ($page - 1) * $pagesize;
-        $row = $link1->get_LimitUser_info($offset, $pagesize);
+        $row = $link1->get_limit_user_info($offset, $pagesize);
         ?>
         <table align="center" width="600">
             <tr>
@@ -88,10 +58,9 @@ if (!isset($_SESSION['username'])) {
             </tr>
             <?php
             for ($i = 0; $i < count($row1); $i++) {
-                $role_name = $link1->get_RoleName($row1[$i]['role_id']);
-//                    dump($row1[$i]['role_id']);
+                $role_name = $link1->get_role_name($row1[$i]['role_id']);
                 echo "<tr>";
-                echo "<td align='center'>{$row1[$i]['username']}</td>";
+                echo "<td align='center'>{$row1[$i]['user_name']}</td>";
                 echo "<td align='center'>$role_name</td>";
                 echo "<td>";
                 if($row1[$i]['role_id']<=1){
@@ -127,5 +96,17 @@ if (!isset($_SESSION['username'])) {
         <br/>
         <hr width="100%"/>
     </div>
+    <script type="text/javascript">
+        function upChange(id) {
+            if (confirm("确定要升级该用户为管理员吗？")) {
+                window.location = "action.php?action=change_role2&id=" + id;
+            }
+        }
+        function downChange(id) {
+            if (confirm("确定撤销该管理员吗？")) {
+                window.location = "action.php?action=change_role2&id=" + id;
+            }
+        }
+    </script>
 </body>
 </html>

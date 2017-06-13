@@ -100,7 +100,7 @@ INSERT INTO `tag` (`tag_id`, `tag_name`) VALUES
 
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
+  `user_name` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `phone` varchar(100) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `user` (
 -- 转存表中的数据 `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `password`, `phone`, `address`, `role_id`) VALUES
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `phone`, `address`, `role_id`) VALUES
 (10, '何彩云', '123', '159', '武汉', 2),
 (12, 'root', '123', '158', '122', 3),
 (24, '方正', '123', '15827398906', '武汉', 2),

@@ -1,9 +1,16 @@
 <?php
-function check_session()
+function check_login()
 {
     session_start();
-    if (!isset($_SESSION['username'])) {
-        echo "<script>alert('请先登录！');window.location.href='../login.php'</script>";
+    if (isset($_SESSION['user_name'])) {
+        echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['user_name'] . " 登录！";
+        echo "<br/>";
+        echo "<a href='../action.php?action=logout'>注销登录  </a>";
+        echo "<a href='../register.php'>  注册</a>";
+    } else {
+        echo "您还没有登录哦！请先 ";
+        echo "<a href='../login.php'>登录 </a>";
+        echo "<a href='../register.php'>注册</a>";
     }
 }
 

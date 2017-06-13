@@ -1,23 +1,26 @@
 <?php
-require_once '../static/dbconfig.php';
+define("HOST","localhost");
+define("USER","root");
+define("PASS","15827398906");
+define("DBNAME","newsdb");
 
 class News_Model
 {
-    public $hostname;
-    public $username;
+    public $host_name;
+    public $user_name;
     public $password;
-    public $dbname;
+    public $db_name;
     public $conn;
 
-    function __construct($hostname = HOST, $username = USER, $password = PASS, $dbname = DBNAME, $charset = 'utf8')
+    function __construct($host_name = HOST, $user_name = USER, $password = PASS, $db_name = DBNAME, $charset = 'utf8')
     {
-        $config = mysqli_connect($hostname, $username, $password);
+        $config = mysqli_connect($host_name, $user_name, $password);
         if (!$config) {
             echo '连接失败，请联系管理员';
             exit;
         }
         $this->conn = $config;
-        $res = mysqli_select_db($config, $dbname);
+        $res = mysqli_select_db($config, $db_name);
         if (!$res) {
             echo '连接失败，请联系管理员';
             exit;
@@ -30,7 +33,7 @@ class News_Model
         mysqli_close($this->conn);
     }
 
-    function fetchOne($sql)
+    function fetch_one($sql)
     {
         $result = mysqli_query($this->conn, $sql);
         $data = array();
@@ -40,33 +43,33 @@ class News_Model
         return $data;
     }
 
-    function fetchAll($sql)
+    function fetch_all($sql)
     {
         $result = mysqli_query($this->conn, $sql);
         $data = array();
         if ($result && mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $data[] = $row;                             //注意此处与fetchOne不同，为二位数组
+                $data[] = $row;                             //注意此处与fetch_one不同，为二位数组
             }
         }
         return $data;
     }
 
-    function get_OneNews_info($news_id)
+    function get_one_news_info($news_id)
     {
-        $news_info = $this->fetchOne("select * from news where id = $news_id");
+        $news_info = $this->fetch_one("select * from news where id = $news_id");
         return $news_info;
     }
 
-    function get_LimitNews_info($set1, $set2)
+    function get_limit_news_info($set1, $set2)
     {
-        $news_info = $this->fetchAll("select * from news limit $set1,$set2");
+        $news_info = $this->fetch_all("select * from news limit $set1,$set2");
         return $news_info;
     }
 
-    function get_AllNews_info()
+    function get_all_news_info()
     {
-        $news_info = $this->fetchAll("select *from news");
+        $news_info = $this->fetch_all("select *from news");
         return $news_info;
     }
 
@@ -77,15 +80,13 @@ class News_Model
         $sql = "insert into {$table}({$keys}) VALUES ({$values})";
         $res = mysqli_query($this->conn, $sql);
         if ($res) {
-            echo "<h3>添加成功！</h3>";
             return true;
         } else {
-            echo "<h3>添加失败！</h3>";
             return false;
         }
     }
 
-    function update_ById($table, $arr, $id)
+    function update_by_id($table, $arr, $id)
     {
         foreach ($arr as $key => $value) {
             $value = mysqli_real_escape_string($this->conn, $value);
@@ -96,24 +97,12 @@ class News_Model
         mysqli_query($this->conn, $sql);
     }
 
-    function delete_ById($id)
+    function delete_by_id($id)
     {
         $sql = "DELETE FROM news where id=$id";
         mysqli_query($this->conn, $sql);
     }
 
-
-    //对mysql_query()、mysql_fetch_array()、mysql_num_rows()函数进行封装
-
-    function myArray($result)
-    {
-        return mysqli_fetch_array($result);
-    }
-
-    function rows($result)
-    {
-        return mysqli_num_rows($result);
-    }
 }
 
 

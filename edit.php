@@ -1,36 +1,22 @@
 <html>
-<?php
-session_start();
-if (!isset($_SESSION['username'])) {
-    echo "<script>alert('请先登录！');window.location.href='login.php'</script>";
-}
-?>
 <head>
-    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" charset="utf-8" src="/lib/qiniu_ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/lib/qiniu_ueditor/ueditor.all.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/lib/qiniu_ueditor/lang/zh-cn/zh-cn.js"></script>
+    <link href="./static/css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" charset="utf-8" src="./lib/qiniu_ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./lib/qiniu_ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./lib/qiniu_ueditor/lang/zh-cn/zh-cn.js"></script>
     <title>文章管理系统</title>
 </head>
 <body>
 <div>
     <h2>文章管理系统</h2>
     <div class="login">
-        <tr>
-            <?php
-            if (isset($_SESSION['username'])) {
-                echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['username'] . " 登录！";
-//                echo $_SESSION['role_id'];
-                echo "<br/>";
-                echo "<a href='action.php?action=logout'>注销登录  </a>";
-                echo "<a href='register.php'>  注册</a>";
-            } else {
-                echo "您还没有登录！请先 ";
-                echo "<a href='login.php'>登录 </a>";
-                echo "<a href='register.php'>注册</a>";
-            }
-            ?>
-        </tr>
+        <?php
+        require_once './models/news_model.class.php';
+        require_once './models/tag_model.class.php';
+        require_once './helpers/global_helper.php';
+        require './models/user_model.class.php';
+        check_login();
+        ?>
     </div>
     <div class="menu">
         <?php
@@ -43,14 +29,14 @@ if (!isset($_SESSION['username'])) {
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>添加文章分类</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
                         <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>添加文章分类</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
                         <li><a href='addEidtor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
@@ -60,16 +46,14 @@ if (!isset($_SESSION['username'])) {
     <div class="content">
         <center>
             <?php
-            include("/helpers/globle_helper.php");
-            require("/models/news_model.class.php");
-            require("/models/tag_model.class.php");
-            require("/static/dbconfig.php");
-            check_session();
+            include("./helpers/global_helper.php");
+            require("./models/news_model.class.php");
+            require("./models/tag_model.class.php");
             $link1 = new News_Model();
-            $news = $link1->get_OneNews_info($_GET['id']);
+            $news = $link1->get_one_news_info($_GET['id']);
             $link2 = new Tag_Model();
-            $tag = $link2->get_OneTags_info($news['tag_id']);
-            $tag1 = $link2->get_AllTags_info();
+            $tag = $link2->get_one_tag_info($news['tag_id']);
+            $tag1 = $link2->get_all_tag_info();
             $tag_num = count($tag1);
             ?>
             <h2 align="center">编辑文章</h2>
@@ -103,7 +87,7 @@ if (!isset($_SESSION['username'])) {
                     </tr>
                     <tr>
                         <td align="center">内容:</td>
-                        <td><textarea name="content" id="content"><?php echo $news['content']; ?></textarea>
+                        <td><textarea name="content" id="content" title=""><?php echo $news['content']; ?></textarea>
                             <script type="text/javascript">
                                 um.getEditor('content')
                             </script>

@@ -1,6 +1,15 @@
 <html>
+<div class="login">
+        <?php
+        require_once './models/news_model.class.php';
+        require_once './models/tag_model.class.php';
+        require_once './helpers/global_helper.php';
+        require './models/user_model.class.php';
+        check_login();
+        ?>
+</div>
 <?php
-require_once '/lib/php-sdk-7.1.3/autoload.php';
+require_once './lib/php-sdk-7.1.3/autoload.php';
 header('Access-Control-Allow-Origin:*');
 use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;

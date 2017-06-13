@@ -1,33 +1,59 @@
 <html>
-<?php
-session_start();
-//echo $_SESSION['username'];
-if (!isset($_SESSION['username'])) {
-    echo "<script>alert('请先登录！');window.location.href='login.php'</script>";
-}
-?>
 <head>
     <meta charset="utf-8">
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css" charset="utf-8">
     <title>文章管理系统</title>
 </head>
-<h3 align="center">文章分类添加</h3>
+<h3 align="center">文章分类</h3>
 <body>
-<form action="action.php?action=add_tag" method="post">
-<table>
-    <tr>
-        <td>添加文章类别：</td>
-        <td><input type="text" name="tag_name"></td>
-    </tr>
-    <tr>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-    </tr>
-
-</table>
-</form>
-
-
+<div class="login">
+    <?php
+    require("./helpers/global_helper.php");
+    require './models/news_model.class.php';
+    require './models/tag_model.class.php';
+    check_login();
+    ?>
+</div>
+<?php
+$link = new Tag_Model();
+$tag = $link->get_all_tag_info();
+$tag_num = count($tag);
+?>
+<div class="content">
+    <form action="action.php?action=add_tag" method="post">
+        <tr>
+            <td>
+                <input type="text" name="tag_name" placeholder="输入您要添加的类别"/>
+                <input type="submit" value="添加"/>
+            </td>
+        </tr>
+    </form>
+    <table width="500">
+        <tr>
+            <th align="center" width="120">文章类别编号</th>
+            <th align="center" width="150">文章类别名称</th>
+            <th align="center">操作</th>
+        </tr>
+        <?php
+        for ($i = 0; $i < $tag_num; $i++) {
+            echo "<tr>";
+            echo "<td align='center'>{$tag[$i]['tag_id']}</td>";
+            echo "<td align='center'>{$tag[$i]['tag_name']}</td>";
+            echo "<td align='center'><a href = 'javascript:dodel({$tag[$i]['tag_id']})' onclick=''>删除该类别</a></td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+    <?php
+    echo "<script type='text/javascript'>dodel();</script>";
+    ?>
+</div>
+<script type="text/javascript">
+    function dodel(tag_id) {
+        if (confirm("确定要删除该文章类别吗？")) {
+            window.location = "action.php?action=delete_tag&tag_id=" + tag_id;
+        }
+    }
+</script>
 </body>
 </html>

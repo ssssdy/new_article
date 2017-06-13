@@ -1,17 +1,17 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link href="/static/css/style.css" rel="stylesheet" type="text/css" charset="utf-8">
+    <link href="./static/css/style.css" rel="stylesheet" type="text/css" charset="utf-8">
     <title>用户注册页面</title>
 </head>
 <body>
 <center>
     <h3>用户注册</h3>
-    <form action="action.php?action=regCheck" method="post">
+    <form action="action.php?action=register_check" method="post">
         <table align="center" border="1">
             <tr>
                 <td>用 户 名:</td>
-                <td><input type="text" name="username"></td>
+                <td><input type="text" name="user_name"></td>
             </tr>
             <tr>
                 <td>密 码:</td>

@@ -1,15 +1,15 @@
 <html>
 <head>
-    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+    <link href="./static/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <?php
 echo("<meta charset = 'utf-8'>");
-require("/static/dbconfig.php");
-require '/models/news_model.class.php';
-require '/models/tag_model.class.php';
-require '/models/user_model.class.php';
-include("/helpers/globle_helper.php");
+require './models/news_model.class.php';
+require './models/tag_model.class.php';
+require './models/user_model.class.php';
+include("./helpers/global_helper.php");
 $link = new News_Model();
+$link2 = new Tag_Model();
 $link3 = new User_Model();
 switch ($_GET["action"]) {
     case "add":
@@ -22,19 +22,33 @@ switch ($_GET["action"]) {
         $addtime = time();
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
             'content' => $content, 'image_name' => $image_name, 'addtime' => $addtime);
-        $link->insert($arr, 'news');
-        echo "<a href='javascript:window.history.back();'>返回</a>";
-        echo "<a href='index.php'>浏览文章！</a>";
+        $res = $link->insert($arr, 'news');
+        if ($res) {
+            echo "<script>alert('添加成功！返回首页浏览'); window.location.href='index.php';</script>";
+        }else{
+            echo "<script>alert('添加失败！'); history.go(-1);</script>";
+        }
         break;
-    case "del":
+    case "delete_news":
         $id = $_GET['id'];
         dump($id);
-        $link->delete_ById($id);
+        $link->delete_by_id($id);
         header("Location:index.php");
         break;
-//    case "add_tag":
-//
-//        break;
+    case "add_tag":
+        $tag_name = $_POST['tag_name'];
+        $res = $link->insert(array('tag_name' => $tag_name), 'tag');
+        if ($res) {
+            echo "<script>alert('添加成功！返回'); window.location.href='add_tag.php';</script>";
+        }else{
+            echo "<script>alert('添加失败！'); history.go(-1);</script>";
+        }
+        break;
+    case "delete_tag":
+        $tag_id = $_GET['tag_id'];
+        $link2->delete_by_tag_id($tag_id);
+        header("Location:add_tag.php");
+        break;
     case "update":
         $tag_id = $_POST['tag_id'];
         $title = $_POST['title'];
@@ -46,12 +60,12 @@ switch ($_GET["action"]) {
         echo $id;
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
             'content' => $content, 'image_name' => $image_name);
-        $link->update_ById('news', $arr, $id);
+        $link->update_by_id('news', $arr, $id);
         header("Location:index.php");
         break;
     case "logout":
         session_start();
-        unset($_SESSION['username']);
+        unset($_SESSION['user_name']);
         unset($_SESSION['role_id']);
         echo "退出登录成功！点击此处<a href='login.php'> 登录</a><a href='index.php'> 返回主页</a>";
         break;
@@ -73,11 +87,11 @@ switch ($_GET["action"]) {
 //            echo "Failed!";
 //        }
 //        echo "<a href='javascript:window.history.back();'>返回  </a>";
-//        echo "<a href='../views/index.php'>浏览文章！</a>";
+//        echo "<a href='index.php'>浏览文章！</a>";
 //        break;
-    case "regCheck":
+    case "register_check":
         if (isset($_POST["submit"])) {
-            $user = $_POST["username"];
+            $user = $_POST["user_name"];
             $psw = $_POST["password"];
             $psw_confirm = $_POST["confirm"];
             $phone = $_POST["phone"];
@@ -86,11 +100,11 @@ switch ($_GET["action"]) {
                 echo "<script>alert('请确认信息完整性！'); history.go(-1);</script>";
             } else {
                 if ($psw == $psw_confirm) {
-                    $num = $link3->checkUser_Exist($user);
+                    $num = $link3->check_user_exist($user);
                     if ($num > 0) {
                         echo "<script>alert('用户名已存在！');history.back()</script>";
                     } else {
-                        $arr1 = array('username' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
+                        $arr1 = array('user_name' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
                         $rs = $link->insert($arr1, 'user');
                         if ($rs) {
                             echo "<script>alert('注册成功！请登录')</script>";
@@ -105,30 +119,29 @@ switch ($_GET["action"]) {
             echo "<script>alert('提交未成功！'); history.go(-1);</script>";
         }
         break;
-    case "logincheck":
+    case "login_check":
         session_start();
         $link1 = new User_Model();
         if (isset($_POST["submit"])) {
-            $user = $_POST["username"];
+            $user = $_POST["user_name"];
             $psw = $_POST["password"];
             $code = $_POST["code"];
             if ($user == "" || $psw == "") {
                 echo "<script>alert('请输入用户名或密码！'); history.go(-1);</script>";
             } else {
-                $result = $link1->checkLogin($user,$psw);
+                $result = $link1->check_login($user, $psw);
                 $num = mysqli_num_rows($result);
-                if($code==null){
+                if ($code == null) {
                     echo "<script>alert('验证码不能为空！');window.location.href='login.php'</script>";
-                }
-                else if ($_SESSION['rand'] != $code) {
+                } else if ($_SESSION['rand'] != $code) {
                     echo "<script>alert('验证码错误！请重新填写');window.location.href='login.php'</script>";
                 } else if ($num) {
                     $row = mysqli_fetch_array($result);
-                    $_SESSION['username'] = $row['username'];
-                    $role_id = $link1->get_RoleId($row['username']);
+                    $_SESSION['user_name'] = $row['user_name'];
+                    $role_id = $link1->get_role_id($row['user_name']);
                     $_SESSION['role_id'] = $role_id;
-                    $_SESSION['role_name'] = $link1->get_RoleName($role_id);
-                    header("refresh:0;url=../views/index.php");
+                    $_SESSION['role_name'] = $link1->get_role_name($role_id);
+                    header("refresh:0;url=index.php");
                 } else {
                     echo "<script>alert('用户名或密码不正确！');window.location.href='login.php';</script>";
                 }
@@ -138,19 +151,21 @@ switch ($_GET["action"]) {
             echo "<script> history.go(-1);</script>";
         }
         break;
-    case "changeRole1":
+    case "change_role1":
         $role_id = $_GET['id'];
-        $user_id = $link3->get_userId($role_id);
-        $result = $link3->chang_Role($user_id,$role_id);
-        if($result){
-            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";}
+        $user_id = $link3->get_user_id($role_id);
+        $result = $link3->change_role($user_id, $role_id);
+        if ($result) {
+            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
+        }
         break;
-    case "changeRole2":
+    case "change_role2":
         $role_id = $_GET['id'];
-        $user_id = $link3->get_userId($role_id);
-        $result = $link3->changAdmin_Role($user_id,$role_id);
-        if($result){
-            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";}
+        $user_id = $link3->get_user_id($role_id);
+        $result = $link3->change_admin_role($user_id, $role_id);
+        if ($result) {
+            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
+        }
         break;
 }
 ?>

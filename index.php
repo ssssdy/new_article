@@ -27,15 +27,15 @@
             case "2":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEidtor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
@@ -82,7 +82,7 @@
                 echo "<td align='center'>{$row[$i]['title']}</td>";
                 echo "<td align='center'>{$row[$i]['keywords']}</td>";
                 echo "<td align='center' width='100'>{$row[$i]['author']}</td>";
-                echo "<td align='center'>" . date("Y-m-d", $row[$i]['addtime']) . "</td>";
+                echo "<td align='center'>" . date("Y-m-d", $row[$i]['add_time']) . "</td>";
                 echo "<td align='center'>{$row[$i]['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
                   <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . "'/>

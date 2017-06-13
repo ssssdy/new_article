@@ -1,7 +1,7 @@
 <?php
 require_once("news_model.class.php");
-class User_Model
-{
+
+class User_Model{
     function check_user_exist($user_name)
     {
         $db1 = new News_Model();
@@ -22,7 +22,7 @@ class User_Model
     function get_general_user_info()
     {
         $db = new News_Model();
-        $sql = "select * from user where role_id<=1";
+        $sql = "SELECT * FROM user WHERE role_id<=1";
         $user_info = $db->fetch_all($sql);
         return $user_info;
     }
@@ -30,7 +30,7 @@ class User_Model
     function get_all_user_info()
     {
         $db = new News_Model();
-        $sql = "select * from user where role_id<=2";
+        $sql = "SELECT * FROM user WHERE role_id<=2";
         $user_info = $db->fetch_all($sql);
         return $user_info;
     }
@@ -74,13 +74,15 @@ class User_Model
         $db = new News_Model();
         $sql0 = "update user set role_id=0 where user_id=$user_id";
         $sql1 = "update user set role_id=1 where user_id=$user_id";
+        $res = null;
         if ($role_id == 0) {
-            $res = mysqli_query($db->conn, $sql1);
-            return $res;
+            $res1 = mysqli_query($db->conn, $sql1);
+            $res = $res1;
         } elseif ($role_id == 1) {
-            $res1 = mysqli_query($db->conn, $sql0);
-            return $res1;
+            $res2 = mysqli_query($db->conn, $sql0);
+             $res = $res2;
         }
+        return $res;
     }
 
     function change_admin_role($user_id, $role_id)
@@ -88,12 +90,14 @@ class User_Model
         $db = new News_Model();
         $sql0 = "update user set role_id=2 where user_id=$user_id";
         $sql1 = "update user set role_id=1 where user_id=$user_id";
+        $res =null;
         if ($role_id == 2) {
-            $res = mysqli_query($db->conn, $sql1);
-            return $res;
+            $res1 = mysqli_query($db->conn, $sql1);
+            $res = $res1;
         } elseif ($role_id <= 1) {
-            $res1 = mysqli_query($db->conn, $sql0);
-            return $res1;
+            $res2 = mysqli_query($db->conn, $sql0);
+           $res = $res2;
         }
+        return $res;
     }
 }

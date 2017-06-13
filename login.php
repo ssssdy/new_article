@@ -20,7 +20,7 @@
                 <td>验证码：</td>
                 <td><input type="text" name="code" placeholder="请输入验证码"/></td>
                 <td>
-                    <img src="erWeiMa.php" alt="看不清楚，换一张" onclick="javascript:newgdcode(this,this.src)"/>
+                    <img src="code.php" alt="看不清楚，换一张" onclick="newgdcode(this,this.src)"/>
                 </td>
             </tr>
             <tr>

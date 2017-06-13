@@ -5,6 +5,7 @@ define("PASS","15827398906");
 define("DBNAME","newsdb");
 define('DS', DIRECTORY_SEPARATOR);                 // 设置目录分隔符
 define('LOG_PATH',dirname(__FILE__).DS.'news_log'.DS); // 日志文件目录
+//此文件下LOG_PATH:/var/www/git/models/news_log/
 require 'log.class.php';
 Log::set_size(1024*1024*10);
 class News_Model
@@ -62,6 +63,10 @@ class News_Model
         return $data;
     }
 
+    /**
+     * @param $news_id
+     * @return array|null
+     */
     function get_one_news_info($news_id)
     {
         $news_info = $this->fetch_one("select * from news where id = $news_id");

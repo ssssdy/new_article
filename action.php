@@ -8,9 +8,9 @@ require './models/news_model.class.php';
 require './models/tag_model.class.php';
 require './models/user_model.class.php';
 include("./helpers/global_helper.php");
-$link = new News_Model();
-$link2 = new Tag_Model();
-$link3 = new User_Model();
+$news_model = new News_Model();
+$tag_model = new Tag_Model();
+$user_model = new User_Model();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -19,10 +19,10 @@ switch ($_GET["action"]) {
         $author = $_POST["author"];
         $content = $_POST["content"];
         $image_name = $_POST["image_name"];
-        $addtime = time();
+        $add_time = time();
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
-            'content' => $content, 'image_name' => $image_name, 'addtime' => $addtime);
-        $res = $link->insert($arr, 'news');
+            'content' => $content, 'image_name' => $image_name, 'add_time' => $add_time);
+        $res = $news_model->insert($arr, 'news');
         if ($res) {
             echo "<script>alert('添加成功！返回首页浏览'); window.location.href='index.php';</script>";
         }else{
@@ -32,22 +32,22 @@ switch ($_GET["action"]) {
     case "delete_news":
         $id = $_GET['id'];
         dump($id);
-        $link->delete_by_id($id);
+        $news_model->delete_by_id($id);
         header("Location:index.php");
         break;
     case "add_tag":
         $tag_name = $_POST['tag_name'];
-        $res = $link->insert(array('tag_name' => $tag_name), 'tag');
+        $res = $news_model->insert(array('tag_name' => $tag_name), 'tag');
         if ($res) {
-            echo "<script>alert('添加成功！返回'); window.location.href='add_tag.php';</script>";
+            echo "<script>alert('添加成功！返回'); window.location.href='addTag.php';</script>";
         }else{
             echo "<script>alert('添加失败！'); history.go(-1);</script>";
         }
         break;
     case "delete_tag":
         $tag_id = $_GET['tag_id'];
-        $link2->delete_by_tag_id($tag_id);
-        header("Location:add_tag.php");
+        $tag_model->delete_by_tag_id($tag_id);
+        header("Location:addTag.php");
         break;
     case "update":
         $tag_id = $_POST['tag_id'];
@@ -60,7 +60,7 @@ switch ($_GET["action"]) {
         echo $id;
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
             'content' => $content, 'image_name' => $image_name);
-        $link->update_by_id('news', $arr, $id);
+        $news_model->update_by_id('news', $arr, $id);
         header("Location:index.php");
         break;
     case "logout":
@@ -100,12 +100,12 @@ switch ($_GET["action"]) {
                 echo "<script>alert('请确认信息完整性！'); history.go(-1);</script>";
             } else {
                 if ($psw == $psw_confirm) {
-                    $num = $link3->check_user_exist($user);
+                    $num = $user_model->check_user_exist($user);
                     if ($num > 0) {
                         echo "<script>alert('用户名已存在！');history.back()</script>";
                     } else {
                         $arr1 = array('user_name' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
-                        $rs = $link->insert($arr1, 'user');
+                        $rs = $news_model->insert($arr1, 'user');
                         if ($rs) {
                             echo "<script>alert('注册成功！请登录')</script>";
                             header("refresh:0;url='login.php'");
@@ -121,7 +121,7 @@ switch ($_GET["action"]) {
         break;
     case "login_check":
         session_start();
-        $link1 = new User_Model();
+        $news_model1 = new User_Model();
         if (isset($_POST["submit"])) {
             $user = $_POST["user_name"];
             $psw = $_POST["password"];
@@ -129,7 +129,7 @@ switch ($_GET["action"]) {
             if ($user == "" || $psw == "") {
                 echo "<script>alert('请输入用户名或密码！'); history.go(-1);</script>";
             } else {
-                $result = $link1->check_login($user, $psw);
+                $result = $news_model1->check_login($user, $psw);
                 $num = mysqli_num_rows($result);
                 if ($code == null) {
                     echo "<script>alert('验证码不能为空！');window.location.href='login.php'</script>";
@@ -138,9 +138,9 @@ switch ($_GET["action"]) {
                 } else if ($num) {
                     $row = mysqli_fetch_array($result);
                     $_SESSION['user_name'] = $row['user_name'];
-                    $role_id = $link1->get_role_id($row['user_name']);
+                    $role_id = $news_model1->get_role_id($row['user_name']);
                     $_SESSION['role_id'] = $role_id;
-                    $_SESSION['role_name'] = $link1->get_role_name($role_id);
+                    $_SESSION['role_name'] = $news_model1->get_role_name($role_id);
                     header("refresh:0;url=index.php");
                 } else {
                     echo "<script>alert('用户名或密码不正确！');window.location.href='login.php';</script>";
@@ -153,16 +153,16 @@ switch ($_GET["action"]) {
         break;
     case "change_role1":
         $role_id = $_GET['id'];
-        $user_id = $link3->get_user_id($role_id);
-        $result = $link3->change_role($user_id, $role_id);
+        $user_id = $user_model->get_user_id($role_id);
+        $result = $user_model->change_role($user_id, $role_id);
         if ($result) {
             echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
         }
         break;
     case "change_role2":
         $role_id = $_GET['id'];
-        $user_id = $link3->get_user_id($role_id);
-        $result = $link3->change_admin_role($user_id, $role_id);
+        $user_id = $user_model->get_user_id($role_id);
+        $result = $user_model->change_admin_role($user_id, $role_id);
         if ($result) {
             echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
         }

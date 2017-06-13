@@ -21,14 +21,14 @@
             case "2":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>文章分类</a></li></ul>";
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='handle.php'>图片上传</a></li>
-                        <li><a href='add_tag.php'>文章分类</a></li></ul>";
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li></ul>";
                 break;
         }
         ?>
@@ -66,6 +66,7 @@
                 if($row1[$i]['role_id']<=1){
                        echo $row1[$i]['role_id'];
                     echo "<a href='javascript:upChange({$row1[$i]['role_id']})'>升级为管理员</a>";
+//                    echo "<button onclick='upChange({$row1[$i]['role_id']})'>权限升级</button>";
                 }else if($row1[$i]['role_id']==2){
                         echo $row1[$i]['role_id'];
                     echo "<a href='javascript:downChange({$row1[$i]['role_id']})'>取消管理员身份</a>";
@@ -96,7 +97,7 @@
         <br/>
         <hr width="100%"/>
     </div>
-    <script type="text/javascript">
+    <script>
         function upChange(id) {
             if (confirm("确定要升级该用户为管理员吗？")) {
                 window.location = "action.php?action=change_role2&id=" + id;

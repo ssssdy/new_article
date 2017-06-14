@@ -8,8 +8,8 @@
 
 	header("Content-Type: text/html; charset=utf-8");
     error_reporting( E_ERROR | E_WARNING );
-	require_once("conf.php");
-	require_once("imageManger.php");
+	require("conf.php");
+	require("imageManger.php");
 	$client = new Qiniu_MacHttpClient(null);
 	$result = array();
     $data = Qiniu_RSF_ListPrefix($client,$BUCKET,'','',5);

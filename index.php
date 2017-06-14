@@ -64,6 +64,7 @@
             $news_model = new News_Model();
             $row1 = $news_model->get_all_news_info();
             $dir = "http://orc8koj7r.bkt.clouddn.com/";
+            $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
             $page_size = 4;
             $page_num = ceil(count($row1) / $page_size);
@@ -85,7 +86,7 @@
                 echo "<td align='center'>" . date("Y-m-d", $row[$i]['add_time']) . "</td>";
                 echo "<td align='center'>{$row[$i]['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . "'/>
+                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] .$img_model."'/>
                   </td>";
                 if ($_SESSION['role_id'] >= 1) {
                     echo "<td align='center'>";

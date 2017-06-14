@@ -8,29 +8,20 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require_once './model/news_model.class.php';
-        require_once './model/tag_model.class.php';
-        require_once './helpers/global_helper.php';
+        require './model/news_model.class.php';
+        require './model/tag_model.class.php';
+        require './helpers/global_helper.php';
         require './model/user_model.class.php';
         check_login();
         ?>
     </div>
     <div class="menu">
         <?php
-        switch ($_SESSION['role_id']) {
-            case "2":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li></ul>";
-                break;
-            case "3":
-                echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li></ul>";
-                break;
-        }
+                        <li><a href='addTag.php'>文章分类</a></li></ul>
+                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
         ?>
     </div>
     <div class="content">
@@ -41,14 +32,14 @@
         $row1 = $user_model->get_all_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
-        $pagesize = 4;
-        $pagenum = ceil(count($row1) / $pagesize);
-        if ($page > $pagenum || $page == 0) {
+        $page_size = 4;
+        $page_num = ceil(count($row1) / $page_size);
+        if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
-        $offset = ($page - 1) * $pagesize;
-        $row = $user_model->get_limit_user_info($offset, $pagesize);
+        $offset = ($page - 1) * $page_size;
+        $row = $user_model->get_limit_user_info($offset, $page_size);
         ?>
         <table align="center" width="600">
             <tr>
@@ -57,7 +48,7 @@
                 <th>变更权限</th>
             </tr>
             <?php
-            for ($i = 0; $i < count($row1); $i++) {
+            for ($i = 0; $i < count($row); $i++) {
                 $role_name = $user_model->get_role_name($row1[$i]['role_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row1[$i]['user_name']}</td>";
@@ -79,16 +70,16 @@
         $prev = $page - 1;
         $next = $page + 1;
         echo "<br/>";
-        echo "<div align='center'>共 " . $pagenum . " 页 ";
+        echo "<div align='center'>共 " . $page_num . " 页 ";
         if ($page > 1) {
             echo "<a href='addAdmin.php?page=1'>首页 </a>";
             echo "<a href='addAdmin.php?page=" . $prev . "'>上一页</a>";
         }
-        if ($page < $pagenum) {
+        if ($page < $page_num) {
             echo "<a href='addAdmin.php?page=" . $next . "'>下一页 </a>";
-            echo "<a href='addAdmin.php?page=" . $pagenum . "'>尾页</a>";
+            echo "<a href='addAdmin.php?page=" . $page_num . "'>尾页</a>";
         }
-        for ($j = 1; $j <= $pagenum; $j++) {
+        for ($j = 1; $j <= $page_num; $j++) {
             $show = ($j != $page) ? "<a href='addAdmin.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
             echo $show . "   ";
         }

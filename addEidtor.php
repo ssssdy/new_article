@@ -41,14 +41,14 @@
         $row1 = $user_model->get_general_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-        $pagesize = 10;
-        $pagenum = ceil(count($row1) / $pagesize);
-        if ($page > $pagenum || $page == 0) {
+        $page_size = 5;
+        $page_num = ceil(count($row1) / $page_size);
+        if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
-        $offset = ($page - 1) * $pagesize;
-        $row = $user_model->get_limit_user_info($offset, $pagesize);
+        $offset = ($page - 1) * $page_size;
+        $row = $user_model->get_limit_user_info($offset, $page_size);
         ?>
         <table align="center" width="600">
             <tr>
@@ -57,7 +57,7 @@
                 <th>变更权限</th>
             </tr>
             <?php
-            for ($i = 0; $i < count($row1); $i++) {
+            for ($i = 0; $i < count($row); $i++) {
                 $role_name = $user_model->get_role_name($row1[$i]['role_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row1[$i]['user_name']}</td>";
@@ -77,16 +77,16 @@
         $prev = $page - 1;
         $next = $page + 1;
         echo "<br/>";
-        echo "<div align='center'>共 " . $pagenum . " 页 ";
+        echo "<div align='center'>共 " . $page_num . " 页 ";
         if ($page > 1) {
             echo "<a href='addEidtor.php?page=1'>首页 </a>";
             echo "<a href='addEidtor.php?page=" . $prev . "'>上一页</a>";
         }
-        if ($page < $pagenum) {
+        if ($page < $page_num) {
             echo "<a href='addEidtor.php?page=" . $next . "'>下一页 </a>";
-            echo "<a href='addEidtor.php?page=" . $pagenum . "'>尾页</a>";
+            echo "<a href='addEidtor.php?page=" . $page_num . "'>尾页</a>";
         }
-        for ($i = 1; $i <= $pagenum; $i++) {
+        for ($i = 1; $i <= $page_num; $i++) {
             $show = ($i != $page) ? "<a href='addEidtor.php?page=" . $i . "'>[$i]</a>" : "<b>[$i]</b>";
             echo $show . "   ";
         }

@@ -61,7 +61,7 @@
                         <td align="center">文章类别：</td>
                         <td>
                             <select name="tag_id" id="tag_name" title="">
-                                <option value=0><?php echo $tag['tag_name']; ?></option>
+                                <option value={$tag['tag_id']}><?=$tag['tag_name']?></option>
                                 <?php
                                 for ($i = 0; $i < $tag_num; $i++) {
                                     echo " <option value={$tag1[$i]['tag_id']}>{$tag1[$i]['tag_name']}</option>";
@@ -72,19 +72,19 @@
                     </tr>
                     <tr>
                         <td align="center">标题:</td>
-                        <td width="90"><input title="" type="text" name="title" value="<?php echo $news['title']; ?>"/></td>
+                        <td width="90"><input title="" type="text" name="title" value="<?=$news['title']?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">关键字:</td>
-                        <td><input title="" type="text" name="keywords" value="<?php echo $news['keywords']; ?>"/></td>
+                        <td><input title="" type="text" name="keywords" value="<?=$news['keywords']?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">作者:</td>
-                        <td><input title="" type="text" name="author" value="<?php echo $news['author']; ?>"/></td>
+                        <td><input title="" type="text" name="author" value="<?=$news['author']?>"/></td>
                     </tr>
                     <tr>
                         <td align="center">内容:</td>
-                        <td><textarea name="content" id="content" title=""><?php echo $news['content']; ?></textarea>
+                        <td><textarea name="content" id="content" title=""><?= $news['content']?></textarea>
                             <script type="text/javascript">
                                 um.getEditor('content')
                             </script>
@@ -92,7 +92,7 @@
                     </tr>
                     <tr>
                         <td align='center'>修改图片：</td>
-                        <td><input title="" type="text" name="image_name" value="<?php echo $news['image_name']; ?>"/></td>
+                        <td><input title="" type="text" name="image_name" value="<?=$news['image_name']?>"/></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center">

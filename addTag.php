@@ -17,12 +17,6 @@
 <div class="menu">
     <?php
     switch ($_SESSION['role_id']) {
-        case "0":
-            break;
-        case "1":
-            echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li></ul>";
-            break;
         case "2":
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
@@ -67,9 +61,6 @@ $tag_num = count($tag);
         }
         ?>
     </table>
-    <?php
-    echo "<script type='text/javascript'>dodel();</script>";
-    ?>
 </div>
 <script type="text/javascript">
     function dodel(tag_id) {

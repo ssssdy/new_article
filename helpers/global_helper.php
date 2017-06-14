@@ -14,6 +14,16 @@ function check_login()
     }
 }
 
+function  str_rand(){
+    $str="abcdefghijkmnpqrstuvwxyz0123456789ABCDEFGHIGKLMNPQRSTUVWXYZ";//设置被随机采集的字符串
+    $codeLen='5';//设置生成的随机数个数
+    $rand="";
+    for($i=0; $i<$codeLen-1; $i++){
+        $rand .= $str[mt_rand(0, strlen($str)-1)];  //如：随机数为30  则：$str[30]
+    }
+    return $rand;
+}
+
 function dump($var, $echo = true, $label = null, $strict = true)
 {
     $label = ($label === null) ? '' : rtrim($label) . ' ';

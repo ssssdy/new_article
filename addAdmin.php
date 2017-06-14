@@ -8,10 +8,10 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require_once './models/news_model.class.php';
-        require_once './models/tag_model.class.php';
+        require_once './model/news_model.class.php';
+        require_once './model/tag_model.class.php';
         require_once './helpers/global_helper.php';
-        require './models/user_model.class.php';
+        require './model/user_model.class.php';
         check_login();
         ?>
     </div>
@@ -36,19 +36,19 @@
     <div class="content">
         <h3 align="center">管理员信息</h3>
         <?php
-        $link = new News_Model();
-        $link1 = new User_Model();
-        $row1 = $link1->get_all_user_info();
+        $news_model = new News_Model();
+        $user_model = new User_Model();
+        $row1 = $user_model->get_all_user_info();
         //        dump($row1);
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-        $pagesize = 3;
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
+        $pagesize = 4;
         $pagenum = ceil(count($row1) / $pagesize);
         if ($page > $pagenum || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
         $offset = ($page - 1) * $pagesize;
-        $row = $link1->get_limit_user_info($offset, $pagesize);
+        $row = $user_model->get_limit_user_info($offset, $pagesize);
         ?>
         <table align="center" width="600">
             <tr>
@@ -58,7 +58,7 @@
             </tr>
             <?php
             for ($i = 0; $i < count($row1); $i++) {
-                $role_name = $link1->get_role_name($row1[$i]['role_id']);
+                $role_name = $user_model->get_role_name($row1[$i]['role_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row1[$i]['user_name']}</td>";
                 echo "<td align='center'>$role_name</td>";
@@ -66,7 +66,6 @@
                 if($row1[$i]['role_id']<=1){
                        echo $row1[$i]['role_id'];
                     echo "<a href='javascript:upChange({$row1[$i]['role_id']})'>升级为管理员</a>";
-//                    echo "<button onclick='upChange({$row1[$i]['role_id']})'>权限升级</button>";
                 }else if($row1[$i]['role_id']==2){
                         echo $row1[$i]['role_id'];
                     echo "<a href='javascript:downChange({$row1[$i]['role_id']})'>取消管理员身份</a>";

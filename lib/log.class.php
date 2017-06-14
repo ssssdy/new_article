@@ -1,24 +1,8 @@
 <?php
-/**
- * 日志类
- *
- * @package    log
- * @version    $Id$
- */
+
 class Log
 {
-    /**
-     * 单个日志文件大小限制
-     *
-     * @var int 字节数
-     */
     private static $i_log_size = 5242880; // 1024 * 1024 * 5 = 5M
-
-    /**
-     * 设置单个日志文件大小限制
-     *
-     * @param int $i_size 字节数
-     */
     public static function set_size($i_size)
     {
         if( is_numeric($i_size) ){
@@ -52,7 +36,6 @@ class Log
                 $s_target .= 'Log_' . $s_now_day . '.log';
                 break;
         }
-
         //检测日志文件大小, 超过配置大小则重命名
         if (file_exists($s_target) && self::$i_log_size <= filesize($s_target)) {
             $s_file_name = substr(basename($s_target), 0, strrpos(basename($s_target), '.log')). '_' . time() . '.log';

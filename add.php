@@ -13,8 +13,8 @@
     <div class="login">
         <?php
         require("./helpers/global_helper.php");
-        require './models/news_model.class.php';
-        require './models/tag_model.class.php';
+        require './model/news_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>

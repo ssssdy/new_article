@@ -8,5 +8,4 @@
 out
 gen
 ‘.idea’
-/phpmyadmin/
-/models/text.log.class.php
+

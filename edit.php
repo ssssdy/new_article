@@ -11,10 +11,10 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require './models/news_model.class.php';
-        require './models/tag_model.class.php';
+        require './model/news_model.class.php';
+        require './model/tag_model.class.php';
         require './helpers/global_helper.php';
-        require './models/user_model.class.php';
+        require './model/user_model.class.php';
         check_login();
         ?>
     </div>
@@ -45,11 +45,11 @@
     </div>
     <div class="content">
             <?php
-            $link1 = new News_Model();
-            $news = $link1->get_one_news_info($_GET['id']);
-            $link2 = new Tag_Model();
-            $tag = $link2->get_one_tag_info($news['tag_id']);
-            $tag1 = $link2->get_all_tag_info();
+            $news_model = new News_Model();
+            $news = $news_model->get_one_news_info($_GET['id']);
+            $tag_model = new Tag_Model();
+            $tag = $tag_model->get_one_tag_info($news['tag_id']);
+            $tag1 = $tag_model->get_all_tag_info();
             $tag_num = count($tag1);
             ?>
             <h2 align="center">编辑文章</h2>

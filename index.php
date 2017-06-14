@@ -10,8 +10,8 @@
     <div class="login">
         <?php
         require("./helpers/global_helper.php");
-        require './models/news_model.class.php';
-        require './models/tag_model.class.php';
+        require './model/news_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>
@@ -61,8 +61,8 @@
                 ?>
             </tr>
             <?php
-            $link = new News_Model();
-            $row1 = $link->get_all_news_info();
+            $news_model = new News_Model();
+            $row1 = $news_model->get_all_news_info();
             $dir = "http://orc8koj7r.bkt.clouddn.com/";
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
             $page_size = 4;
@@ -72,7 +72,7 @@
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $row = $link->get_limit_news_info($offset, $page_size);
+            $row = $news_model->get_limit_news_info($offset, $page_size);
             for ($i = 0; $i < count($row); $i++) {
                 $tag = new Tag_Model();
                 $tag_row = $tag->get_one_tag_info($row[$i]['tag_id']);

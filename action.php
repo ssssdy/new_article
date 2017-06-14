@@ -4,9 +4,9 @@
 </head>
 <?php
 echo("<meta charset = 'utf-8'>");
-require './models/news_model.class.php';
-require './models/tag_model.class.php';
-require './models/user_model.class.php';
+require './model/news_model.class.php';
+require './model/tag_model.class.php';
+require './model/user_model.class.php';
 include("./helpers/global_helper.php");
 $news_model = new News_Model();
 $tag_model = new Tag_Model();
@@ -25,7 +25,7 @@ switch ($_GET["action"]) {
         $res = $news_model->insert($arr, 'news');
         if ($res) {
             echo "<script>alert('添加成功！返回首页浏览'); window.location.href='index.php';</script>";
-        }else{
+        } else {
             echo "<script>alert('添加失败！'); history.go(-1);</script>";
         }
         break;
@@ -40,7 +40,7 @@ switch ($_GET["action"]) {
         $res = $news_model->insert(array('tag_name' => $tag_name), 'tag');
         if ($res) {
             echo "<script>alert('添加成功！返回'); window.location.href='addTag.php';</script>";
-        }else{
+        } else {
             echo "<script>alert('添加失败！'); history.go(-1);</script>";
         }
         break;

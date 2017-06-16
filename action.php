@@ -160,11 +160,13 @@ switch ($_GET["action"]) {
         $role_id = $_GET['id'];
         $user_id = $user_model->get_user_id($role_id);
         $result = $user_model->change_role($user_id, $role_id);
+        header("Location:addEditor.php");
         break;
     case "change_role2":
         $role_id = $_GET['id'];
         $user_id = $user_model->get_user_id($role_id);
         $result = $user_model->change_admin_role($user_id, $role_id);
+        header("Location:addAdmin.php");
         break;
 }
 ?>

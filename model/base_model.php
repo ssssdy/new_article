@@ -167,9 +167,9 @@ class Base_User_Model extends Base_Model
         return $user_info;
     }
 
-    function get_limit_user_info($set1, $set2)
+    function get_limit_user_info($set1, $set2,$key)
     {
-        $news_info = $this->fetch_all("select * from user limit $set1,$set2");
+        $news_info = $this->fetch_all("select * from user where role_id<=$key limit $set1,$set2");
         return $news_info;
     }
 

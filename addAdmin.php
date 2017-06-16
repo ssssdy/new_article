@@ -31,14 +31,14 @@
         $row1 = $user_model->get_all_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
-        $page_size = 4;
+        $page_size = 10;
         $page_num = ceil(count($row1) / $page_size);
         if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
         $offset = ($page - 1) * $page_size;
-        $row = $user_model->get_limit_user_info($offset, $page_size);
+        $row = $user_model->get_limit_user_info($offset, $page_size,2);
         ?>
         <table align="center" width="600">
             <tr>

@@ -41,15 +41,14 @@
         $row1 = $user_model->get_general_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-        $page_size = 5;
+        $page_size = 10;
         $page_num = ceil(count($row1) / $page_size);
         if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
         $offset = ($page - 1) * $page_size;
-        $row = $user_model->get_limit_user_info($offset, $page_size);
-//        dump($row);
+        $row = $user_model->get_limit_user_info($offset, $page_size,1);
         ?>
         <table align="center" width="600">
             <tr>
@@ -59,15 +58,15 @@
             </tr>
             <?php
             for ($i = 0; $i < count($row); $i++) {
-                $role_name = $user_model->get_role_name($row1[$i]['role_id']);
+                $role_name = $user_model->get_role_name($row[$i]['role_id']);
                 echo "<tr>";
-                echo "<td align='center'>{$row1[$i]['user_name']}</td>";
+                echo "<td align='center'>{$row[$i]['user_name']}</td>";
                 echo "<td align='center'>$role_name</td>";
                 echo "<td>";
-                if ($row1[$i]['role_id'] == 0) {
-                    echo "<a href='javascript:upChange({$row1[$i]['role_id']})'>升级为编辑</a>";
-                } else if ($row1[$i]['role_id'] == 1) {
-                    echo "<a href='javascript:downChange({$row1[$i]['role_id']})'>取消编辑身份</a>";
+                if ($row[$i]['role_id'] == 0) {
+                    echo "<a href='javascript:upChange({$row[$i]['role_id']})'>升级为编辑</a>";
+                } else if ($row[$i]['role_id'] == 1) {
+                    echo "<a href='javascript:downChange({$row[$i]['role_id']})'>取消编辑身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";

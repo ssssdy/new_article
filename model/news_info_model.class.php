@@ -2,7 +2,6 @@
 include("base_mysql_model.class.php");
 class Real_Time_News_Model{
     function insert_real_time_news($array){
-        print_r($array);
         $db = new Base_Mysql_Model();
         $sql = "insert into real_news (id,content) VALUES (null,'{$array}')";
         $res = mysqli_query($db->conn, $sql);

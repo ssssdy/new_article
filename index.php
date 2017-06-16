@@ -9,9 +9,8 @@
 <div>
     <div class="login">
         <?php
-        require("./helpers/global_helper.php");
-        require './model/news_model.class.php';
-        require './model/tag_model.class.php';
+        require './helpers/global_helper.php';
+        require './model/base_model.php';
         check_login();
         ?>
     </div>
@@ -29,14 +28,14 @@
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
         }
@@ -61,7 +60,7 @@
                 ?>
             </tr>
             <?php
-            $news_model = new News_Model();
+            $news_model = new Base_News_Model();
             $row1 = $news_model->get_all_news_info();
             $dir = "http://orc8koj7r.bkt.clouddn.com/";
             $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
@@ -75,8 +74,8 @@
             $offset = ($page - 1) * $page_size;
             $row = $news_model->get_limit_news_info($offset, $page_size);
             for ($i = 0; $i < count($row); $i++) {
-                $tag = new Tag_Model();
-                $tag_row = $tag->get_one_tag_info($row[$i]['tag_id']);
+                $tag_model = new Base_Tag_Model();
+                $tag_row = $tag_model->get_one_tag_info($row[$i]['tag_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row[$i]['id']}</td>";
                 echo "<td align='center'>{$tag_row['tag_name']}</td>";
@@ -86,7 +85,7 @@
                 echo "<td align='center'>" . date("Y-m-d", $row[$i]['add_time']) . "</td>";
                 echo "<td align='center'>{$row[$i]['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] .$img_model."'/>
+                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . $img_model . "'/>
                   </td>";
                 if ($_SESSION['role_id'] >= 1) {
                     echo "<td align='center'>";

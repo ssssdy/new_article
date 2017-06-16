@@ -8,9 +8,8 @@
 <body>
 <div class="login">
     <?php
-    require("./helpers/global_helper.php");
-    require './model/news_model.class.php';
-    require './model/tag_model.class.php';
+    require './helpers/global_helper.php';
+    require './model/base_model.php';
     check_login();
     ?>
 </div>
@@ -22,28 +21,23 @@
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
             break;
         case "3":
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
             break;
     }
     ?>
 </div>
-<?php
-$tag_model = new Tag_Model();
-$tag = $tag_model->get_all_tag_info();
-$tag_num = count($tag);
-?>
 <div class="content">
     <form action="action.php?action=add_tag" method="post">
-                <input type="text" name="tag_name" placeholder="输入您要添加的类别"/>
-                <input type="submit" value="添加"/>
+        <input type="text" name="tag_name" placeholder="输入您要添加的类别"/>
+        <input type="submit" value="添加"/>
     </form>
     <table width="500">
         <tr>
@@ -52,6 +46,9 @@ $tag_num = count($tag);
             <th align="center">操作</th>
         </tr>
         <?php
+        $tag_model = new Base_Tag_Model();
+        $tag = $tag_model->get_all_tag_info();
+        $tag_num = count($tag);
         for ($i = 0; $i < $tag_num; $i++) {
             echo "<tr>";
             echo "<td align='center'>{$tag[$i]['tag_id']}</td>";

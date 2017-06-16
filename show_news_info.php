@@ -9,14 +9,14 @@
     <div class="login">
         <?php
         require("./helpers/global_helper.php");
-        require './model/news_info_model.class.php';
+        require './model/base_model.php';
         check_login();
         ?>
     </div>
     <div>
             <h3 align="center" style="font-size: 26px">实时新闻</h3>
             <?php
-            $news_model = new Real_Time_News_Model();
+            $news_model = new Base_Real_News_Model();
             $row1 = $news_model->get_real_time_news();
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
             $page_size = 10;

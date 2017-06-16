@@ -1,6 +1,6 @@
 <html>
 <?php
-require './model/news_info_model.class.php';
+require './model/base_model.php';
 require './helpers/global_helper.php';
 session_start();
 $ch = curl_init();
@@ -26,23 +26,17 @@ if (curl_errno($ch)) {
 curl_close($ch);
 $arr = array();
 preg_match_all($ru, $output, $arr);
-dump($arr);
+//dump($arr);
 $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 $page_size = 10;
 $offset1 = ($page)*$page_size;
 $offset2 = ($page+1)*$page_size;
-$info_model = new Real_Time_News_Model();
+$info_model = new Base_Real_News_Model();
 echo $page."</br>";
 for($i=$offset1;$i<$offset2;$i++){
-//    dump($arr[0][$i]);
     $news[$i] = $arr[0][$i];
     $res =$info_model->insert_real_time_news($news[$i]);
-    print_r($arr[0][$i]);
-}
-//for($j=0;$j<10;$j++){
-//    $res =$info_model->insert_news_info($news[$j]);
-////    dump($res);
-//}
+    print_r($arr[0][$i]);}
 $_SESSION['page'] = ++$page;
 echo "{$_SESSION['page']}";
 session_destroy();

@@ -4,13 +4,11 @@
     <link href="./static/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <?php
-require './model/news_model.class.php';
-require './model/tag_model.class.php';
-require './model/user_model.class.php';
+require './model/base_model.php';
 include './helpers/global_helper.php';
-$news_model = new News_Model();
-$tag_model = new Tag_Model();
-$user_model = new User_Model();
+$news_model = new Base_News_model();
+$tag_model = new Base_Tag_Model();
+$user_model = new Base_User_Model();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -129,7 +127,6 @@ switch ($_GET["action"]) {
         break;
     case "login_check":
         session_start();
-        $news_model1 = new User_Model();
         if (isset($_POST["submit"])) {
             $user = $_POST["user_name"];
             $psw = $_POST["password"];
@@ -137,7 +134,7 @@ switch ($_GET["action"]) {
             if ($user == "" || $psw == "") {
                 echo "<script>alert('请输入用户名或密码！'); history.go(-1);</script>";
             } else {
-                $result = $news_model1->check_login($user, $psw);
+                $result = $user_model->check_login($user, $psw);
                 $num = mysqli_num_rows($result);
                 if ($code == null) {
                     echo "<script>alert('验证码不能为空！');window.location.href='login.php'</script>";
@@ -146,9 +143,9 @@ switch ($_GET["action"]) {
                 } else if ($num) {
                     $row = mysqli_fetch_array($result);
                     $_SESSION['user_name'] = $row['user_name'];
-                    $role_id = $news_model1->get_role_id($row['user_name']);
+                    $role_id = $user_model->get_role_id($row['user_name']);
                     $_SESSION['role_id'] = $role_id;
-                    $_SESSION['role_name'] = $news_model1->get_role_name($role_id);
+                    $_SESSION['role_name'] = $user_model->get_role_name($role_id);
                     header("refresh:0;url=index.php");
                 } else {
                     echo "<script>alert('用户名或密码不正确！');window.location.href='login.php';</script>";

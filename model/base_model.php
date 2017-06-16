@@ -29,7 +29,7 @@ class Base_Model
         }
         mysqli_set_charset($config, $this->db_charset);
     }
-    
+
     function __destruct()
     {
         mysqli_close($this->conn);
@@ -85,7 +85,7 @@ class Base_Model
     {
         $where = $where == null ? '' : ' WHERE ' . $where;
         $sql = "DELETE FROM {$table}{$where}";
-        $res = mysqli_query($this->conn,$sql);
+        $res = mysqli_query($this->conn, $sql);
         if ($res) {
             return mysqli_affected_rows($this->conn);
         } else {
@@ -93,7 +93,18 @@ class Base_Model
         }
     }
 }
-class Base_News_model extends Base_Model{
+
+class Base_News_model extends Base_Model
+{
+    function insert_news($array, $table)
+    {
+        return $this->insert($array, $table);
+    }
+
+    function update_news($table, $arr, $id)
+    {
+        $this->update_by_id($table, $arr, $id);
+    }
 
     function get_one_news_info($news_id)
     {
@@ -120,7 +131,9 @@ class Base_News_model extends Base_Model{
     }
 
 }
-class Base_User_Model extends Base_Model{
+
+class Base_User_Model extends Base_Model
+{
     function check_user_exist($user_name)
     {
         $sql = "select * from user where user_name = '$user_name'";//注意引号
@@ -134,6 +147,10 @@ class Base_User_Model extends Base_Model{
         $sql = "select user_name,password from user where user_name = '$user_name' and password = '$password'";
         $result = mysqli_query($this->conn, $sql);
         return $result;
+    }
+    function insert_user($array, $table)
+    {
+        return $this->insert($array, $table);
     }
 
     function get_general_user_info()
@@ -199,7 +216,7 @@ class Base_User_Model extends Base_Model{
     {
         $sql0 = "update user set role_id=2 where user_id=$user_id";
         $sql1 = "update user set role_id=1 where user_id=$user_id";
-        $res =null;
+        $res = null;
         if ($role_id == 2) {
             $res1 = mysqli_query($this->conn, $sql1);
             $res = $res1;
@@ -208,5 +225,58 @@ class Base_User_Model extends Base_Model{
             $res = $res2;
         }
         return $res;
+    }
+}
+
+class Base_Tag_Model extends Base_Model
+{
+    function get_one_tag_info($tagId)
+    {
+        $tag_info = $this->fetch_one("select * from tag where tag_id = $tagId");
+        return $tag_info;
+    }
+
+    function get_all_tag_info()
+    {
+        $tag_info = $this->fetch_all("SELECT * FROM tag");
+        return $tag_info;
+    }
+
+    function delete_by_tag_id($id)
+    {
+        $sql = "DELETE FROM tag where tag_id=$id";
+        mysqli_query($this->conn, $sql);
+    }
+
+    function insert_tag($array, $table)
+    {
+
+        return $this->insert($array, $table);
+    }
+}
+
+class Base_Real_News_Model extends Base_Model
+{
+    function insert_real_time_news($array)
+    {
+        $sql = "insert into real_news (id,content) VALUES (null,'{$array}')";
+        $res = mysqli_query($this->conn, $sql);
+        if ($res) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function get_real_time_news()
+    {
+        $real_news_info = $this->fetch_all("SELECT *FROM real_news");
+        return $real_news_info;
+    }
+
+    function get_limit_real_news($set1, $set2)
+    {
+        $real_news_info = $this->fetch_all("select * from real_news limit $set1,$set2");
+        return $real_news_info;
     }
 }

@@ -11,10 +11,8 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require './model/news_model.class.php';
-        require './model/tag_model.class.php';
+        require './model/base_model.php';
         require './helpers/global_helper.php';
-        require './model/user_model.class.php';
         check_login();
         ?>
     </div>
@@ -30,14 +28,14 @@
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
         }
@@ -45,9 +43,9 @@
     </div>
     <div class="content">
             <?php
-            $news_model = new News_Model();
+            $news_model = new Base_News_Model();
             $news = $news_model->get_one_news_info($_GET['id']);
-            $tag_model = new Tag_Model();
+            $tag_model = new Base_Tag_Model();
             $tag = $tag_model->get_one_tag_info($news['tag_id']);
             $tag1 = $tag_model->get_all_tag_info();
             $tag_num = count($tag1);

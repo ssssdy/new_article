@@ -13,8 +13,7 @@
     <div class="login">
         <?php
         require("./helpers/global_helper.php");
-        require './model/news_model.class.php';
-        require './model/tag_model.class.php';
+        require './model/base_model.php';
         check_login();
         ?>
     </div>
@@ -30,73 +29,73 @@
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEidtor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
         }
         ?>
     </div>
     <div class="content">
-            <?php
-            $tag_model = new Tag_Model();
-            $tag = $tag_model->get_all_tag_info();
-            $total_num = count($tag);
-            ?>
-            <form action="action.php?action=add" method="post">
-                <table width="800">
-                    <caption style="font-size: 26px">文章添加</caption>
-                    <tr>
-                        <td align="center">文章类别：</td>
-                        <td>
-                            <select name='tag_id' id='tag_name' title="">
-                                <option value=0>---请选择---</option>
-                                <?php
-                                for ($i = 0; $i < $total_num; $i++) {
-                                    echo "<option value={$tag[$i]['tag_id']}>{$tag[$i]['tag_name']}</option>";
-                                }
-                                ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">标题：</td>
-                        <td><input type="text" name="title" title="label"/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">关键字：</td>
-                        <td><input type="text" name="keywords" title=""/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">作者：</td>
-                        <td><input type="text" name="author" title=""/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">内容：</td>
-                        <td><textarea name="content" id="content" title=""></textarea>
-                            <script type="text/javascript">
-                                um.getEditor(' content ')
-                            </script>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">图片名：</td>
-                        <td><input type="text" name="image_name" title=""/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <input type="submit" value="添加"/>
-                            <input type="reset" value="重置">
-                        </td>
-                    </tr>
-                </table>
-            </form>
+        <?php
+        $tag_model = new Base_Tag_Model();
+        $tag = $tag_model->get_all_tag_info();
+        $total_num = count($tag);
+        ?>
+        <form action="action.php?action=add" method="post">
+            <table width="800">
+                <caption style="font-size: 26px">文章添加</caption>
+                <tr>
+                    <td align="center">文章类别：</td>
+                    <td>
+                        <select name='tag_id' id='tag_name' title="">
+                            <option value=0>---请选择---</option>
+                            <?php
+                            for ($i = 0; $i < $total_num; $i++) {
+                                echo "<option value={$tag[$i]['tag_id']}>{$tag[$i]['tag_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">标题：</td>
+                    <td><input type="text" name="title" title="label"/></td>
+                </tr>
+                <tr>
+                    <td align="center">关键字：</td>
+                    <td><input type="text" name="keywords" title=""/></td>
+                </tr>
+                <tr>
+                    <td align="center">作者：</td>
+                    <td><input type="text" name="author" title=""/></td>
+                </tr>
+                <tr>
+                    <td align="center">内容：</td>
+                    <td><textarea name="content" id="content" title=""></textarea>
+                        <script type="text/javascript">
+                            um.getEditor(' content ')
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">图片名：</td>
+                    <td><input type="text" name="image_name" title=""/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <input type="submit" value="添加"/>
+                        <input type="reset" value="重置">
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
     <script type="text/javascript">
         var um = UE.getEditor('content',

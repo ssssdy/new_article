@@ -57,3 +57,6 @@ input.text{
     border: 1px solid #CCC;
 
 }
+ul{
+    list-style: none;color: #003F76;line-height: 25px;
+}

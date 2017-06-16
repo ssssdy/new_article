@@ -1,7 +1,8 @@
 <?php
 require_once("base_mysql_model.class.php");
 
-class User_Model{
+class User_Model
+{
     function check_user_exist($user_name)
     {
         $db = new Base_Mysql_Model();
@@ -17,6 +18,12 @@ class User_Model{
         $sql = "select user_name,password from user where user_name = '$user_name' and password = '$password'";
         $result = mysqli_query($db->conn, $sql);
         return $result;
+    }
+
+    function insert_user($array, $table)
+    {
+        $db = new Base_Mysql_Model();
+        return $db->insert($array, $table);
     }
 
     function get_general_user_info()
@@ -80,7 +87,7 @@ class User_Model{
             $res = $res1;
         } elseif ($role_id == 1) {
             $res2 = mysqli_query($db->conn, $sql0);
-             $res = $res2;
+            $res = $res2;
         }
         return $res;
     }
@@ -90,13 +97,13 @@ class User_Model{
         $db = new Base_Mysql_Model();
         $sql0 = "update user set role_id=2 where user_id=$user_id";
         $sql1 = "update user set role_id=1 where user_id=$user_id";
-        $res =null;
+        $res = null;
         if ($role_id == 2) {
             $res1 = mysqli_query($db->conn, $sql1);
             $res = $res1;
         } elseif ($role_id <= 1) {
             $res2 = mysqli_query($db->conn, $sql0);
-           $res = $res2;
+            $res = $res2;
         }
         return $res;
     }

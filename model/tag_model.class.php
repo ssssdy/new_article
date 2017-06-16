@@ -16,4 +16,8 @@ class Tag_Model{
         $sql = "DELETE FROM tag where tag_id=$id";
         mysqli_query($db->conn, $sql);
     }
+    function  insert_tag($array,$table){
+        $db =new Base_Mysql_Model();
+        return $db->insert($array,$table);
+    }
 }

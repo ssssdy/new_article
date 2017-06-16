@@ -45,7 +45,7 @@ switch ($_GET["action"]) {
             echo "<script>alert('不能添加空类别!'); window.location.href='addTag.php';</script>";
             exit;
         }
-        $res = $news_model->insert(array('tag_name' => $tag_name), 'tag');
+        $res = $tag_model->insert_tag(array('tag_name' => $tag_name), 'tag');
         if ($res) {
             echo "<script>alert('添加成功！返回'); window.location.href='addTag.php';</script>";
         } else {
@@ -113,7 +113,7 @@ switch ($_GET["action"]) {
                         echo "<script>alert('用户名已存在！');history.back()</script>";
                     } else {
                         $arr1 = array('user_name' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
-                        $rs = $news_model->insert($arr1, 'user');
+                        $rs = $user_model->insert_user($arr1, 'user');
                         if ($rs) {
                             echo "<script>alert('注册成功！请登录')</script>";
                             header("refresh:0;url='login.php'");
@@ -163,17 +163,11 @@ switch ($_GET["action"]) {
         $role_id = $_GET['id'];
         $user_id = $user_model->get_user_id($role_id);
         $result = $user_model->change_role($user_id, $role_id);
-        if ($result) {
-            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
-        }
         break;
     case "change_role2":
         $role_id = $_GET['id'];
         $user_id = $user_model->get_user_id($role_id);
         $result = $user_model->change_admin_role($user_id, $role_id);
-        if ($result) {
-            echo "<script>alert('用户权限已变更！'); history.go(-1);</script>";
-        }
         break;
 }
 ?>

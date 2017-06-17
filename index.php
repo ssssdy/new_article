@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="./static/css/style.css" rel="stylesheet" type="text/css" charset="utf-8">
-    <title> 文章管理系统主页 </title>
+    <title> 文章主页 </title>
 
 </head>
 <body>
@@ -20,18 +20,21 @@
             case "0":
                 break;
             case "1":
-                echo "<ul><li><a href='index.php'>文章首页</a></li>
+                echo "<ul><li><a href='show_news_info.php'>实时新闻</a></li>>;
+                        <li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li></ul>";
                 break;
             case "2":
-                echo "<ul><li><a href='index.php'>文章首页</a></li>
+                echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                        <li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
-                echo "<ul><li><a href='index.php'>文章首页</a></li>
+                echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                        <li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
@@ -43,7 +46,6 @@
     </div>
     <div class="content">
         <table align="center" width="900">
-            <caption style="font-size: 26px">文章信息</caption>
             <tr>
                 <th>文章id</th>
                 <th>文章类别</th>
@@ -61,37 +63,60 @@
             </tr>
             <?php
             $news_model = new Base_News_Model();
-            $row1 = $news_model->get_all_news_info();
+            $redis = new redis();
+            $redis->connect('127.0.0.1', 6379);
+            $redis->select(1);
+            $blog = $redis->lrange('news_list', 0, 20);
+            //如果$blog数组为空，则去数据库中查询，并加入到redis中
+            if (empty($blog)) {
+                echo "缓存中没有数据,正从MySQL数据库调取数据存入缓存"."<br>";
+                $info = $news_model->get_all_news_info();
+//                dump($info[0]['title']);
+                $num = count($info);
+                $redis->select(1);
+                for ($i = 0; $i < $num; $i++) {
+                    $redis->rpush('news_list', json_encode($info[$i]));
+                }
+                $redis_blog = $redis->lRange('news_list', 0, $num - 1);
+            } else {
+                echo "缓存中有数据,直接调取"."<br>";
+                $redis_blog = $redis->lRange('news_list', 0, 20);
+                $news = json_decode($redis_blog[0], true);
+//                print_r($news['title']);
+            }
             $dir = "http://orc8koj7r.bkt.clouddn.com/";
             $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-            $page_size = 4;
-            $page_num = ceil(count($row1) / $page_size);
+            $page_size = 5;
+            echo "总文章数:".count($redis_blog);
+            $page_num = ceil(count($redis_blog) / $page_size);
             if ($page > $page_num || $page == 0) {
                 echo "Error : Can Not Found The page .";
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $row = $news_model->get_limit_news_info($offset, $page_size);
-            for ($i = 0; $i < count($row); $i++) {
+            $row1 = $redis->lRange('news_list', $offset, $page * $page_size - 1);
+//            dump($row1);
+            for ($i = 0; $i < count($row1); $i++) {
+                $row2 = json_decode($row1[$i], true);
                 $tag_model = new Base_Tag_Model();
-                $tag_row = $tag_model->get_one_tag_info($row[$i]['tag_id']);
+                $tag_row = $tag_model->get_one_tag_info($row2['tag_id']);
                 echo "<tr>";
-                echo "<td align='center'>{$row[$i]['id']}</td>";
+                echo "<td align='center'>{$row2['id']}</td>";
                 echo "<td align='center'>{$tag_row['tag_name']}</td>";
-                echo "<td align='center'>{$row[$i]['title']}</td>";
-                echo "<td align='center'>{$row[$i]['keywords']}</td>";
-                echo "<td align='center' width='100'>{$row[$i]['author']}</td>";
-                echo "<td align='center'>" . date("Y-m-d", $row[$i]['add_time']) . "</td>";
-                echo "<td align='center'>{$row[$i]['content']}</td>";
+                echo "<td align='center'>{$row2['title']}</td>";
+                echo "<td align='center'>{$row2['keywords']}</td>";
+                echo "<td align='center' width='100'>{$row2['author']}</td>";
+                echo "<td align='center'>" . date("Y-m-d", $row2['add_time']) . "</td>";
+                echo "<td align='center'>{$row2['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . $img_model . "'/>
+                  <img width='100' height='100' src='" . $dir . $row2['image_name'] . $img_model . "'/>
                   </td>";
                 if ($_SESSION['role_id'] >= 1) {
                     echo "<td align='center'>";
-                    echo "<a href='edit.php?id={$row[$i]['id']}'>编辑文章</a><br/>";
+                    echo "<a href='edit.php?id={$row2['id']}'>编辑文章</a><br/>";
                     if ($_SESSION['role_id'] >= 2) {
-                        echo "<a href='javascript:dodel({$row[$i]['id']})'>删除文章</a>";
+                        echo "<a href='javascript:dodel({$row2['id']})'>删除文章</a>";
                     }
                 }
                 echo "</td>";

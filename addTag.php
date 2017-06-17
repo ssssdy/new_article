@@ -20,14 +20,12 @@
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
             break;
         case "3":
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='add.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
             break;

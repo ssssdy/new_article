@@ -148,6 +148,7 @@ class Base_User_Model extends Base_Model
         $result = mysqli_query($this->conn, $sql);
         return $result;
     }
+
     function insert_user($array, $table)
     {
         return $this->insert($array, $table);
@@ -167,7 +168,7 @@ class Base_User_Model extends Base_Model
         return $user_info;
     }
 
-    function get_limit_user_info($set1, $set2,$key)
+    function get_limit_user_info($set1, $set2, $key)
     {
         $news_info = $this->fetch_all("select * from user where role_id<=$key limit $set1,$set2");
         return $news_info;
@@ -278,5 +279,11 @@ class Base_Real_News_Model extends Base_Model
     {
         $real_news_info = $this->fetch_all("select * from real_news limit $set1,$set2");
         return $real_news_info;
+    }
+
+    function get_one_real_news_($real_news_id)
+    {
+        $news_info = $this->fetch_one("select content from real_news where id = $real_news_id");
+        return $news_info;
     }
 }

@@ -18,7 +18,7 @@
     </div>
     <div class="menu">
         <?php
-        switch ($_SESSION['role_id']) {
+        switch ($_SESSION['role_type']) {
             case "2":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
@@ -55,22 +55,24 @@
         ?>
         <table align="center" width="600">
             <tr>
+                <th>用户ID</th>
                 <th>用户名</th>
                 <th>权限ID</th>
                 <th>变更权限</th>
             </tr>
             <?php
             for ($i = 0; $i < count($row); $i++) {
-                $role_name = $user_model->get_role_name($row[$i]['role_id']);
+                $role_name = $user_model->get_role_name($row[$i]['role_type']);
                 echo "<tr>";
+                echo "<td align='center'>{$row[$i]['user_id']}</td>";
                 echo "<td align='center'>{$row[$i]['user_name']}</td>";
-                echo "<td align='center'>{$row[$i]['user_id']}$role_name</td>";
+                echo "<td align='center'>$role_name</td>";
                 echo "<td align='center'>";
-                if ($row[$i]['role_id'] == 0) {
-                    echo $row1[$i]['role_id'];
+                if ($row[$i]['role_type'] == VI) {
+//                    echo $row1[$i]['role_type'];
                     echo "<a href='javascript:upChange({$row[$i]['user_id']})'>升级为编辑</a>";
-                } else if ($row[$i]['role_id'] == 1) {
-                    echo $row1[$i]['role_id'];
+                } else if ($row[$i]['role_type'] == ED) {
+//                    echo $row1[$i]['role_type'];
                     echo "<a href='javascript:downChange({$row[$i]['user_id']})'>取消编辑身份</a>";
                 }
                 echo "</td>";

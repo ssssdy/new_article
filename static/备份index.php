@@ -16,29 +16,29 @@
     </div>
     <div class="menu">
         <?php
-        switch ($_SESSION['role_id']) {
+        switch ($_SESSION['role_type']) {
             case "0":
                 break;
             case "1":
-                echo "<ul><li><a href='show_news_info.php'>实时新闻</a></li>>;
+                echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
             case "2":
-                echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
             case "3":
-                echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>添加编辑</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
         }
@@ -57,7 +57,7 @@
                 <th>文章内容</th>
                 <th>图片</th>
                 <?php
-                if (isset($_SESSION['user_name']) && $_SESSION['role_id'] >= 1) {
+                if (isset($_SESSION['user_name']) && $_SESSION['role_type'] >= 1) {
                     echo "<th>操作</th>";
                 }
                 ?>
@@ -90,10 +90,10 @@
                 echo "<td width=\"100\" height=\"100\">
                   <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . $img_model . "'/>
                   </td>";
-                if ($_SESSION['role_id'] >= 1) {
+                if ($_SESSION['role_type'] >= 1) {
                     echo "<td align='center'>";
                     echo "<a href='editArticle.php?id={$row[$i]['id']}'>编辑文章</a><br/>";
-                    if ($_SESSION['role_id'] >= 2) {
+                    if ($_SESSION['role_type'] >= 2) {
                         echo "<a href='javascript:dodel({$row[$i]['id']})'>删除文章</a>";
                     }
                 }

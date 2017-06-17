@@ -56,7 +56,7 @@ INSERT INTO `news` (`id`, `tag_id`, `title`, `keywords`, `author`, `addtime`, `c
 
 CREATE TABLE `roles` (
   `id` int(10) UNSIGNED NOT NULL,
-  `role_id` int(10) NOT NULL,
+  `role_type` int(10) NOT NULL,
   `role_name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -64,7 +64,7 @@ CREATE TABLE `roles` (
 -- 转存表中的数据 `roles`
 --
 
-INSERT INTO `roles` (`id`, `role_id`, `role_name`) VALUES
+INSERT INTO `roles` (`id`, `role_type`, `role_name`) VALUES
 (1, 1, '编辑'),
 (2, 2, '管理员'),
 (3, 3, '超级管理员'),
@@ -104,14 +104,14 @@ CREATE TABLE `user` (
   `password` varchar(100) NOT NULL,
   `phone` varchar(100) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
-  `role_id` int(11) DEFAULT '0'
+  `role_type` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `user`
 --
 
-INSERT INTO `user` (`user_id`, `user_name`, `password`, `phone`, `address`, `role_id`) VALUES
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `phone`, `address`, `role_type`) VALUES
 (10, '何彩云', '123', '159', '武汉', 2),
 (12, 'root', '123', '158', '122', 3),
 (24, '方正', '123', '15827398906', '武汉', 2),

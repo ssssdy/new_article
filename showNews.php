@@ -19,7 +19,7 @@
     </div>
     <div class="menu">
         <?php
-        switch ($_SESSION['role_id']) {
+        switch ($_SESSION['role_type']) {
             case "0":
                 break;
             case "1":
@@ -31,14 +31,14 @@
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
+                        <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>添加编辑</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
                 break;
         }
@@ -93,15 +93,15 @@
             echo "<br/>";
             echo "<div align='center'>共 " . $page_num . " 页 ";
             if ($page > 1) {
-                echo "<a href='show_news_info.php?page=1'>首页 </a>";
-                echo "<a href='show_news_info.php?page=" . $prev . "'>上一页</a>";
+                echo "<a href='showNews.php?page=1'>首页 </a>";
+                echo "<a href='showNews.php?page=" . $prev . "'>上一页</a>";
             }
             if ($page < $page_num) {
-                echo "<a href='show_news_info.php?page=" . $next . "'>下一页 </a>";
-                echo "<a href='show_news_info.php?page=" . $page_num . "'>尾页</a>";
+                echo "<a href='showNews.php?page=" . $next . "'>下一页 </a>";
+                echo "<a href='showNews.php?page=" . $page_num . "'>尾页</a>";
             }
             for ($j = 1; $j <= $page_num; $j++) {
-                $show = ($j != $page) ? "<a href='show_news_info.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
+                $show = ($j != $page) ? "<a href='showNews.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
                 echo $show . "   ";
             }
             ?>

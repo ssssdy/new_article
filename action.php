@@ -75,7 +75,7 @@ switch ($_GET["action"]) {
     case "logout":
         session_start();
         unset($_SESSION['user_name']);
-        unset($_SESSION['role_id']);
+        unset($_SESSION['role_type']);
         echo "退出登录成功！点击此处<a href='login.php'> 登录</a><a href='index.php'> 返回主页</a>";
         break;
 //    case "upload_image":
@@ -146,9 +146,9 @@ switch ($_GET["action"]) {
                 } else if ($num) {
                     $row = mysqli_fetch_array($result);
                     $_SESSION['user_name'] = $row['user_name'];
-                    $role_id = $user_model->get_role_id($row['user_name']);
-                    $_SESSION['role_id'] = $role_id;
-                    $_SESSION['role_name'] = $user_model->get_role_name($role_id);
+                    $role_type = $user_model->get_role_type($row['user_name']);
+                    $_SESSION['role_type'] = $role_type;
+                    $_SESSION['role_name'] = $user_model->get_role_name($role_type);
                     header("refresh:0;url=index.php");
                 } else {
                     echo "<script>alert('用户名或密码不正确！');window.location.href='login.php';</script>";
@@ -161,14 +161,14 @@ switch ($_GET["action"]) {
         break;
     case "change_role1":
         $user_id = $_GET['id'];
-        $role_id = $user_model->get_role_id_by_user_id($user_id);
-        $result = $user_model->change_role($user_id, $role_id);
+        $role_type = $user_model->get_role_type_by_user_id($user_id);
+        $result = $user_model->change_role($user_id, $role_type);
         header("Location:addEditor.php");
         break;
     case "change_role2":
         $user_id = $_GET['id'];
-        $role_id = $user_model->get_role_id_by_user_id($user_id);
-        $result = $user_model->change_admin_role($user_id,$role_id);
+        $role_type = $user_model->get_role_type_by_user_id($user_id);
+        $result = $user_model->change_admin_role($user_id,$role_type);
         header("Location:addAdmin.php");
         break;
 }

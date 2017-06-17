@@ -22,7 +22,7 @@
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>变更用户权限</a></li>
+                        <li><a href='addEditor.php'>添加编辑</a></li>
                         </ul>";
         ?>
     </div>
@@ -45,22 +45,24 @@
         ?>
         <table align="center" width="600">
             <tr>
-                <th>管理员名</th>
+                <th>用户ID</th>
+                <th>用户名</th>
                 <th>权限</th>
                 <th>变更权限</th>
             </tr>
             <?php
             for ($i = 0; $i < count($row); $i++) {
-                $role_name = $user_model->get_role_name($row[$i]['role_id']);
+                $role_name = $user_model->get_role_name($row[$i]['role_type']);
                 echo "<tr>";
+                echo "<td align='center'>{$row[$i]['user_id']}</td>";
                 echo "<td align='center'>{$row[$i]['user_name']}</td>";
-                echo "<td align='center'>{$row[$i]['user_id']}$role_name</td>";
+                echo "<td align='center'>$role_name</td>";
                 echo "<td align='center'>";
-                if($row[$i]['role_id']<=1){
-                       echo $row1[$i]['role_id'];
+                if($row[$i]['role_type']<=ED){
+//                       echo $row1[$i]['role_type'];
                     echo "<a href='javascript:upChange({$row[$i]['user_id']})'>升级为管理员</a>";
-                }else if($row[$i]['role_id']==2){
-                        echo $row[$i]['role_id'];
+                }else if($row[$i]['role_type']==AD){
+//                        echo $row[$i]['role_type'];
                     echo "<a href='javascript:downChange({$row[$i]['user_id']})'>取消管理员身份</a>";
                 }
                 echo "</td>";

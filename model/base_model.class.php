@@ -4,7 +4,10 @@ define("USER", "root");
 define("PASS", "15827398906");
 define("DB_NAME", "newsdb");
 define("DB_CHARSET", "utf8");
-
+define("SU","3");
+define("AD","2");
+define("ED","1");
+define("VI","0");
 class Base_Model
 {
     public $host_name = HOST;

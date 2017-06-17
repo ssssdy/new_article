@@ -22,9 +22,9 @@
 ////dump($news['id']);
 require '../model/base_model.class.php';
 include '../helpers/global_helper.php';
-$user_model = new Base_User_Model();
+$user_model = new User_Model();
 $user_id = 26;
-$id = $user_model->get_role_id_by_user_id($user_id);
+$id = $user_model->get_role_type_by_user_id($user_id);
 dump($id);
 $result = $user_model->change_admin_role($user_id,$id);
 dump($result);

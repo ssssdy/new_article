@@ -2,6 +2,10 @@
 
 class User_Model extends Base_Model
 {
+    function __construct()
+    {
+        parent::__construct();
+    }
     function check_user_exist($user_name)
     {
         $user_name = mysqli_real_escape_string($this->conn, $user_name);
@@ -25,23 +29,23 @@ class User_Model extends Base_Model
         return $this->insert($array, $table);
     }
 
-    function get_general_user_info()
+    function get_general_user_info($type)
     {
-        $sql = "SELECT * FROM user WHERE role_type<=1";
+        $sql = "SELECT * FROM user WHERE role_type<=$type";
         $user_info = $this->fetch_all($sql);
         return $user_info;
     }
 
-    function get_all_user_info()
+    function get_all_user_info($type)
     {
-        $sql = "SELECT * FROM user WHERE role_type<=2";
+        $sql = "SELECT * FROM user WHERE role_type<=$type";
         $user_info = $this->fetch_all($sql);
         return $user_info;
     }
 
-    function get_limit_user_info($set1, $set2, $key)
+    function get_limit_user_info($set1, $set2, $type)
     {
-        $news_info = $this->fetch_all("select * from user where role_type<=$key limit $set1,$set2");
+        $news_info = $this->fetch_all("select * from user where role_type<=$type limit $set1,$set2");
         return $news_info;
     }
 
@@ -85,13 +89,13 @@ class User_Model extends Base_Model
     {
         $role_type = mysqli_real_escape_string($this->conn, $role_type);
         $user_id = mysqli_real_escape_string($this->conn, $user_id);
-        $sql0 = "update user set role_type=0 where user_id=$user_id";
-        $sql1 = "update user set role_type=1 where user_id=$user_id";
+        $sql0 = "update user set role_type=1 where user_id=$user_id";
+        $sql1 = "update user set role_type=2 where user_id=$user_id";
         $res = null;
-        if ($role_type == 0) {
+        if ($role_type == 1) {
             $res1 = mysqli_query($this->conn, $sql1);
             $res = $res1;
-        } elseif ($role_type == 1) {
+        } elseif ($role_type == 2) {
             $res2 = mysqli_query($this->conn, $sql0);
             $res = $res2;
         }
@@ -102,13 +106,13 @@ class User_Model extends Base_Model
     {
         $role_type = mysqli_real_escape_string($this->conn, $role_type);
         $user_id = mysqli_real_escape_string($this->conn, $user_id);
-        $sql0 = "update user set role_type=2 where user_id=$user_id";
-        $sql1 = "update user set role_type=1 where user_id=$user_id";
+        $sql0 = "update user set role_type=3 where user_id=$user_id";
+        $sql1 = "update user set role_type=2 where user_id=$user_id";
         $res = null;
-        if ($role_type == 2) {
+        if ($role_type == 3) {
             $res1 = mysqli_query($this->conn, $sql1);
             $res = $res1;
-        } elseif ($role_type <= 1) {
+        } elseif ($role_type <= 2) {
             $res2 = mysqli_query($this->conn, $sql0);
             $res = $res2;
         }

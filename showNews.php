@@ -20,20 +20,20 @@
     <div class="menu">
         <?php
         switch ($_SESSION['role_type']) {
-            case "0":
+            case ROLE_TYPE_VISITOR:
                 break;
-            case "1":
+            case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
-            case "2":
+            case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
-            case "3":
+            case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
@@ -78,11 +78,11 @@
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $row =$redis->lRange('real_news',$offset,$page*$page_size-1);
-            echo "当页新闻数量:".count($row);
+            $real_news_list_info =$redis->lRange('real_news',$offset,$page*$page_size-1);
+            echo "当页新闻数量:".count($real_news_list_info);
             echo "<ul style='list-style: none;color: #003F76;line-height: 25px;'>";
-            for ($i = 0; $i < count($row); $i++) {
-                echo "<li>{$row[$i]}</li>";
+            for ($i = 0; $i < count($real_news_list_info); $i++) {
+                echo "<li>{$real_news_list_info[$i]}</li>";
             }
             echo "</ul>";
             ?>

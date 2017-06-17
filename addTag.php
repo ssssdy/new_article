@@ -19,13 +19,13 @@
 <div class="menu">
     <?php
     switch ($_SESSION['role_type']) {
-        case "2":
+        case ROLE_TYPE_ADMIN:
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
             break;
-        case "3":
+        case ROLE_TYPE_SUPER:
             echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
@@ -48,13 +48,13 @@
         </tr>
         <?php
         $tag_model = new Tag_Model();
-        $tag = $tag_model->get_all_tag_info();
-        $tag_num = count($tag);
+        $tag_info_list = $tag_model->get_all_tag_info();
+        $tag_num = count($tag_info_list);
         for ($i = 0; $i < $tag_num; $i++) {
             echo "<tr>";
-            echo "<td align='center'>{$tag[$i]['tag_id']}</td>";
-            echo "<td align='center'>{$tag[$i]['tag_name']}</td>";
-            echo "<td align='center'><a href = 'javascript:dodel({$tag[$i]['tag_id']})' onclick=''>删除该类别</a></td>";
+            echo "<td align='center'>{$tag_info_list[$i]['tag_id']}</td>";
+            echo "<td align='center'>{$tag_info_list[$i]['tag_name']}</td>";
+            echo "<td align='center'><a href = 'javascript:dodel({$tag_info_list[$i]['tag_id']})' onclick=''>删除该类别</a></td>";
             echo "</tr>";
         }
         ?>

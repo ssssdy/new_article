@@ -20,14 +20,14 @@
     <div class="menu">
         <?php
         switch ($_SESSION['role_type']) {
-            case "VI":
+            case ROLE_TYPE_VISITOR:
                 break;
-            case "ED":
+            case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
-            case "AD":
+            case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
@@ -35,7 +35,7 @@
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
-            case "SU":
+            case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
@@ -72,54 +72,53 @@
             $blog = $redis->lrange('news_list', 0, 20);
             //如果$blog数组为空，则去数据库中查询，并加入到redis中
             if (empty($blog)) {
-                echo "缓存中没有数据,正从MySQL数据库调取数据存入缓存"."<br>";
-                $info = $news_model->get_all_news_info();
+                echo "缓存中没有数据,正从MySQL数据库调取数据存入缓存" . "<br>";
+                $news_info_list = $news_model->get_all_news_info();
 //                dump($info[0]['title']);
-                $num = count($info);
+                $num = count($news_info_list);
                 $redis->select(1);
-                for ($i = 0; $i < $num; $i++) {
-                    $redis->rpush('news_list', json_encode($info[$i]));
+                foreach ($news_info_list as $news_info) {
+                    $redis->rpush('news_list', json_encode($news_info));
                 }
                 $redis_blog = $redis->lRange('news_list', 0, $num - 1);
             } else {
-                echo "缓存中有数据,直接调取"."<br>";
+                echo "缓存中有数据,直接调取" . "<br>";
                 $redis_blog = $redis->lRange('news_list', 0, 20);
                 $news = json_decode($redis_blog[0], true);
 //                print_r($news['title']);
             }
-            $dir = "http://orc8koj7r.bkt.clouddn.com/";
-            $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
             $page_size = 5;
-            echo "总文章数:".count($redis_blog);
+            echo "总文章数:" . count($redis_blog);
             $page_num = ceil(count($redis_blog) / $page_size);
             if ($page > $page_num || $page == 0) {
                 echo "Error : Can Not Found The page .";
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $row1 = $redis->lRange('news_list', $offset, $page * $page_size - 1);
-//            dump($row1);
-            for ($i = 0; $i < count($row1); $i++) {
-                $row2 = json_decode($row1[$i], true);
+            $news_info_list_redis = $redis->lRange('news_list', $offset, $page * $page_size - 1);
+            //            dump($row1);
+            for ($i = 0; $i < count($news_info_list_redis); $i++) {
+                $news_info_redis = json_decode($news_info_list_redis[$i], true);
                 $tag_model = new Tag_Model();
-                $tag_row = $tag_model->get_one_tag_info($row2['tag_id']);
+                $tag_info = $tag_model->get_one_tag_info($news_info_redis['tag_id']);
                 echo "<tr>";
-                echo "<td align='center'>{$row2['id']}</td>";
-                echo "<td align='center'>{$tag_row['tag_name']}</td>";
-                echo "<td align='center'>{$row2['title']}</td>";
-                echo "<td align='center'>{$row2['keywords']}</td>";
-                echo "<td align='center' width='100'>{$row2['author']}</td>";
-                echo "<td align='center'>" . date("Y-m-d", $row2['add_time']) . "</td>";
-                echo "<td align='center'>{$row2['content']}</td>";
+                echo "<td align='center'>{$news_info_redis['id']}</td>";
+                echo "<td align='center'>{$tag_info['tag_name']}</td>";
+                echo "<td align='center'>{$news_info_redis['title']}</td>";
+                echo "<td align='center'>{$news_info_redis['keywords']}</td>";
+                echo "<td align='center' width='100'>{$news_info_redis['author']}</td>";
+                echo "<td align='center'>" . date("Y-m-d", $news_info_redis['add_time']) . "</td>";
+                echo "<td align='center'>{$news_info_redis['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . $dir . $row2['image_name'] . $img_model . "'/>
+                  <img width='100' height='100' src='" . qiniu_image_display($news_info_redis['image_name']) . "'/>
                   </td>";
-                if ($_SESSION['role_type'] >= 1) {
+                if ($_SESSION['role_type'] >= ROLE_TYPE_EDITOR) {
                     echo "<td align='center'>";
-                    echo "<a href='editArticle.php?id={$row2['id']}'>编辑文章</a><br/>";
-                    if ($_SESSION['role_type'] >= 2) {
-                        echo "<a href='javascript:dodel({$row2['id']})'>删除文章</a>";
+                    echo $news_info_redis['id'];
+                    echo "<a href='editArticle.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
+                    if ($_SESSION['role_type'] >= ROLE_TYPE_ADMIN) {
+                        echo "<a href='javascript:dodel({$news_info_redis['id']})'>删除文章</a>";
                     }
                 }
                 echo "</td>";

@@ -11,20 +11,23 @@
         <?php
         require './helpers/global_helper.php';
         require './model/base_model.class.php';
+        require './model/news_model.class.php';
+        require './model/user_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>
     <div class="menu">
         <?php
         switch ($_SESSION['role_type']) {
-            case "0":
+            case ROLE_TYPE_VISITOR:
                 break;
-            case "1":
+            case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
-            case "2":
+            case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
@@ -32,7 +35,7 @@
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
-            case "3":
+            case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='showNews.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
@@ -63,7 +66,7 @@
                 ?>
             </tr>
             <?php
-            $news_model = new Base_News_Model();
+            $news_model = new News_Model();
             $row1 = $news_model->get_all_news_info();
             $dir = "http://orc8koj7r.bkt.clouddn.com/";
             $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
@@ -77,7 +80,7 @@
             $offset = ($page - 1) * $page_size;
             $row = $news_model->get_limit_news_info($offset, $page_size);
             for ($i = 0; $i < count($row); $i++) {
-                $tag_model = new Base_Tag_Model();
+                $tag_model = new Tag_Model();
                 $tag_row = $tag_model->get_one_tag_info($row[$i]['tag_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row[$i]['id']}</td>";

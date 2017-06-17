@@ -23,16 +23,16 @@
     <div class="menu">
         <?php
         switch ($_SESSION['role_type']) {
-            case "1":
+            case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='index.php'>文章首页</a></li></ul>";
                 break;
-            case "2":
+            case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
-            case "3":
+            case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>

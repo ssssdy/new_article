@@ -22,18 +22,18 @@
     <div class="menu">
         <?php
         switch ($_SESSION['role_type']) {
-            case "1":
+            case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
-            case "2":
+            case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>添加编辑</a></li></ul>";
                 break;
-            case "3":
+            case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
@@ -45,64 +45,67 @@
         ?>
     </div>
     <div class="content">
-            <?php
-            $news_model = new News_Model();
-            $news = $news_model->get_one_news_info($_GET['id']);
-            $tag_model = new Tag_Model();
-            $tag = $tag_model->get_one_tag_info($news['tag_id']);
-            $tag1 = $tag_model->get_all_tag_info();
-            $tag_num = count($tag1);
-            ?>
-            <h2 align="center">编辑文章</h2>
-            <form action="action.php?action=update" method="post">
-                <input type="hidden" name="id" value="<?php echo $news['id']; ?>"/>
-                <table width="800">
-                    <caption style="font-size: 26px">编辑文章</caption>
-                    <tr>
-                        <td align="center">文章类别：</td>
-                        <td>
-                            <select name="tag_id" id="tag_name" title="">
-                                <option value={$tag['tag_id']}><?=$tag['tag_name']?></option>
-                                <?php
-                                for ($i = 0; $i < $tag_num; $i++) {
-                                    echo " <option value={$tag1[$i]['tag_id']}>{$tag1[$i]['tag_name']}</option>";
-                                }
-                                ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">标题:</td>
-                        <td width="90"><input title="" type="text" name="title" value="<?=$news['title']?>"/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">关键字:</td>
-                        <td><input title="" type="text" name="keywords" value="<?=$news['keywords']?>"/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">作者:</td>
-                        <td><input title="" type="text" name="author" value="<?=$news['author']?>"/></td>
-                    </tr>
-                    <tr>
-                        <td align="center">内容:</td>
-                        <td><textarea name="content" id="content" title=""><?= $news['content']?></textarea>
-                            <script type="text/javascript">
-                                um.getEditor('content')
-                            </script>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align='center'>修改图片：</td>
-                        <td><input title="" type="text" name="image_name" value="<?=$news['image_name']?>"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <input size="6" type="submit" value="编辑"/>
-                            <input type="reset" value="重置"/>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+        <?php
+        $news_model = new News_Model();
+        $news_info = $news_model->get_one_news_info($_GET['id']);
+//        dump($news_info);
+        $tag_model = new Tag_Model();
+        $tag_info = $tag_model->get_one_tag_info($news_info['tag_id']);
+//        dump($tag_info['tag_id']);
+        $tag_list_info = $tag_model->get_all_tag_info();
+//        dump($tag_list_info);
+        $tag_num = count($tag_list_info);
+        ?>
+        <h2 align="center">编辑文章</h2>
+        <form action="action.php?action=update" method="post">
+            <input type="hidden" name="id" value="<?php echo $news_info['id']; ?>"/>
+            <table width="800">
+                <caption style="font-size: 26px">编辑文章</caption>
+                <tr>
+                    <td align="center">文章类别：</td>
+                    <td>
+                        <select name="tag_id" id="tag_name" title="">
+                            <?php
+                            echo "<option value={$tag_info['tag_id']}>{$tag_info['tag_name']}</option>";
+                            for ($i = 0; $i < $tag_num; $i++) {
+                                echo " <option value=$tag_list_info[$i]['tag_id']>{$tag_list_info[$i]['tag_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">标题:</td>
+                    <td width="90"><input title="" type="text" name="title" value="<?= $news_info['title'] ?>"/></td>
+                </tr>
+                <tr>
+                    <td align="center">关键字:</td>
+                    <td><input title="" type="text" name="keywords" value="<?= $news_info['keywords'] ?>"/></td>
+                </tr>
+                <tr>
+                    <td align="center">作者:</td>
+                    <td><input title="" type="text" name="author" value="<?= $news_info['author'] ?>"/></td>
+                </tr>
+                <tr>
+                    <td align="center">内容:</td>
+                    <td><textarea name="content" id="content" title=""><?= $news_info['content'] ?></textarea>
+                        <script type="text/javascript">
+                            um.getEditor('content');
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align='center'>修改图片：</td>
+                    <td><input title="" type="text" name="image_name" value="<?= $news_info['image_name'] ?>"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <input size="6" type="submit" value="编辑"/>
+                        <input type="reset" value="重置"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
     <script type="text/javascript">
         var um = UE.getEditor('content',

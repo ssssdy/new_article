@@ -18,7 +18,7 @@
     </div>
     <div class="menu">
         <?php
-                echo "<ul><li><a href='index.php'>浏览文章</a></li>
+        echo "<ul><li><a href='index.php'>浏览文章</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
@@ -31,17 +31,17 @@
         <?php
         $news_model = new News_Model();
         $user_model = new User_Model();
-        $row1 = $user_model->get_all_user_info();
+        $user_list_info = $user_model->get_all_user_info(ROLE_TYPE_ADMIN);
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
         $page_size = 10;
-        $page_num = ceil(count($row1) / $page_size);
+        $page_num = ceil(count($user_list_info) / $page_size);
         if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
             exit;
         }
         $offset = ($page - 1) * $page_size;
-        $row = $user_model->get_limit_user_info($offset, $page_size,2);
+        $user_limit_info = $user_model->get_limit_user_info($offset, $page_size, ROLE_TYPE_ADMIN);
         ?>
         <table align="center" width="600">
             <tr>
@@ -51,19 +51,19 @@
                 <th>变更权限</th>
             </tr>
             <?php
-            for ($i = 0; $i < count($row); $i++) {
-                $role_name = $user_model->get_role_name($row[$i]['role_type']);
+            for ($i = 0; $i < count($user_limit_info); $i++) {
+                $role_name = $user_model->get_role_name($user_limit_info[$i]['role_type']);
                 echo "<tr>";
-                echo "<td align='center'>{$row[$i]['user_id']}</td>";
-                echo "<td align='center'>{$row[$i]['user_name']}</td>";
+                echo "<td align='center'>{$user_limit_info[$i]['user_id']}</td>";
+                echo "<td align='center'>{$user_limit_info[$i]['user_name']}</td>";
                 echo "<td align='center'>$role_name</td>";
                 echo "<td align='center'>";
-                if($row[$i]['role_type']<=ED){
-//                       echo $row1[$i]['role_type'];
-                    echo "<a href='javascript:upChange({$row[$i]['user_id']})'>升级为管理员</a>";
-                }else if($row[$i]['role_type']==AD){
-//                        echo $row[$i]['role_type'];
-                    echo "<a href='javascript:downChange({$row[$i]['user_id']})'>取消管理员身份</a>";
+                if ($user_limit_info[$i]['role_type'] <= ROLE_TYPE_EDITOR) {
+                       echo $user_limit_info[$i]['role_type'];
+                    echo "<a href='javascript:upChange({$user_limit_info[$i]['user_id']})'>升级为管理员</a>";
+                } else if ($user_limit_info[$i]['role_type'] == ROLE_TYPE_ADMIN) {
+                        echo $user_limit_info[$i]['role_type'];
+                    echo "<a href='javascript:downChange({$user_limit_info[$i]['user_id']})'>取消管理员身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";

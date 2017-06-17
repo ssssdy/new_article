@@ -36,7 +36,6 @@ switch ($_GET["action"]) {
         break;
     case "delete_news":
         $id = $_GET['id'];
-        dump($id);
         $news_model->delete_by_id($id);
         header("Location:index.php");
         break;
@@ -66,7 +65,7 @@ switch ($_GET["action"]) {
         $content = $_POST['content'];
         $image_name = $_POST['image_name'];
         $id = $_POST['id'];
-//        echo $id;
+        echo $id;
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
             'content' => $content, 'image_name' => $image_name);
         $news_model->update_news('news', $arr, $id);
@@ -113,9 +112,9 @@ switch ($_GET["action"]) {
                     if ($num > 0) {
                         echo "<script>alert('用户名已存在！');history.back()</script>";
                     } else {
-                        $arr1 = array('user_name' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
-                        $rs = $user_model->insert_user($arr1, 'user');
-                        if ($rs) {
+                        $user_info = array('user_name' => $user, 'password' => $psw, 'phone' => $phone, 'address' => $address);
+                        $result = $user_model->insert_user($user_info, 'user');
+                        if ($result) {
                             echo "<script>alert('注册成功！请登录')</script>";
                             header("refresh:0;url='login.php'");
                         }
@@ -144,9 +143,9 @@ switch ($_GET["action"]) {
                 } else if ($_SESSION['rand'] != $code) {
                     echo "<script>alert('验证码错误！请重新填写');window.location.href='login.php'</script>";
                 } else if ($num) {
-                    $row = mysqli_fetch_array($result);
-                    $_SESSION['user_name'] = $row['user_name'];
-                    $role_type = $user_model->get_role_type($row['user_name']);
+                    $check_user_info = mysqli_fetch_array($result);
+                    $_SESSION['user_name'] = $check_user_info['user_name'];
+                    $role_type = $user_model->get_role_type($check_user_info['user_name']);
                     $_SESSION['role_type'] = $role_type;
                     $_SESSION['role_name'] = $user_model->get_role_name($role_type);
                     header("refresh:0;url=index.php");

@@ -14,12 +14,13 @@ function check_login()
     }
 }
 
-function  str_rand(){
-    $str="abcdefghijkmnpqrstuvwxyz0123456789ABCDEFGHIGKLMNPQRSTUVWXYZ";//设置被随机采集的字符串
-    $codeLen='5';//设置生成的随机数个数
-    $rand="";
-    for($i=0; $i<$codeLen-1; $i++){
-        $rand .= $str[mt_rand(0, strlen($str)-1)];  //如：随机数为30  则：$str[30]
+function str_rand()
+{
+    $str = "abcdefghijkmnpqrstuvwxyz0123456789ABCDEFGHIGKLMNPQRSTUVWXYZ";//设置被随机采集的字符串
+    $codeLen = '5';//设置生成的随机数个数
+    $rand = "";
+    for ($i = 0; $i < $codeLen - 1; $i++) {
+        $rand .= $str[mt_rand(0, strlen($str) - 1)];  //如：随机数为30  则：$str[30]
     }
     return $rand;
 }
@@ -48,4 +49,11 @@ function dump($var, $echo = true, $label = null, $strict = true)
         return null;
     } else
         return $output;
+}
+
+function qiniu_image_display($url)
+{
+    $dir = "http://orc8koj7r.bkt.clouddn.com/";
+    $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
+    return $dir . $url . $img_model;
 }

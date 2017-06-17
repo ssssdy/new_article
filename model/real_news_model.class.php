@@ -1,6 +1,11 @@
 <?php
 class Real_News_Model extends Base_Model
 {
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     function insert_real_time_news($array)
     {
         $sql = "insert into real_news (id,content) VALUES (null,'{$array}')";

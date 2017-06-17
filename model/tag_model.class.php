@@ -1,9 +1,14 @@
 <?php
+
 class Tag_Model extends Base_Model
 {
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     function get_one_tag_info($tag_id)
     {
-        $tag_id = mysqli_real_escape_string($this->conn, $tag_id);
         $tag_info = $this->fetch_one("select * from tag where tag_id = $tag_id");
         return $tag_info;
     }

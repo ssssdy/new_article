@@ -4,17 +4,18 @@ define("USER", "root");
 define("PASS", "15827398906");
 define("DB_NAME", "newsdb");
 define("DB_CHARSET", "utf8");
-define("SU","3");
-define("AD","2");
-define("ED","1");
-define("VI","0");
+define("ROLE_TYPE_SUPER", 4);
+define("ROLE_TYPE_ADMIN", 3);
+define("ROLE_TYPE_EDITOR", 2);
+define("ROLE_TYPE_VISITOR", 1);
+
 class Base_Model
 {
-    public $host_name = HOST;
-    public $user_name = USER;
-    public $password = PASS;
-    public $db_name = DB_NAME;
-    public $db_charset = DB_CHARSET;
+    private $host_name = HOST;
+    private $user_name = USER;
+    private $password = PASS;
+    private $db_name = DB_NAME;
+    private $db_charset = DB_CHARSET;
     public $conn;
 
     function __construct()
@@ -60,11 +61,11 @@ class Base_Model
         return $data;
     }
 
-    function insert($array, $table)
+    function insert($array,$table)
     {
         $keys = join(',', array_keys($array));
         $values = "'" . join("','", array_values($array)) . "'";
-        $sql = "insert into {$table}({$keys}) VALUES ({$values})";
+        $sql = "insert into $table ({$keys}) VALUES ({$values})";
         $res = mysqli_query($this->conn, $sql);
         if ($res) {
             return true;
@@ -73,8 +74,9 @@ class Base_Model
         }
     }
 
-    function update_by_id($table, $arr, $id)
+    function update_by_id($table,$arr, $id)
     {
+        $key_and_value = array();
         foreach ($arr as $key => $value) {
             $value = mysqli_real_escape_string($this->conn, $value);
             $key_and_value[] = $key . "='" . $value . "'";        //合成类似：var = 'var1'var2='var3'这样的字符串
@@ -84,10 +86,10 @@ class Base_Model
         mysqli_query($this->conn, $sql);
     }
 
-    function delete($table, $where = null)
+    function delete($table,$where = null)
     {
         $where = $where == null ? '' : ' WHERE ' . $where;
-        $sql = "DELETE FROM {$table}{$where}";
+        $sql = "DELETE FROM $table $where";
         $res = mysqli_query($this->conn, $sql);
         if ($res) {
             return mysqli_affected_rows($this->conn);

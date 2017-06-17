@@ -4,11 +4,14 @@
     <link href="./static/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <?php
-require './model/base_model.php';
-include './helpers/global_helper.php';
-$news_model = new Base_News_model();
-$tag_model = new Base_Tag_Model();
-$user_model = new Base_User_Model();
+require './helpers/global_helper.php';
+require './model/base_model.class.php';
+require './model/news_model.class.php';
+require './model/user_model.class.php';
+require './model/tag_model.class.php';
+$news_model = new News_model();
+$tag_model = new Tag_Model();
+$user_model = new User_Model();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -19,7 +22,7 @@ switch ($_GET["action"]) {
         $image_name = $_POST["image_name"];
         $add_time = time();
         if($title==null){
-            echo "<script>alert('标题不能为空!'); window.location.href='add.php';</script>";
+            echo "<script>alert('标题不能为空!'); window.location.href='addArticle.php';</script>";
             exit;
         }
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
@@ -63,7 +66,7 @@ switch ($_GET["action"]) {
         $content = $_POST['content'];
         $image_name = $_POST['image_name'];
         $id = $_POST['id'];
-        echo $id;
+//        echo $id;
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
             'content' => $content, 'image_name' => $image_name);
         $news_model->update_news('news', $arr, $id);
@@ -157,15 +160,15 @@ switch ($_GET["action"]) {
         }
         break;
     case "change_role1":
-        $role_id = $_GET['id'];
-        $user_id = $user_model->get_user_id($role_id);
+        $user_id = $_GET['id'];
+        $role_id = $user_model->get_role_id_by_user_id($user_id);
         $result = $user_model->change_role($user_id, $role_id);
         header("Location:addEditor.php");
         break;
     case "change_role2":
-        $role_id = $_GET['id'];
-        $user_id = $user_model->get_user_id($role_id);
-        $result = $user_model->change_admin_role($user_id, $role_id);
+        $user_id = $_GET['id'];
+        $role_id = $user_model->get_role_id_by_user_id($user_id);
+        $result = $user_model->change_admin_role($user_id,$role_id);
         header("Location:addAdmin.php");
         break;
 }

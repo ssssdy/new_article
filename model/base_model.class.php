@@ -5,7 +5,7 @@ define("PASS", "15827398906");
 define("DB_NAME", "newsdb");
 define("DB_CHARSET", "utf8");
 
-class Base_Mysql_Model
+class Base_Model
 {
     public $host_name = HOST;
     public $user_name = USER;
@@ -74,10 +74,10 @@ class Base_Mysql_Model
     {
         foreach ($arr as $key => $value) {
             $value = mysqli_real_escape_string($this->conn, $value);
-            $keyAndvalueArr[] = $key . "='" . $value . "'";        //合成类似：var = 'var1'var2='var3'这样的字符串
+            $key_and_value[] = $key . "='" . $value . "'";        //合成类似：var = 'var1'var2='var3'这样的字符串
         }
-        $keyAndvalues = join(',', $keyAndvalueArr);           //将字符串用','隔开,变成：var = 'var1',var2='var3'
-        $sql = "update {$table} set {$keyAndvalues} where id={$id}";//修改操作 格式 update 表名 set 字段=值 where 条件
+        $key_and_values = join(',', $key_and_value);           //将字符串用','隔开,变成：var = 'var1',var2='var3'
+        $sql = "update {$table} set {$key_and_values} where id={$id}";//修改操作 格式 update 表名 set 字段=值 where 条件
         mysqli_query($this->conn, $sql);
     }
 
@@ -85,7 +85,7 @@ class Base_Mysql_Model
     {
         $where = $where == null ? '' : ' WHERE ' . $where;
         $sql = "DELETE FROM {$table}{$where}";
-        $res = mysqli_query($this->conn,$sql);
+        $res = mysqli_query($this->conn, $sql);
         if ($res) {
             return mysqli_affected_rows($this->conn);
         } else {

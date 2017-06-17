@@ -8,9 +8,12 @@
 <div>
     <div class="login">
         <?php
-        require("./helpers/global_helper.php");
-        require './model/base_model.php';
-        $real_news_model = new Base_Real_News_Model();
+        require './helpers/global_helper.php';
+        require './model/base_model.class.php';
+        require './model/news_model.class.php';
+        require './model/user_model.class.php';
+        require './model/real_news_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>
@@ -21,18 +24,18 @@
                 break;
             case "1":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li></ul>";
+                        <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
             case "2":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li>
@@ -45,6 +48,7 @@
         <h3 align="center" style="font-size: 26px">实时新闻</h3>
         <table>
             <?php
+            $real_news_model = new Real_News_Model();
             $redis = new redis();
             $redis->connect('127.0.0.1', 6379);
             $redis->select(4);

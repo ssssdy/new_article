@@ -9,7 +9,10 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.php';
+        require './model/base_model.class.php';
+        require './model/news_model.class.php';
+        require './model/user_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>
@@ -18,13 +21,13 @@
         switch ($_SESSION['role_id']) {
             case "2":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li></ul>";
                 break;
             case "3":
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li>
@@ -36,8 +39,8 @@
     <div class="content">
         <h3 align="center">用户信息</h3>
         <?php
-        $news_model = new Base_News_Model();
-        $user_model = new Base_User_Model();
+        $news_model = new News_Model();
+        $user_model = new User_Model();
         $row1 = $user_model->get_general_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
@@ -61,12 +64,14 @@
                 $role_name = $user_model->get_role_name($row[$i]['role_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row[$i]['user_name']}</td>";
-                echo "<td align='center'>$role_name</td>";
-                echo "<td>";
+                echo "<td align='center'>{$row[$i]['user_id']}$role_name</td>";
+                echo "<td align='center'>";
                 if ($row[$i]['role_id'] == 0) {
-                    echo "<a href='javascript:upChange({$row[$i]['role_id']})'>升级为编辑</a>";
+                    echo $row1[$i]['role_id'];
+                    echo "<a href='javascript:upChange({$row[$i]['user_id']})'>升级为编辑</a>";
                 } else if ($row[$i]['role_id'] == 1) {
-                    echo "<a href='javascript:downChange({$row[$i]['role_id']})'>取消编辑身份</a>";
+                    echo $row1[$i]['role_id'];
+                    echo "<a href='javascript:downChange({$row[$i]['user_id']})'>取消编辑身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";

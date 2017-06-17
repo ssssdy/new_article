@@ -1,23 +1,28 @@
 <?php
-require_once ("base_mysql_model.class.php");
-class Tag_Model{
-    function get_one_tag_info($tagId)
-    {   $db = new Base_Mysql_Model();
-        $tag_info = $db->fetch_one("select * from tag where tag_id = $tagId");
+class Tag_Model extends Base_Model
+{
+    function get_one_tag_info($tag_id)
+    {
+        $tag_id = mysqli_real_escape_string($this->conn, $tag_id);
+        $tag_info = $this->fetch_one("select * from tag where tag_id = $tag_id");
         return $tag_info;
     }
+
     function get_all_tag_info()
-    {   $db = new Base_Mysql_Model();
-        $tag_info = $db->fetch_all("select * from tag");
+    {
+        $tag_info = $this->fetch_all("SELECT * FROM tag");
         return $tag_info;
     }
+
     function delete_by_tag_id($id)
-    {   $db = new Base_Mysql_Model();
+    {
+        $id = mysqli_real_escape_string($this->conn, $id);
         $sql = "DELETE FROM tag where tag_id=$id";
-        mysqli_query($db->conn, $sql);
+        mysqli_query($this->conn, $sql);
     }
-    function  insert_tag($array,$table){
-        $db =new Base_Mysql_Model();
-        return $db->insert($array,$table);
+
+    function insert_tag($array, $table)
+    {
+        return $this->insert($array, $table);
     }
 }

@@ -9,4 +9,5 @@ out
 gen
 ‘.idea’
 /lib/login/
+/model/news_model.class.php
 

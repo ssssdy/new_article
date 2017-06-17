@@ -9,7 +9,10 @@
 <div class="login">
     <?php
     require './helpers/global_helper.php';
-    require './model/base_model.php';
+    require './model/base_model.class.php';
+    require './model/news_model.class.php';
+    require './model/user_model.class.php';
+    require './model/tag_model.class.php';
     check_login();
     ?>
 </div>
@@ -18,13 +21,13 @@
     switch ($_SESSION['role_id']) {
         case "2":
             echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
             break;
         case "3":
             echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li>
                         <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
@@ -44,7 +47,7 @@
             <th align="center">操作</th>
         </tr>
         <?php
-        $tag_model = new Base_Tag_Model();
+        $tag_model = new Tag_Model();
         $tag = $tag_model->get_all_tag_info();
         $tag_num = count($tag);
         for ($i = 0; $i < $tag_num; $i++) {

@@ -1,6 +1,7 @@
 <?php
-require './model/base_model.php';
 require './helpers/global_helper.php';
+require './model/base_model.class.php';
+require './model/real_news_model.class.php';
 session_start();
 $ch = curl_init();
 $url = 'http://news.hustonline.net/category/highlights';
@@ -28,7 +29,7 @@ $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 $page_size = 10;
 $offset1 = ($page) * $page_size;
 $offset2 = ($page + 1) * $page_size;
-$info_model = new Base_Real_News_Model();
+$info_model = new Real_News_Model();
 echo $page . "</br>";
 $news = array();
 for ($i = $offset1; $i < $offset2; $i++) {

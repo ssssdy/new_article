@@ -5,11 +5,42 @@
 <body>
 <div class="login">
     <?php
-    require './model/base_model.php';
+    require './model/base_model.class.php';
     require './helpers/global_helper.php';
     check_login();
     ?>
 </div>
+<div class="menu">
+    <?php
+    switch ($_SESSION['role_id']) {
+        case "0":
+            break;
+        case "1":
+            echo "<ul><li><a href='show_news_info.php'>实时新闻</a></li>>;
+                        <li><a href='index.php'>文章首页</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li></ul>";
+            break;
+        case "2":
+            echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                        <li><a href='index.php'>文章首页</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li></ul>";
+            break;
+        case "3":
+            echo "<ul><li><a href='show_news_info.php'>实时新闻</a>
+                        <li><a href='index.php'>文章首页</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
+                        <li><a href='uploadImage.php'>图片上传</a></li>
+                        <li><a href='addTag.php'>文章分类</a></li>
+                        <li><a href='addEditor.php'>变更用户权限</a></li>
+                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
+            break;
+    }
+    ?>
+</div>
+<div class="content">
 <?php
 require './lib/php-sdk-7.1.3/autoload.php';
 header('Access-Control-Allow-Origin:*');
@@ -40,5 +71,6 @@ $token = $auth->uploadToken($bucket, NULL, 3600, $policy);
         <li><input type="submit" value="上传"/></li>
     </ul>
 </form>
+</div>
 </body>
 </html>

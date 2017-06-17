@@ -8,15 +8,18 @@
     <h2>文章管理系统</h2>
     <div class="login">
         <?php
-        require './model/base_model.php';
         require './helpers/global_helper.php';
+        require './model/base_model.class.php';
+        require './model/news_model.class.php';
+        require './model/user_model.class.php';
+        require './model/tag_model.class.php';
         check_login();
         ?>
     </div>
     <div class="menu">
         <?php
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='add.php'>添加文章</a></li>
+                        <li><a href='addArticle.php'>添加文章</a></li>
                         <li><a href='uploadImage.php'>图片上传</a></li>
                         <li><a href='addTag.php'>文章分类</a></li>
                         <li><a href='addEditor.php'>变更用户权限</a></li>
@@ -26,8 +29,8 @@
     <div class="content">
         <h3 align="center">管理员信息</h3>
         <?php
-        $news_model = new Base_News_Model();
-        $user_model = new Base_User_Model();
+        $news_model = new News_Model();
+        $user_model = new User_Model();
         $row1 = $user_model->get_all_user_info();
         //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
@@ -43,7 +46,7 @@
         <table align="center" width="600">
             <tr>
                 <th>管理员名</th>
-                <th>权限ID</th>
+                <th>权限</th>
                 <th>变更权限</th>
             </tr>
             <?php
@@ -51,14 +54,14 @@
                 $role_name = $user_model->get_role_name($row[$i]['role_id']);
                 echo "<tr>";
                 echo "<td align='center'>{$row[$i]['user_name']}</td>";
-                echo "<td align='center'>$role_name</td>";
-                echo "<td>";
+                echo "<td align='center'>{$row[$i]['user_id']}$role_name</td>";
+                echo "<td align='center'>";
                 if($row[$i]['role_id']<=1){
                        echo $row1[$i]['role_id'];
-                    echo "<a href='javascript:upChange({$row[$i]['role_id']})'>升级为管理员</a>";
+                    echo "<a href='javascript:upChange({$row[$i]['user_id']})'>升级为管理员</a>";
                 }else if($row[$i]['role_id']==2){
                         echo $row[$i]['role_id'];
-                    echo "<a href='javascript:downChange({$row[$i]['role_id']})'>取消管理员身份</a>";
+                    echo "<a href='javascript:downChange({$row[$i]['user_id']})'>取消管理员身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";

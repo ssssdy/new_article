@@ -10,7 +10,6 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.class.php';
         require './model/news_model.class.php';
         require './model/user_model.class.php';
         require './model/tag_model.class.php';
@@ -67,28 +66,26 @@
             </tr>
             <?php
             $news_model = new News_Model();
-            $redis = new Base_cache();
-            $blog = $redis->isExists('news_list');
-            if ($blog == 0) {
+            $redis = new Base_Cache();
+            $data_status = $redis->is_exists('news_list');
+            if ($data_status == 0) {
                 echo "数据库有数据修改" . "<br>";
                 $news_info_list = $news_model->get_all_news_info();
                 $num = count($news_info_list);
                 foreach ($news_info_list as $news_info) {
-                    $redis->rPush('news_list', json_encode($news_info), 86400);
+                    $redis->r_push('news_list', json_encode($news_info), SURVIVAL_TIME);
                 }
             }
-            $list_length = $redis->lLen('news_list');
-            echo "缓存中总数量:" . $list_length . "<br>";
-            $redis_blog = $redis->lRange('news_list', 0, $list_length);
+            $list_length = $redis->list_length('news_list');
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-            $page_size = 5;
-            $page_num = ceil(count($redis_blog) / $page_size);
+            $page_size = PAGE_SIZE;
+            $page_num = ceil($list_length / $page_size);
             if ($page > $page_num || $page == 0) {
                 echo "Error : Can Not Found The page .";
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $news_info_list_redis = $redis->lRange('news_list', $offset, $page * $page_size - 1);
+            $news_info_list_redis = $redis->l_range('news_list', $offset, $page * $page_size - 1);
             for ($i = 0; $i < count($news_info_list_redis); $i++) {
                 $news_info_redis = json_decode($news_info_list_redis[$i], true);
                 $tag_model = new Tag_Model();
@@ -110,7 +107,6 @@
                     echo "<a href='editArticle.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
                     if ($_SESSION['role_type'] >= ROLE_TYPE_ADMIN) {
                         echo "<a href='javascript:dodel({$news_info_redis['id']})'>删除文章</a>";
-//                        echo "<a href='action.php?action=delete({$news_info_redis['id']})'>删除文章</a>";
                     }
                 }
                 echo "</td>";

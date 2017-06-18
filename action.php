@@ -5,7 +5,6 @@
 </head>
 <?php
 require './helpers/global_helper.php';
-require './model/base_model.class.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
@@ -22,7 +21,7 @@ switch ($_GET["action"]) {
         $content = $_POST["content"];
         $image_url = $_POST["image_url"];
         $add_time = time();
-        if($title==null){
+        if ($title == null) {
             echo "<script>alert('标题不能为空!'); window.location.href='addArticle.php';</script>";
             exit;
         }
@@ -43,7 +42,7 @@ switch ($_GET["action"]) {
         break;
     case "add_tag":
         $tag_name = $_POST['tag_name'];
-        if($tag_name==null){
+        if ($tag_name == null) {
             echo "<script>alert('不能添加空类别!'); window.location.href='addTag.php';</script>";
             exit;
         }
@@ -160,16 +159,16 @@ switch ($_GET["action"]) {
             echo "<script> history.go(-1);</script>";
         }
         break;
-    case "change_role1":
+    case "change_editor":
         $user_id = $_GET['id'];
         $role_type = $user_model->get_role_type_by_user_id($user_id);
         $result = $user_model->change_role($user_id, $role_type);
         header("Location:addEditor.php");
         break;
-    case "change_role2":
+    case "change_admin":
         $user_id = $_GET['id'];
         $role_type = $user_model->get_role_type_by_user_id($user_id);
-        $result = $user_model->change_admin_role($user_id,$role_type);
+        $result = $user_model->change_admin_role($user_id, $role_type);
         header("Location:addAdmin.php");
         break;
 }

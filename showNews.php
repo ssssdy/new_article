@@ -9,11 +9,8 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.class.php';
         require './model/news_model.class.php';
-        require './model/user_model.class.php';
         require './model/real_news_model.class.php';
-        require './model/tag_model.class.php';
         require './cache/base_cache.class.php';
         check_login();
         ?>
@@ -50,42 +47,34 @@
         <table>
             <?php
             $real_news_model = new Real_News_Model();
-            $redis = new Base_cache();
-            $redis->
-            $blog = $redis->lrange('real_news',0,19);
-            //如果$blog数组为空，则去数据库中查询，并加入到redis中
-//            dump($blog);
-            if (empty($blog)) {
-                $rs = $real_news_model->get_real_time_news();
-//                dump($rs);
-                $num = count($rs);
-                for ($i = 0; $i <= $num; $i++) {
-                    $redis->rPush('real_news', $rs[$i]['content'],86400);
+            $redis = new Base_Cache();
+            $data_status = $redis->is_exists('real_news');
+            if ($data_status == 0) {
+                $real_news_list_info = $real_news_model->get_real_time_news();
+                $num = count($real_news_list_info);
+                for ($i = 0; $i < $num; $i++) {
+                    $redis->r_push('real_news', $real_news_list_info[$i]['content'], SURVIVAL_TIME);
                 }
-                $redis_blog = $redis->lRange('real_news', 0, $num-1);
-//                print_r($redis_blog[5]);
-            } else {
-                $redis_blog = $redis->lRange('real_news',0,19);
-//                print_r($redis_blog);
             }
-            echo "新闻总数量:".count($redis_blog)."<br>";
+            $list_length = $redis->list_length('real_news');
+            echo "新闻总数量:" . $list_length . "<br>";
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page的值，假如不存在page，那么页数就是1
-            $page_size = 6;
-            $page_num = ceil(count($redis_blog) / $page_size);
+            $page_size = PAGE_SIZE;
+            $page_num = ceil($list_length / $page_size);
             if ($page > $page_num || $page == 0) {
                 echo "Error : Can Not Found The page .";
                 exit;
             }
             $offset = ($page - 1) * $page_size;
-            $real_news_list_info =$redis->lRange('real_news',$offset,$page*$page_size-1);
-            echo "当页新闻数量:".count($real_news_list_info);
+            $real_news_info_redis = $redis->l_range('real_news', $offset, $page * $page_size - 1);
+            echo "当页新闻数量:" . count($real_news_info_redis);
             echo "<ul style='list-style: none;color: #003F76;line-height: 25px;'>";
-            for ($i = 0; $i < count($real_news_list_info); $i++) {
-                echo "<li>{$real_news_list_info[$i]}</li>";
+            for ($i = 0; $i < count($real_news_info_redis); $i++) {
+//                $real_news_info = json_decode($real_news_info_redis[$i],true);
+                echo "<li>{$real_news_info_redis[$i]}</li>";
             }
             echo "</ul>";
             ?>
-
             <?php
             $prev = $page - 1;
             $next = $page + 1;

@@ -12,7 +12,6 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.class.php';
         require './model/news_model.class.php';
         require './model/user_model.class.php';
         require './model/tag_model.class.php';
@@ -50,7 +49,6 @@
         $news_info = $news_model->get_one_news_info($_GET['id']);
         $tag_model = new Tag_Model();
         $tag_info = $tag_model->get_one_tag_info($news_info['tag_id']);
-        dump($tag_info['tag_name']);
         $tag_list_info = $tag_model->get_all_tag_info();
         $tag_num = count($tag_list_info);
         ?>

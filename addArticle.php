@@ -13,7 +13,6 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.class.php';
         require './model/news_model.class.php';
         require './model/user_model.class.php';
         require './model/tag_model.class.php';

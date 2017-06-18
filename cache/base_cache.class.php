@@ -1,12 +1,12 @@
 <?php
-
+require_once '/var/www/article.ssssdy.top/config/config.php';
 /**
  * Created by PhpStorm.
  * User: root
  * Date: 17-6-17
  * Time: 下午8:02
  */
-class Base_cache
+class Base_Cache
 {
     public $redis_instance;
 
@@ -56,44 +56,44 @@ class Base_cache
         }
     }
 
-    function rPush($key, $value, $timeout = 0)
+    function r_push($key, $value, $timeout = 0)
     {
-        $this->redis_instance->rPush($key, $value);
+        $this->redis_instance->rpush($key, $value);
         if ($timeout > 0) {
             $this->redis_instance->expire('$key', $timeout);
         }
     }
 
-    function lRange($key, $start, $end)
+    function l_range($key, $start, $end)
     {
-        return $this->redis_instance->lRange($key, $start, $end);
+        return $this->redis_instance->lrange($key, $start, $end);
     }
 
-    function hSet($tableName, $field, $value)
+    function h_set($tableName, $field, $value)
     {
         return $this->redis_instance->hset($tableName, $field, $value);
     }
 
-    function hmSet($key, $value, $timeout = 0)
+    function hm_set($key, $value, $timeout = 0)
     {
         if (!is_array($value))
             return false;
         if ($timeout > 0) {
             $this->redis_instance->expire('$key', $timeout);
         }
-        return $this->redis_instance->hMset($key, $value);
+        return $this->redis_instance->hmset($key, $value);
     }
 
-    function hmGet($key, $field)
+    function hm_get($key, $field)
     {
         if (!is_array($field))
             $field = explode(',', $field);
-        return $this->redis_instance->hMget($key, $field);
+        return $this->redis_instance->hmget($key, $field);
     }
 
-    function hGet($tableName, $field)
+    function h_get($table_name, $field)
     {
-        return $this->redis_instance->hget($tableName, $field);
+        return $this->redis_instance->hget($table_name, $field);
     }
 
     function delete($key)
@@ -101,7 +101,7 @@ class Base_cache
         return $this->redis_instance->del($key);
     }
 
-    function lLen($list)
+    function list_length($list)
     {
         return $this->redis_instance->lLen($list);
     }
@@ -111,7 +111,7 @@ class Base_cache
         return $this->redis_instance->flushDB();
     }
 
-    function isExists($key)
+    function is_exists($key)
     {
         return $this->redis_instance->exists($key);
     }

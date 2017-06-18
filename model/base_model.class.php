@@ -1,13 +1,5 @@
 <?php
-define("HOST", "localhost");
-define("USER", "root");
-define("PASS", "15827398906");
-define("DB_NAME", "newsdb");
-define("DB_CHARSET", "utf8");
-define("ROLE_TYPE_SUPER", 4);
-define("ROLE_TYPE_ADMIN", 3);
-define("ROLE_TYPE_EDITOR", 2);
-define("ROLE_TYPE_VISITOR", 1);
+require_once '/var/www/article.ssssdy.top/config/config.php';
 
 class Base_Model
 {
@@ -22,13 +14,12 @@ class Base_Model
     {
         $config = mysqli_connect($this->host_name, $this->user_name, $this->password);
         if (!$config) {
-            echo "数据库连接失败!";
-            exit;
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
         }
         $this->conn = $config;
         $res = mysqli_select_db($config, $this->db_name);
         if (!$res) {
-            echo "数据库连接失败!";
+            echo "Failed to connect to MySQL: " . mysqli_error($config);
             exit;
         }
         mysqli_set_charset($config, $this->db_charset);
@@ -37,6 +28,11 @@ class Base_Model
     function __destruct()
     {
         mysqli_close($this->conn);
+    }
+
+    function query($sql)
+    {
+        return mysqli_query($this->conn, $sql);
     }
 
     function fetch_one($sql)

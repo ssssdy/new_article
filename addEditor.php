@@ -9,7 +9,6 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/base_model.class.php';
         require './model/news_model.class.php';
         require './model/user_model.class.php';
         require './model/tag_model.class.php';
@@ -42,9 +41,8 @@
         $news_model = new News_Model();
         $user_model = new User_Model();
         $user_general_list_info = $user_model->get_general_user_info(ROLE_TYPE_EDITOR);
-        //        dump($row1);
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
-        $page_size = 10;
+        $page_size = PAGE_SIZE;
         $page_num = ceil(count($user_general_list_info) / $page_size);
         if ($page > $page_num || $page == 0) {
             echo "Error : Can Not Found The page .";
@@ -102,12 +100,12 @@
     <script type="text/javascript">
         function upChange(id) {
             if (confirm("确定要升级该游客为编辑吗？")) {
-                window.location = "action.php?action=change_role1&id=" + id;
+                window.location = "action.php?action=change_editor&id=" + id;
             }
         }
         function downChange(id) {
             if (confirm("确定取消该用户编辑权吗？")) {
-                window.location = "action.php?action=change_role1&id=" + id;
+                window.location = "action.php?action=change_editor&id=" + id;
             }
         }
     </script>

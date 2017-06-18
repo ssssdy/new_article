@@ -91,7 +91,7 @@
                 echo "<td align='center'>" . date("Y-m-d", $row[$i]['add_time']) . "</td>";
                 echo "<td align='center'>{$row[$i]['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . $dir . $row[$i]['image_name'] . $img_model . "'/>
+                  <img width='100' height='100' src='" . $dir . $row[$i]['image_url'] . $img_model . "'/>
                   </td>";
                 if ($_SESSION['role_type'] >= 1) {
                     echo "<td align='center'>";

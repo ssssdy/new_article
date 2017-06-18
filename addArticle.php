@@ -87,7 +87,7 @@
                 </tr>
                 <tr>
                     <td align="center">图片名：</td>
-                    <td><input type="text" name="image_name" title=""/></td>
+                    <td><input type="text" name="image_url" title=""/></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">

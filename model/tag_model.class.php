@@ -9,13 +9,13 @@ class Tag_Model extends Base_Model
 
     function get_one_tag_info($tag_id)
     {
-        $tag_info = $this->fetch_one("select * from tag where tag_id = $tag_id");
+        $tag_info = parent::fetch_one("select * from tag where tag_id = $tag_id");
         return $tag_info;
     }
 
     function get_all_tag_info()
     {
-        $tag_info = $this->fetch_all("SELECT * FROM tag");
+        $tag_info = parent::fetch_all("SELECT * FROM tag");
         return $tag_info;
     }
 
@@ -28,6 +28,6 @@ class Tag_Model extends Base_Model
 
     function insert_tag($array, $table)
     {
-        return $this->insert($array, $table);
+        return parent::insert($array, $table);
     }
 }

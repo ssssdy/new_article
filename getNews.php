@@ -1,8 +1,7 @@
 <?php
-require './helpers/global_helper.php';
-require './model/base_model.class.php';
-require './model/real_news_model.class.php';
-//session_start();
+//require './helpers/global_helper.php';
+require '/var/www/article.ssssdy.top/model/base_model.class.php';
+require '/var/www/article.ssssdy.top/model/real_news_model.class.php';
 $ch = curl_init();
 //$url = 'http://news.hustonline.net/category/highlights';
 $url = 'http://hb.qq.com/news/';
@@ -27,28 +26,13 @@ $output = mb_convert_encoding($output, "utf-8", "gb2312");
 //print_r($output);
 $arr = array();
 preg_match_all($ru, $output, $arr);
-//dump($arr);
-//dump($arr[0][1]);
-//$redis = new Redis();
-//$redis->connect('127.0.0.1', 6379);
-$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
-$page_size = 10;
-$offset1 = ($page) * $page_size;
-$offset2 = ($page + 1) * $page_size;
+
 $info_model = new Real_News_Model();
-echo $page . "</br>";
 $news = array();
-for ($i = $offset1; $i < $offset2; $i++) {
+for ($i = 0; $i < 10; $i++) {
     $news[$i] = $arr[0][$i];
     $info_model->insert_real_time_news($news[$i]);
-//    $redis->lPush('news_list', "$news[$i]");
     print_r($news[$i]);
-//    dump($news);
+
 }
-//echo $news[1];
-//dump($news[0]);
-////$arList = $redis->lRange("new_list",0,10);
-//$_SESSION['page'] = ++$page;
-//echo "{$_SESSION['page']}";
-//session_destroy();
-//header("refresh:5;url='getNews.php?page={$_SESSION['page']}'");
+

@@ -6,6 +6,7 @@ class User_Model extends Base_Model
     {
         parent::__construct();
     }
+
     function check_user_exist($user_name)
     {
         $user_name = mysqli_real_escape_string($this->conn, $user_name);
@@ -32,20 +33,20 @@ class User_Model extends Base_Model
     function get_general_user_info($type)
     {
         $sql = "SELECT * FROM user WHERE role_type<=$type";
-        $user_info = $this->fetch_all($sql);
+        $user_info = parent::fetch_all($sql);
         return $user_info;
     }
 
     function get_all_user_info($type)
     {
         $sql = "SELECT * FROM user WHERE role_type<=$type";
-        $user_info = $this->fetch_all($sql);
+        $user_info = parent::fetch_all($sql);
         return $user_info;
     }
 
     function get_limit_user_info($set1, $set2, $type)
     {
-        $news_info = $this->fetch_all("select * from user where role_type<=$type limit $set1,$set2");
+        $news_info = parent::fetch_all("select * from user where role_type<=$type limit $set1,$set2");
         return $news_info;
     }
 

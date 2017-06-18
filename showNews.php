@@ -14,6 +14,7 @@
         require './model/user_model.class.php';
         require './model/real_news_model.class.php';
         require './model/tag_model.class.php';
+        require './cache/base_cache.class.php';
         check_login();
         ?>
     </div>
@@ -49,9 +50,8 @@
         <table>
             <?php
             $real_news_model = new Real_News_Model();
-            $redis = new redis();
-            $redis->connect('127.0.0.1', 6379);
-            $redis->select(4);
+            $redis = new Base_cache();
+            $redis->
             $blog = $redis->lrange('real_news',0,19);
             //如果$blog数组为空，则去数据库中查询，并加入到redis中
 //            dump($blog);
@@ -59,9 +59,8 @@
                 $rs = $real_news_model->get_real_time_news();
 //                dump($rs);
                 $num = count($rs);
-                $redis->select(4);
                 for ($i = 0; $i <= $num; $i++) {
-                    $redis->rpush('real_news', $rs[$i]['content']);
+                    $redis->rPush('real_news', $rs[$i]['content'],86400);
                 }
                 $redis_blog = $redis->lRange('real_news', 0, $num-1);
 //                print_r($redis_blog[5]);

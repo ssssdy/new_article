@@ -9,6 +9,7 @@ require './model/base_model.class.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
+require './cache/base_cache.class.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
@@ -19,14 +20,14 @@ switch ($_GET["action"]) {
         $keywords = $_POST["keywords"];
         $author = $_POST["author"];
         $content = $_POST["content"];
-        $image_name = $_POST["image_name"];
+        $image_url = $_POST["image_url"];
         $add_time = time();
         if($title==null){
             echo "<script>alert('标题不能为空!'); window.location.href='addArticle.php';</script>";
             exit;
         }
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
-            'content' => $content, 'image_name' => $image_name, 'add_time' => $add_time);
+            'content' => $content, 'image_url' => $image_url, 'add_time' => $add_time);
         $res = $news_model->insert_news($arr, 'news');
         if ($res) {
             echo "<script>alert('添加成功！返回首页浏览'); window.location.href='index.php';</script>";
@@ -36,7 +37,8 @@ switch ($_GET["action"]) {
         break;
     case "delete_news":
         $id = $_GET['id'];
-        $news_model->delete_by_id($id);
+        $news_model->delete_by_news_id($id);
+        $news_info = $news_model->get_one_news_info($id);
         header("Location:index.php");
         break;
     case "add_tag":
@@ -63,11 +65,11 @@ switch ($_GET["action"]) {
         $keywords = $_POST['keywords'];
         $author = $_POST['author'];
         $content = $_POST['content'];
-        $image_name = $_POST['image_name'];
+        $image_url = $_POST['image_url'];
         $id = $_POST['id'];
         echo $id;
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
-            'content' => $content, 'image_name' => $image_name);
+            'content' => $content, 'image_url' => $image_url);
         $news_model->update_news('news', $arr, $id);
         header("Location:index.php");
         break;

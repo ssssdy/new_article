@@ -14,6 +14,7 @@
         require './model/news_model.class.php';
         require './model/user_model.class.php';
         require './model/tag_model.class.php';
+        require './cache/base_cache.class.php';
         check_login();
         ?>
     </div>
@@ -66,30 +67,21 @@
             </tr>
             <?php
             $news_model = new News_Model();
-            $redis = new redis();
-            $redis->connect('127.0.0.1', 6379);
-            $redis->select(1);
-            $blog = $redis->lrange('news_list', 0, 20);
-            //如果$blog数组为空，则去数据库中查询，并加入到redis中
-            if (empty($blog)) {
-                echo "缓存中没有数据,正从MySQL数据库调取数据存入缓存" . "<br>";
+            $redis = new Base_cache();
+            $blog = $redis->isExists('news_list');
+            if ($blog == 0) {
+                echo "数据库有数据修改" . "<br>";
                 $news_info_list = $news_model->get_all_news_info();
-//                dump($info[0]['title']);
                 $num = count($news_info_list);
-                $redis->select(1);
                 foreach ($news_info_list as $news_info) {
-                    $redis->rpush('news_list', json_encode($news_info));
+                    $redis->rPush('news_list', json_encode($news_info), 86400);
                 }
-                $redis_blog = $redis->lRange('news_list', 0, $num - 1);
-            } else {
-                echo "缓存中有数据,直接调取" . "<br>";
-                $redis_blog = $redis->lRange('news_list', 0, 20);
-                $news = json_decode($redis_blog[0], true);
-//                print_r($news['title']);
             }
+            $list_length = $redis->lLen('news_list');
+            echo "缓存中总数量:" . $list_length . "<br>";
+            $redis_blog = $redis->lRange('news_list', 0, $list_length);
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;//这句就是获取page=18中的page的值，假如不存在page，那么页数就是1
             $page_size = 5;
-            echo "总文章数:" . count($redis_blog);
             $page_num = ceil(count($redis_blog) / $page_size);
             if ($page > $page_num || $page == 0) {
                 echo "Error : Can Not Found The page .";
@@ -97,7 +89,6 @@
             }
             $offset = ($page - 1) * $page_size;
             $news_info_list_redis = $redis->lRange('news_list', $offset, $page * $page_size - 1);
-            //            dump($row1);
             for ($i = 0; $i < count($news_info_list_redis); $i++) {
                 $news_info_redis = json_decode($news_info_list_redis[$i], true);
                 $tag_model = new Tag_Model();
@@ -111,7 +102,7 @@
                 echo "<td align='center'>" . date("Y-m-d", $news_info_redis['add_time']) . "</td>";
                 echo "<td align='center'>{$news_info_redis['content']}</td>";
                 echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . qiniu_image_display($news_info_redis['image_name']) . "'/>
+                  <img width='100' height='100' src='" . qiniu_image_display($news_info_redis['image_url']) . "'/>
                   </td>";
                 if ($_SESSION['role_type'] >= ROLE_TYPE_EDITOR) {
                     echo "<td align='center'>";
@@ -119,6 +110,7 @@
                     echo "<a href='editArticle.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
                     if ($_SESSION['role_type'] >= ROLE_TYPE_ADMIN) {
                         echo "<a href='javascript:dodel({$news_info_redis['id']})'>删除文章</a>";
+//                        echo "<a href='action.php?action=delete({$news_info_redis['id']})'>删除文章</a>";
                     }
                 }
                 echo "</td>";

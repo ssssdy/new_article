@@ -48,12 +48,10 @@
         <?php
         $news_model = new News_Model();
         $news_info = $news_model->get_one_news_info($_GET['id']);
-//        dump($news_info);
         $tag_model = new Tag_Model();
         $tag_info = $tag_model->get_one_tag_info($news_info['tag_id']);
-//        dump($tag_info['tag_id']);
+        dump($tag_info['tag_name']);
         $tag_list_info = $tag_model->get_all_tag_info();
-//        dump($tag_list_info);
         $tag_num = count($tag_list_info);
         ?>
         <h2 align="center">编辑文章</h2>
@@ -68,7 +66,7 @@
                             <?php
                             echo "<option value={$tag_info['tag_id']}>{$tag_info['tag_name']}</option>";
                             for ($i = 0; $i < $tag_num; $i++) {
-                                echo " <option value=$tag_list_info[$i]['tag_id']>{$tag_list_info[$i]['tag_name']}</option>";
+                                echo " <option value={$tag_list_info[$i]['tag_id']}>{$tag_list_info[$i]['tag_name']}</option>";
                             }
                             ?>
                         </select>
@@ -96,7 +94,7 @@
                 </tr>
                 <tr>
                     <td align='center'>修改图片：</td>
-                    <td><input title="" type="text" name="image_name" value="<?= $news_info['image_name'] ?>"/></td>
+                    <td><input title="" type="text" name="image_url" value="<?= $news_info['image_url'] ?>"/></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">

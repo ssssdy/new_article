@@ -61,7 +61,7 @@ class Base_Model
         return $data;
     }
 
-    function insert($array,$table)
+    function insert($array, $table)
     {
         $keys = join(',', array_keys($array));
         $values = "'" . join("','", array_values($array)) . "'";
@@ -74,7 +74,7 @@ class Base_Model
         }
     }
 
-    function update_by_id($table,$arr, $id)
+    function update_by_id($table, $arr, $id)
     {
         $key_and_value = array();
         foreach ($arr as $key => $value) {
@@ -86,15 +86,4 @@ class Base_Model
         mysqli_query($this->conn, $sql);
     }
 
-    function delete($table,$where = null)
-    {
-        $where = $where == null ? '' : ' WHERE ' . $where;
-        $sql = "DELETE FROM $table $where";
-        $res = mysqli_query($this->conn, $sql);
-        if ($res) {
-            return mysqli_affected_rows($this->conn);
-        } else {
-            return false;
-        }
-    }
 }

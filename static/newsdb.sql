@@ -34,14 +34,14 @@ CREATE TABLE `news` (
   `author` varchar(16) NOT NULL,
   `addtime` int(10) UNSIGNED NOT NULL,
   `content` text NOT NULL,
-  `image_name` varchar(100) DEFAULT NULL
+  `image_url` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `news`
 --
 
-INSERT INTO `news` (`id`, `tag_id`, `title`, `keywords`, `author`, `addtime`, `content`, `image_name`) VALUES
+INSERT INTO `news` (`id`, `tag_id`, `title`, `keywords`, `author`, `addtime`, `content`, `image_url`) VALUES
 (40, 2, '爱的', '是多大的', '硕大的', 1497062999, '<p>dfsdfdd</p><p>dsdfs&nbsp;</p>', '009.jpg'),
 (41, 2, '速度发发', '啊发发', '啊发发', 1497065305, '<p>发发发广告给</p>', '003.jpg'),
 (42, 1, '二十多岁多', '萨达', '硕大的', 1497098828, '<p>阿萨德撒多</p>', '006.jpg'),

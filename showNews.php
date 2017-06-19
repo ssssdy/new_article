@@ -44,7 +44,6 @@
     </div>
     <div class="content">
         <h3 align="center" style="font-size: 26px">实时新闻</h3>
-        <table>
             <?php
             $real_news_model = new Real_News_Model();
             $redis = new Base_Cache();
@@ -93,7 +92,6 @@
                 echo $show . "   ";
             }
             ?>
-        </table>
         <br/>
         <hr width="100%"/>
     </div>

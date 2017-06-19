@@ -40,6 +40,21 @@ switch ($_GET["action"]) {
         $news_info = $news_model->get_one_news_info($id);
         header("Location:index.php");
         break;
+    case "refresh_cache":
+        $key = $_GET['key'];
+        $redis = new Base_Cache();
+        $redis->delete($key);
+        header("Location:article_details.php?id=$key");
+        break;
+    case "switch_city":
+        $city_name = $_POST['city_name'];
+        $city_id = area_to_id($city_name);
+        if ($city_id == null) {
+            exit('您输入的城市不存在!');
+        }
+        $weather_info = get_real_weather_info($city_id);
+        header("Location:show_weather_info.php");
+        break;
     case "add_tag":
         $tag_name = $_POST['tag_name'];
         if ($tag_name == null) {

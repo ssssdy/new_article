@@ -41,7 +41,7 @@
         $offset = ($page - 1) * $page_size;
         $user_limit_info = $user_model->get_limit_user_info($offset, $page_size, ROLE_TYPE_ADMIN);
         ?>
-        <table align="center" width="600">
+        <table align="center" width="500">
             <tr>
                 <th>用户ID</th>
                 <th>用户名</th>
@@ -57,11 +57,9 @@
                 echo "<td align='center'>$role_name</td>";
                 echo "<td align='center'>";
                 if ($user_limit_info[$i]['role_type'] <= ROLE_TYPE_EDITOR) {
-                    echo $user_limit_info[$i]['role_type'];
-                    echo "<a href='javascript:upChange({$user_limit_info[$i]['user_id']})'>升级为管理员</a>";
+                    echo "<a href='javascript:change_admin({$user_limit_info[$i]['user_id']})'>升级为管理员</a>";
                 } else if ($user_limit_info[$i]['role_type'] == ROLE_TYPE_ADMIN) {
-                    echo $user_limit_info[$i]['role_type'];
-                    echo "<a href='javascript:downChange({$user_limit_info[$i]['user_id']})'>取消管理员身份</a>";
+                    echo "<a href='javascript:change_admin({$user_limit_info[$i]['user_id']})'>取消管理员身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";
@@ -90,13 +88,8 @@
         <hr width="100%"/>
     </div>
     <script>
-        function upChange(id) {
+        function change_admin(id) {
             if (confirm("确定要升级该用户为管理员吗？")) {
-                window.location = "action.php?action=change_admin&id=" + id;
-            }
-        }
-        function downChange(id) {
-            if (confirm("确定撤销该管理员吗？")) {
                 window.location = "action.php?action=change_admin&id=" + id;
             }
         }

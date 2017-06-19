@@ -23,7 +23,6 @@ if (curl_errno($ch)) {
 }
 curl_close($ch);
 $output = mb_convert_encoding($output, "utf-8", "gb2312");
-//print_r($output);
 $arr = array();
 preg_match_all($ru, $output, $arr);
 

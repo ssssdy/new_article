@@ -49,7 +49,7 @@
         $total_num = count($tag);
         ?>
         <form action="action.php?action=add" method="post">
-            <table width="800">
+            <table align="center">
                 <caption style="font-size: 26px">文章添加</caption>
                 <tr>
                     <td align="center">文章类别：</td>

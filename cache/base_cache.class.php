@@ -22,7 +22,7 @@ class Base_Cache
     {
         $this->redis_instance->set($key, $value);
         if ($timeout > 0) {
-            $this->redis_instance->expire('$key', $timeout);
+            $this->redis_instance->expire($key, $timeout);
         }
     }
 
@@ -60,7 +60,7 @@ class Base_Cache
     {
         $this->redis_instance->rpush($key, $value);
         if ($timeout > 0) {
-            $this->redis_instance->expire('$key', $timeout);
+            $this->redis_instance->expire($key, $timeout);
         }
     }
 
@@ -79,7 +79,7 @@ class Base_Cache
         if (!is_array($value))
             return false;
         if ($timeout > 0) {
-            $this->redis_instance->expire('$key', $timeout);
+            $this->redis_instance->expire($key, $timeout);
         }
         return $this->redis_instance->hmset($key, $value);
     }
@@ -114,5 +114,14 @@ class Base_Cache
     function is_exists($key)
     {
         return $this->redis_instance->exists($key);
+    }
+    function rest_survival_time($key){
+        return $this->redis_instance->ttl($key);
+    }
+    function increase($key){
+        return $this->redis_instance->incr($key);
+    }
+    function expire($key,$timeout){
+        return $this->redis_instance->expire($key,$timeout);
     }
 }

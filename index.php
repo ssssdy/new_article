@@ -3,7 +3,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="./static/css/style.css" rel="stylesheet" type="text/css" charset="utf-8">
     <title> 文章主页 </title>
-
 </head>
 <body>
 <div>
@@ -23,7 +22,7 @@
             case ROLE_TYPE_VISITOR:
                 break;
             case ROLE_TYPE_EDITOR:
-                echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
+                echo "<ul><li><a href='showNews.php'>实时新闻</a></li>;
                         <li><a href='index.php'>文章首页</a></li>
                         <li><a href='addArticle.php'>添加文章</a></li></ul>";
                 break;
@@ -48,16 +47,12 @@
         ?>
     </div>
     <div class="content">
-        <table align="center" width="900">
+        <table align="center" width="800">
             <tr>
                 <th>文章id</th>
                 <th>文章类别</th>
                 <th>文章标题</th>
-                <th>关键字</th>
-                <th>作者</th>
                 <th>发布时间</th>
-                <th>文章内容</th>
-                <th>图片</th>
                 <?php
                 if (isset($_SESSION['user_name']) && $_SESSION['role_type'] >= 1) {
                     echo "<th>操作</th>";
@@ -93,20 +88,13 @@
                 echo "<tr>";
                 echo "<td align='center'>{$news_info_redis['id']}</td>";
                 echo "<td align='center'>{$tag_info['tag_name']}</td>";
-                echo "<td align='center'>{$news_info_redis['title']}</td>";
-                echo "<td align='center'>{$news_info_redis['keywords']}</td>";
-                echo "<td align='center' width='100'>{$news_info_redis['author']}</td>";
+                echo "<td align='center'><a href='article_details.php?id={$news_info_redis['id']}'>{$news_info_redis['title']}</a></td>";
                 echo "<td align='center'>" . date("Y-m-d", $news_info_redis['add_time']) . "</td>";
-                echo "<td align='center'>{$news_info_redis['content']}</td>";
-                echo "<td width=\"100\" height=\"100\">
-                  <img width='100' height='100' src='" . qiniu_image_display($news_info_redis['image_url']) . "'/>
-                  </td>";
                 if ($_SESSION['role_type'] >= ROLE_TYPE_EDITOR) {
                     echo "<td align='center'>";
-                    echo $news_info_redis['id'];
                     echo "<a href='editArticle.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
                     if ($_SESSION['role_type'] >= ROLE_TYPE_ADMIN) {
-                        echo "<a href='javascript:dodel({$news_info_redis['id']})'>删除文章</a>";
+                        echo "<a href='javascript:delete_news({$news_info_redis['id']})'>删除文章</a>";
                     }
                 }
                 echo "</td>";
@@ -136,7 +124,7 @@
         <hr width="100%"/>
     </div>
     <script type="text/javascript">
-        function dodel(id) {
+        function delete_news(id) {
             if (confirm("确定要删除这篇文章吗？")) {
                 window.location = "action.php?action=delete_news&id=" + id;
             }

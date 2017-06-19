@@ -6,7 +6,7 @@
 </head>
 <body>
 <form action="action.php?action=register_check" method="post">
-    <table align="center" border="1">
+    <table align="center">
         <caption style="font-size: 22px">用户注册</caption>
         <tr>
             <td>用 户 名:</td>

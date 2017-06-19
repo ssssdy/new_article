@@ -51,7 +51,7 @@
         $offset = ($page - 1) * $page_size;
         $user_all_list_info = $user_model->get_limit_user_info($offset, $page_size, ROLE_TYPE_EDITOR);
         ?>
-        <table align="center" width="600">
+        <table align="center" width="500">
             <tr>
                 <th>用户ID</th>
                 <th>用户名</th>
@@ -67,9 +67,9 @@
                 echo "<td align='center'>$role_name</td>";
                 echo "<td align='center'>";
                 if ($user_all_list_info[$i]['role_type'] == ROLE_TYPE_VISITOR) {
-                    echo "<a href='javascript:upChange({$user_all_list_info[$i]['user_id']})'>升级为编辑</a>";
+                    echo "<a href='javascript:change_editor({$user_all_list_info[$i]['user_id']})'>升级为编辑</a>";
                 } else if ($user_all_list_info[$i]['role_type'] == ROLE_TYPE_EDITOR) {
-                    echo "<a href='javascript:downChange({$user_all_list_info[$i]['user_id']})'>取消编辑身份</a>";
+                    echo "<a href='javascript:change_editor({$user_all_list_info[$i]['user_id']})'>取消编辑身份</a>";
                 }
                 echo "</td>";
                 echo "</tr>";
@@ -98,13 +98,8 @@
         <hr width="100%"/>
     </div>
     <script type="text/javascript">
-        function upChange(id) {
+        function change_editor(id) {
             if (confirm("确定要升级该游客为编辑吗？")) {
-                window.location = "action.php?action=change_editor&id=" + id;
-            }
-        }
-        function downChange(id) {
-            if (confirm("确定取消该用户编辑权吗？")) {
                 window.location = "action.php?action=change_editor&id=" + id;
             }
         }

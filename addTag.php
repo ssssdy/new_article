@@ -35,11 +35,11 @@
     ?>
 </div>
 <div class="content">
-    <form action="action.php?action=add_tag" method="post">
+    <form style="text-align: center" action="action.php?action=add_tag" method="post">
         <input type="text" name="tag_name" placeholder="输入您要添加的类别"/>
         <input type="submit" value="添加"/>
     </form>
-    <table width="500">
+    <table align="center">
         <tr>
             <th align="center" width="120">文章类别编号</th>
             <th align="center" width="150">文章类别名称</th>
@@ -53,14 +53,14 @@
             echo "<tr>";
             echo "<td align='center'>{$tag_info_list[$i]['tag_id']}</td>";
             echo "<td align='center'>{$tag_info_list[$i]['tag_name']}</td>";
-            echo "<td align='center'><a href = 'javascript:dodel({$tag_info_list[$i]['tag_id']})' onclick=''>删除该类别</a></td>";
+            echo "<td align='center'><a href = 'javascript:delete_tag({$tag_info_list[$i]['tag_id']})' onclick=''>删除该类别</a></td>";
             echo "</tr>";
         }
         ?>
     </table>
 </div>
 <script type="text/javascript">
-    function dodel(tag_id) {
+    function delete_tag(tag_id) {
         if (confirm("确定要删除该文章类别吗？")) {
             window.location = "action.php?action=delete_tag&tag_id=" + tag_id;
         }

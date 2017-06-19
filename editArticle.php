@@ -55,7 +55,7 @@
         <h2 align="center">编辑文章</h2>
         <form action="action.php?action=update" method="post">
             <input type="hidden" name="id" value="<?php echo $news_info['id']; ?>"/>
-            <table width="800">
+            <table align="center">
                 <caption style="font-size: 26px">编辑文章</caption>
                 <tr>
                     <td align="center">文章类别：</td>

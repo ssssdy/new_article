@@ -27,6 +27,7 @@ class News_Model extends Base_Model
         $this->update_by_id($table, $arr, $id);
         $redis = new Base_Cache();
         $redis->delete('news_list');
+        $redis->delete($id);
     }
 
     function get_one_news_info($news_id)
@@ -53,6 +54,7 @@ class News_Model extends Base_Model
         $this->query($sql);
         $redis = new Base_Cache();
         $redis->delete('news_list');
+        $redis->delete($id);
     }
 
 }

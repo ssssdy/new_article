@@ -9,10 +9,10 @@ out
 gen
 ‘.idea’
 /lib/login/
-/get_weather.php
+/test_get_weather_info.php
 /lib/php-sdk-7.1.3/
 /lib/qiniu_ueditor/
 /log/
 /static/备份index.php
 
-!/get_weather.php
+!/test_get_weather_info.php

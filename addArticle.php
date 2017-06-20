@@ -42,7 +42,7 @@
         }
         ?>
     </div>
-    <div class="content">
+    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:900px">
         <?php
         $tag_model = new Tag_Model();
         $tag = $tag_model->get_all_tag_info();

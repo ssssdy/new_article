@@ -47,7 +47,7 @@
         }
         ?>
     </div>
-    <div class="content">
+    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:900px">
         <?php
         $news_id = $_GET['id'];
         $news_model = new News_Model();

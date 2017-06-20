@@ -7,7 +7,7 @@ function check_login()
         echo "<br/>";
         echo "<a href='../action.php?action=logout'>注销登录  </a>";
         echo "<a href='../register.php'>  注册</a><br>";
-        echo "<a href='../show_weather_info.php'>天气预报</a>";
+        echo "<a href='../show_weather_info.php'>实时天气</a>";
     } else {
         echo "您还没有登录哦！请先 ";
         echo "<a href='../login.php'>登录 </a>";
@@ -152,5 +152,4 @@ function area_to_id($city_name)
     $data = json_decode($out_put_info, true);
     $city_id = $data['showapi_res_body']['list']['0']['cityInfo']['c1'];
     return $city_id;
-
 }

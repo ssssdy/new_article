@@ -43,7 +43,7 @@
         ?>
     </div>
     <div class="content">
-        <h3 align="center" style="font-size: 26px">天气预报</h3>
+        <h3 align="center" style="font-size: 26px">实时天气</h3>
         <?php
         $redis = new Base_Cache();
         $data_status_weather = $redis->is_exists('today_weather');
@@ -63,16 +63,16 @@
                 </form>
             </div>
             <ul>
-                <li><p><strong><?= $today_weather_info['aqiDetail']['area'] ?></strong></p></li>
+                <li><p><strong><?= $today_weather_info['aqiDetail']['area'] ?></strong>(今天)</p></li>
                 <li>
                     <span><?= $today_weather_info['weather'] ?></span>
                     <span><?php echo "<img width='60' height='50' src='" . $today_weather_info['weather_pic'] . "'/>"; ?></span>
                 </li>
                 <li>空气质量:<?= $today_weather_info['aqiDetail']['quality'] ?></li>
-                <li>当前气温:<?= $today_weather_info['temperature'] ?></li>
+                <li>当前气温:<?= $today_weather_info['temperature'] ?>(<?=$today_weather_info['temperature_time']?>)</li>
                 <li><b>风向:</b><i><?= $today_weather_info['wind_direction'] ?></i></li>
                 <li><b>风力:</b><i><?= $today_weather_info['wind_power'] ?></i></li>
-                <li>PM2.5:<?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>
+                <li>PM2.5: <?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>
             </ul>
         </div>
         <br/>

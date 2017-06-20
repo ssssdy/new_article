@@ -46,8 +46,8 @@
         }
         ?>
     </div>
-    <div class="content">
-        <table align="center" width="800">
+    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:900px">
+        <table align="center" width="700">
             <tr>
                 <th>文章id</th>
                 <th>文章类别</th>

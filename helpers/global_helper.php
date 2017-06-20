@@ -116,8 +116,8 @@ function get_real_weather_info($area_id)
     }
     $data_weather_info = json_decode($out_put_info, true);
     $redis = new Base_Cache();
-    $redis->set('today_weather', json_encode($data_weather_info['showapi_res_body']['now']));
-    $redis->set('city_info', json_encode(($data_weather_info['showapi_res_body']['cityInfo'])));
+    $redis->set('today_weather', json_encode($data_weather_info['showapi_res_body']['now']), 60);
+//    $redis->set('city_info', json_encode(($data_weather_info['showapi_res_body']['cityInfo'])));
     $today_weather_redis = $redis->get('today_weather');
     $today_weather_info = json_decode($today_weather_redis, true);
     return $today_weather_info;

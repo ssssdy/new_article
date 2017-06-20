@@ -20,16 +20,16 @@
         switch ($_SESSION['role_type']) {
             case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li></ul>";
                 break;
             case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addAdmin.php'>添加管理员</a></li>
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_admin.php'>添加管理员</a></li>
                         </ul>";
                 break;
         }
@@ -82,15 +82,15 @@
         echo "<br/>";
         echo "<div align='center'>共 " . $page_num . " 页 ";
         if ($page > 1) {
-            echo "<a href='addEditor.php?page=1'>首页 </a>";
-            echo "<a href='addEditor.php?page=" . $prev . "'>上一页</a>";
+            echo "<a href='add_editor.php?page=1'>首页 </a>";
+            echo "<a href='add_editor.php?page=" . $prev . "'>上一页</a>";
         }
         if ($page < $page_num) {
-            echo "<a href='addEditor.php?page=" . $next . "'>下一页 </a>";
-            echo "<a href='addEditor.php?page=" . $page_num . "'>尾页</a>";
+            echo "<a href='add_editor.php?page=" . $next . "'>下一页 </a>";
+            echo "<a href='add_editor.php?page=" . $page_num . "'>尾页</a>";
         }
         for ($i = 1; $i <= $page_num; $i++) {
-            $show = ($i != $page) ? "<a href='addEditor.php?page=" . $i . "'>[$i]</a>" : "<b>[$i]</b>";
+            $show = ($i != $page) ? "<a href='add_editor.php?page=" . $i . "'>[$i]</a>" : "<b>[$i]</b>";
             echo $show . "   ";
         }
         ?>

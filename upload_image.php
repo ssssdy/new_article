@@ -16,26 +16,26 @@
         case ROLE_TYPE_VISITOR:
             break;
         case ROLE_TYPE_EDITOR:
-            echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
+            echo "<ul><li><a href='show_news.php'>实时新闻</a></li>>;
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li></ul>";
             break;
         case ROLE_TYPE_ADMIN:
-            echo "<ul><li><a href='showNews.php'>实时新闻</a>
+            echo "<ul><li><a href='show_news.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li></ul>";
             break;
         case ROLE_TYPE_SUPER:
-            echo "<ul><li><a href='showNews.php'>实时新闻</a>
+            echo "<ul><li><a href='show_news.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li>
-                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li>
+                        <li><a href='add_admin.php'>添加管理员</a></li></ul>";
             break;
     }
     ?>

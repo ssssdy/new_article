@@ -22,7 +22,7 @@ switch ($_GET["action"]) {
         $image_url = $_POST["image_url"];
         $add_time = time();
         if ($title == null) {
-            echo "<script>alert('标题不能为空!'); window.location.href='addArticle.php';</script>";
+            echo "<script>alert('标题不能为空!'); window.location.href='add_article.php';</script>";
             exit;
         }
         $arr = array('tag_id' => $tag_id, 'title' => $title, 'keywords' => $keywords, 'author' => $author,
@@ -58,12 +58,12 @@ switch ($_GET["action"]) {
     case "add_tag":
         $tag_name = $_POST['tag_name'];
         if ($tag_name == null) {
-            echo "<script>alert('不能添加空类别!'); window.location.href='addTag.php';</script>";
+            echo "<script>alert('不能添加空类别!'); window.location.href='add_tag.php';</script>";
             exit;
         }
         $res = $tag_model->insert_tag(array('tag_name' => $tag_name), 'tag');
         if ($res) {
-            echo "<script>alert('添加成功！返回'); window.location.href='addTag.php';</script>";
+            echo "<script>alert('添加成功！返回'); window.location.href='add_tag.php';</script>";
         } else {
             echo "<script>alert('添加失败！'); history.go(-1);</script>";
         }
@@ -71,7 +71,7 @@ switch ($_GET["action"]) {
     case "delete_tag":
         $tag_id = $_GET['tag_id'];
         $tag_model->delete_by_tag_id($tag_id);
-        header("Location:addTag.php");
+        header("Location:add_tag.php");
         break;
     case "update":
         $tag_id = $_POST['tag_id'];
@@ -178,13 +178,13 @@ switch ($_GET["action"]) {
         $user_id = $_GET['id'];
         $role_type = $user_model->get_role_type_by_user_id($user_id);
         $result = $user_model->change_role($user_id, $role_type);
-        header("Location:addEditor.php");
+        header("Location:add_editor.php");
         break;
     case "change_admin":
         $user_id = $_GET['id'];
         $role_type = $user_model->get_role_type_by_user_id($user_id);
         $result = $user_model->change_admin_role($user_id, $role_type);
-        header("Location:addAdmin.php");
+        header("Location:add_admin.php");
         break;
 }
 ?>

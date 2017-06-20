@@ -19,19 +19,17 @@ function access_limit($ip, $limit, $timeout)
 {
     $redis = new Base_Cache();
     $key = "rate.limiting:{$ip}";
-    $check = $redis->is_exists($key);
-    if ($check) {
-        $redis->increase($key);
+    $check = $redis->increase($key);
+    if ($check == 1) {
+        $redis->expire($key, $timeout);
+    } else {
         $count = $redis->get($key);
         if ($count > $limit) {
-            exit('请求太频繁，请稍后再试！');
+            header("location:../static/error.php?error_type=rate_limiting");
         }
-    } else {
-        $redis->increase($key);
-        $redis->expire($key, $timeout);
     }
     $count = $redis->get($key);
-    echo '第 ' . $count . ' 次访问';
+    echo $limit . '秒内第 ' . $count . ' 次访问' . '<br>';
 }
 
 function str_rand()
@@ -116,7 +114,7 @@ function get_real_weather_info($area_id)
     }
     $data_weather_info = json_decode($out_put_info, true);
     $redis = new Base_Cache();
-    $redis->set('today_weather', json_encode($data_weather_info['showapi_res_body']['now']), 60);
+    $redis->set('today_weather', json_encode($data_weather_info['showapi_res_body']['now']));
 //    $redis->set('city_info', json_encode(($data_weather_info['showapi_res_body']['cityInfo'])));
     $today_weather_redis = $redis->get('today_weather');
     $today_weather_info = json_decode($today_weather_redis, true);
@@ -151,5 +149,8 @@ function area_to_id($city_name)
     $out_put_info = curl_exec($curl);
     $data = json_decode($out_put_info, true);
     $city_id = $data['showapi_res_body']['list']['0']['cityInfo']['c1'];
+    if ($city_id == null) {
+        header("location:../static/error.php?error_type=not_exist");
+    }
     return $city_id;
 }

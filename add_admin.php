@@ -18,10 +18,10 @@
     <div class="menu">
         <?php
         echo "<ul><li><a href='index.php'>浏览文章</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li>
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li>
                         </ul>";
         ?>
     </div>
@@ -72,15 +72,15 @@
         echo "<br/>";
         echo "<div align='center'>共 " . $page_num . " 页 ";
         if ($page > 1) {
-            echo "<a href='addAdmin.php?page=1'>首页 </a>";
-            echo "<a href='addAdmin.php?page=" . $prev . "'>上一页</a>";
+            echo "<a href='add_admin.php?page=1'>首页 </a>";
+            echo "<a href='add_admin.php?page=" . $prev . "'>上一页</a>";
         }
         if ($page < $page_num) {
-            echo "<a href='addAdmin.php?page=" . $next . "'>下一页 </a>";
-            echo "<a href='addAdmin.php?page=" . $page_num . "'>尾页</a>";
+            echo "<a href='add_admin.php?page=" . $next . "'>下一页 </a>";
+            echo "<a href='add_admin.php?page=" . $page_num . "'>尾页</a>";
         }
         for ($j = 1; $j <= $page_num; $j++) {
-            $show = ($j != $page) ? "<a href='addAdmin.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
+            $show = ($j != $page) ? "<a href='add_admin.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
             echo $show . "   ";
         }
         ?>

@@ -26,6 +26,6 @@ $out_put = curl_exec($curl);
 dump(area_to_id('湖南'));
 dump(get_real_weather_info(101200107));
 //dump($out_put);
-$data = json_decode($out_put,true);
+$data = json_decode($out_put, true);
 dump($data['showapi_res_body']['list']['0']['cityInfo']['c1']);
 dump($data);

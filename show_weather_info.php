@@ -9,8 +9,6 @@
     <div class="login">
         <?php
         require './helpers/global_helper.php';
-        require './model/news_model.class.php';
-        require './model/real_news_model.class.php';
         require './cache/base_cache.class.php';
         check_login();
         ?>
@@ -22,22 +20,22 @@
                 break;
             case ROLE_TYPE_EDITOR:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li></ul>";
                 break;
             case ROLE_TYPE_ADMIN:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li></ul>";
                 break;
             case ROLE_TYPE_SUPER:
                 echo "<ul><li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li>
-                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li>
+                        <li><a href='add_admin.php'>添加管理员</a></li></ul>";
                 break;
         }
         ?>
@@ -46,11 +44,11 @@
         <h3 align="center" style="font-size: 26px">实时天气</h3>
         <?php
         $redis = new Base_Cache();
-        $data_status_weather = $redis->is_exists('today_weather');
-        if ($data_status_weather == 0) {
-            echo "缓存中没有天气信息!";
-            exit;
-        }
+        //        $data_status_weather = $redis->is_exists('today_weather');
+        //        if ($data_status_weather == 0) {
+        //            echo "缓存中没有天气信息!";
+        //            exit;
+        //        }
         $today_weather_redis = $redis->get('today_weather');
         $today_weather_info = json_decode($today_weather_redis, true);
         echo "</ul>";
@@ -69,7 +67,7 @@
                     <span><?php echo "<img width='60' height='50' src='" . $today_weather_info['weather_pic'] . "'/>"; ?></span>
                 </li>
                 <li>空气质量:<?= $today_weather_info['aqiDetail']['quality'] ?></li>
-                <li>当前气温:<?= $today_weather_info['temperature'] ?>(<?=$today_weather_info['temperature_time']?>)</li>
+                <li>当前气温:<?= $today_weather_info['temperature'] ?>(<?= $today_weather_info['temperature_time'] ?>)</li>
                 <li><b>风向:</b><i><?= $today_weather_info['wind_direction'] ?></i></li>
                 <li><b>风力:</b><i><?= $today_weather_info['wind_power'] ?></i></li>
                 <li>PM2.5: <?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>

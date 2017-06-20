@@ -11,8 +11,6 @@
         <?php
         require './helpers/global_helper.php';
         require './model/news_model.class.php';
-        require './model/user_model.class.php';
-        require './model/tag_model.class.php';
         require './cache/base_cache.class.php';
         check_login();
         ?>
@@ -23,31 +21,31 @@
             case ROLE_TYPE_VISITOR:
                 break;
             case ROLE_TYPE_EDITOR:
-                echo "<ul><li><a href='showNews.php'>实时新闻</a></li>>;
+                echo "<ul><li><a href='show_news.php'>实时新闻</a></li>>;
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li></ul>";
                 break;
             case ROLE_TYPE_ADMIN:
-                echo "<ul><li><a href='showNews.php'>实时新闻</a>
+                echo "<ul><li><a href='show_news.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li></ul>";
                 break;
             case ROLE_TYPE_SUPER:
-                echo "<ul><li><a href='showNews.php'>实时新闻</a>
+                echo "<ul><li><a href='show_news.php'>实时新闻</a>
                         <li><a href='index.php'>文章首页</a></li>
-                        <li><a href='addArticle.php'>添加文章</a></li>
-                        <li><a href='uploadImage.php'>图片上传</a></li>
-                        <li><a href='addTag.php'>文章分类</a></li>
-                        <li><a href='addEditor.php'>添加编辑</a></li>
-                        <li><a href='addAdmin.php'>添加管理员</a></li></ul>";
+                        <li><a href='add_article.php'>添加文章</a></li>
+                        <li><a href='upload_image.php'>图片上传</a></li>
+                        <li><a href='add_tag.php'>文章分类</a></li>
+                        <li><a href='add_editor.php'>添加编辑</a></li>
+                        <li><a href='add_admin.php'>添加管理员</a></li></ul>";
                 break;
         }
         ?>
     </div>
-    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:900px">
+    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:1000px">
         <?php
         $news_id = $_GET['id'];
         $news_model = new News_Model();
@@ -65,20 +63,19 @@
         ?>
         <div style="font-size: 17px;position: absolute;right: 5px;top: 60px;">
             <?php
-            echo "当前用户IP:".$_SERVER['REMOTE_ADDR']."<br>";
-//            echo "文章id:" . $news_id . "<br>";
-//            access_limit($_SERVER['REMOTE_ADDR'],3,3);                              //函数封装在helpers中
-            access_limit($_SERVER['REMOTE_ADDR'],10,10);
-//            access_limit($_SERVER['REMOTE_ADDR'],100,60);
+            echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
+            foreach (RATE_LIMITING_ARR as $limit => $timeout) {
+                access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
+            }
             echo "<br>";
             echo "缓存状态:";
             if ($news_status == 0) {
                 echo "先存后取" . "<br>";
-            }else{
+            } else {
                 echo "直接从缓存中读取" . "<br>";
             }
             echo "缓存有效期剩余:" . seconds_to_date($rest_survival_time) . "<br>";
-//            echo "<button onclick='javascript:refresh_cache({$news_info_redis['id']})'>刷新缓存</button>";
+            //            echo "<button onclick='javascript:refresh_cache({$news_info_redis['id']})'>刷新缓存</button>";
             echo "<button><a href='javascript:refresh_cache({$news_info_redis['id']})'>刷新缓存</a></button>";
             ?>
         </div>

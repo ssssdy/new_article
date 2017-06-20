@@ -1,5 +1,6 @@
 <?php
 require_once '/var/www/article.ssssdy.top/config/config.php';
+
 /**
  * Created by PhpStorm.
  * User: root
@@ -115,13 +116,19 @@ class Base_Cache
     {
         return $this->redis_instance->exists($key);
     }
-    function rest_survival_time($key){
+
+    function rest_survival_time($key)
+    {
         return $this->redis_instance->ttl($key);
     }
-    function increase($key){
+
+    function increase($key)
+    {
         return $this->redis_instance->incr($key);
     }
-    function expire($key,$timeout){
-        return $this->redis_instance->expire($key,$timeout);
+
+    function expire($key, $timeout)
+    {
+        return $this->redis_instance->expire($key, $timeout);
     }
 }

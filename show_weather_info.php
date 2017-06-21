@@ -56,10 +56,9 @@
         <div>
             <div>
                 <form style="text-align: center" action="action.php?action=switch_city" method="post">
-                    <input type="text" name="city_name" placeholder="城市名"/>
+                    <input type="text" name="city_name" placeholder="请输入您要查找的城市名"/>
                     <input type="submit" value="切换城市"/>
                 </form>
-            </div>
             <ul>
                 <li><p><strong><?= $today_weather_info['aqiDetail']['area'] ?></strong>(今天)</p></li>
                 <li>
@@ -72,6 +71,7 @@
                 <li><b>风力:</b><i><?= $today_weather_info['wind_power'] ?></i></li>
                 <li>PM2.5: <?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>
             </ul>
+            </div>
         </div>
         <br/>
         <hr width="100%"/>

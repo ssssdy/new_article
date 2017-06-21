@@ -18,3 +18,5 @@ gen
 
 将删除 static/test.php
 /static/test.php
+/wx/
+将忽略仓库 wx/

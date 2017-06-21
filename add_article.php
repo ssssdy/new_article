@@ -9,7 +9,6 @@
 </head>
 <body>
 <div>
-    <h2>文章管理系统</h2>
     <div class="login">
         <?php
         require './helpers/global_helper.php';
@@ -50,7 +49,6 @@
         ?>
         <form action="action.php?action=add" method="post">
             <table align="center">
-                <caption style="font-size: 26px">文章添加</caption>
                 <tr>
                     <td align="center">文章类别：</td>
                     <td>
@@ -102,7 +100,7 @@
             {
                 toolbars: [["source", '|', "undo", "redo", '|', "bold", "italic", "underline", "strikethrough", '|', 'insertorderedlist', 'insertunorderedlist', '|', "superscript", "subscript", '|', "justifyleft", "justifycenter", "justifyright", "justifyjustify", '|', "indent", "rowspacingbottom", "rowspacingtop", "lineheight", "|", 'selectall', 'cleardoc'], ["fontfamily", "fontsize", '|', "forecolor", "backcolor", '|', "pasteplain", 'removeformat', 'formatmatch', "autotypeset", '|', "insertimage", 'music', 'insertvideo', "attachment", '|', "link", "unlink", "spechars", '|', "inserttable", "deletetable"], ['gmap', 'insertframe', 'highlightcode', 'template', 'background', "|", 'horizontal', 'date', 'time', '|', 'print', 'searchreplace', 'preview', "fullscreen"]]
                 , initialFrameWidth: 550  //初始化编辑器宽度,默认1000
-                , initialFrameHeight: 300  //初始化编辑器高度,默认320
+                , initialFrameHeight: 250  //初始化编辑器高度,默认320
                 , initialContent: ''   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
                 , wordCount: true          //是否开启字数统计
                 , maximumWords: 10000       //允许的最大字符数

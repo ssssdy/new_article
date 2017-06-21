@@ -2,6 +2,7 @@
 function check_login()
 {
     session_start();
+    echo "<div class = 'user'>";
     if (isset($_SESSION['user_name'])) {
         echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['user_name'] . " 登录！";
         echo "<br/>";
@@ -13,6 +14,7 @@ function check_login()
         echo "<a href='../login.php'>登录 </a>";
         echo "<a href='../register.php'>注册</a>";
     }
+    echo "</div>";
 }
 
 function access_limit($ip, $limit, $timeout)

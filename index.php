@@ -7,6 +7,7 @@
 <body>
 <div>
     <div class="login">
+        <h3 align="center">文章管理系统</h3>
         <?php
         require './helpers/global_helper.php';
         require './model/news_model.class.php';
@@ -46,7 +47,7 @@
         }
         ?>
     </div>
-    <div class="content" style="position: absolute;left: 200px;top: 100px;right: 200px;height: 650px;width:900px">
+    <div class="content">
         <table align="center" width="700">
             <tr>
                 <th>文章id</th>
@@ -92,7 +93,7 @@
                 echo "<td align='center'>" . date("Y-m-d", $news_info_redis['add_time']) . "</td>";
                 if ($_SESSION['role_type'] >= ROLE_TYPE_EDITOR) {
                     echo "<td align='center'>";
-                    echo "<a href='editArticle.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
+                    echo "<a href='edit_article.php?id={$news_info_redis['id']}'>编辑文章</a><br/>";
                     if ($_SESSION['role_type'] >= ROLE_TYPE_ADMIN) {
                         echo "<a href='javascript:delete_news({$news_info_redis['id']})'>删除文章</a>";
                     }
@@ -119,8 +120,8 @@
             $show = ($j != $page) ? "<a href='index.php?page=" . $j . "'>[$j]</a>" : "<b>[$j]</b>";
             echo $show . "   ";
         }
+        echo "</div>";
         ?>
-        <br/>
         <hr width="100%"/>
     </div>
     <script type="text/javascript">

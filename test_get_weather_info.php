@@ -25,6 +25,9 @@ if (1 == strpos("$" . $host, "https://")) {
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 }
 $out_put = curl_exec($curl);
+$info = curl_getinfo($curl);
+curl_close($curl);
+dump($info);
 dump($out_put);
 $data = json_decode($out_put, true);
 $redis = new Base_Cache();

@@ -29,32 +29,23 @@ class Base_Cache
 
     function sets($key_array, $timeout)
     {
-        if (is_array($key_array)) {
-            $result_res = $this->redis_instance->mset($key_array);
-            if ($timeout > 0) {
-                foreach ($key_array as $key => $value) {
-                    $this->redis_instance->expire($key, $timeout);
-                }
+        $this->redis_instance->mset($key_array);
+        if ($timeout > 0) {
+            foreach ($key_array as $key => $value) {
+                $this->redis_instance->expire($key, $timeout);
             }
-            return $result_res;
-        } else {
-            return array();
         }
     }
 
     function get($key)
     {
-        $result = $this->redis_instance->get($key);
-        return $result;
+        return $this->redis_instance->get($key);
     }
 
     function gets($key_array)
     {
-        if (is_array($key_array)) {
-            return $this->redis_instance->mget($key_array);
-        } else {
-            return array();
-        }
+        return $this->redis_instance->mget($key_array);
+
     }
 
     function r_push($key, $value, $timeout = 0)
@@ -77,18 +68,14 @@ class Base_Cache
 
     function hm_set($key, $value, $timeout = 0)
     {
-        if (!is_array($value))
-            return false;
+        $this->redis_instance->hmset($key, $value);
         if ($timeout > 0) {
             $this->redis_instance->expire($key, $timeout);
         }
-        return $this->redis_instance->hmset($key, $value);
     }
 
     function hm_get($key, $field)
     {
-        if (!is_array($field))
-            $field = explode(',', $field);
         return $this->redis_instance->hmget($key, $field);
     }
 

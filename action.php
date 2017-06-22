@@ -12,6 +12,7 @@ require './cache/base_cache.class.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
+$redis = new Base_Cache();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -42,7 +43,6 @@ switch ($_GET["action"]) {
         break;
     case "refresh_cache":
         $key = $_GET['key'];
-        $redis = new Base_Cache();
         $redis->delete($key);
         header("Location:article_details.php?id=$key");
         break;
@@ -50,12 +50,19 @@ switch ($_GET["action"]) {
         $city_name = $_POST['city_name'];
         $city_id = area_to_id($city_name);
         if ($city_id == null) {
-            exit('您输入的城市不存在!');
+            header("location:error.php?error_type=city_not_exist");
+        } else {
+            if (($redis->is_exists($city_id)) == 0) {
+                $weather_info = get_weather_info_from_new($city_id);
+            } else {
+                $weather_info = get_weather_info_from_cache($city_id);
+            }
+            $redis->set('now_city_id', $city_id);
+            header("Location:show_weather_info.php");
         }
-        $weather_info = get_real_weather_info($city_id);
-        header("Location:show_weather_info.php");
         break;
-    case "add_tag":
+    case
+    "add_tag":
         $tag_name = $_POST['tag_name'];
         if ($tag_name == null) {
             echo "<script>alert('不能添加空类别!'); window.location.href='add_tag.php';</script>";

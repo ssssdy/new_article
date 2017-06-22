@@ -27,7 +27,7 @@ function access_limit($ip, $limit, $timeout)
     } else {
         $count = $redis->get($key);
         if ($count > $limit) {
-            header("location:../static/error.php?error_type=rate_limiting");
+            header("location:../error.php?error_type=rate_limiting");
         }
     }
     $count = $redis->get($key);
@@ -81,15 +81,24 @@ function qiniu_image_display($url)
 
 function seconds_to_date($seconds)
 {
-    $hours = floor($seconds / 3600);
-    $minutes = floor(($seconds / 60) % 60);
-    $seconds = $seconds % 60;
+    $hours = floor($seconds / SECONDS_PER_HOUR);
+    $minutes = floor(($seconds / SECONDS_PER_MINUTE) % SECONDS_PER_MINUTE);
+    $seconds = $seconds % SECONDS_PER_MINUTE;
     return "$hours" . "小时" . "$minutes" . "分钟" . "$seconds" . "秒";
 }
 
-function get_real_weather_info($area_id)
+//设置初始城市为武汉
+function get_weather_info_from_cache($city_id = WEATHER_DEFAULT_CITY)
 {
-    require_once '/var/www/article.ssssdy.top/cache/base_cache.class.php';
+    $redis = new Base_Cache();
+    $today_weather_redis = $redis->get($city_id);
+    $today_weather_info = json_decode($today_weather_redis, true);
+    return $today_weather_info;
+}
+
+function get_weather_info_from_new($area_id = WEATHER_DEFAULT_CITY)
+{
+//    require_once '/var/www/article.ssssdy.top/cache/base_cache.class.php';
     $host = "https://ali-weather.showapi.com";
     $path = "/area-to-weather";
     $method = "GET";
@@ -116,9 +125,11 @@ function get_real_weather_info($area_id)
     }
     $data_weather_info = json_decode($out_put_info, true);
     $redis = new Base_Cache();
-    $redis->set('today_weather', json_encode($data_weather_info['showapi_res_body']['now']));
-//    $redis->set('city_info', json_encode(($data_weather_info['showapi_res_body']['cityInfo'])));
-    $today_weather_redis = $redis->get('today_weather');
+    //$data_weather_info['showapi_res_body']['cityInfo']['c1']为城市编号
+    dump($data_weather_info['showapi_res_body']['cityInfo']['c1']);
+    $redis->set($data_weather_info['showapi_res_body']['cityInfo']['c1'], json_encode($data_weather_info['showapi_res_body']['now']), SURVIVAL_TIME_OF_WEATHER);
+    $today_weather_redis = $redis->get($data_weather_info['showapi_res_body']['cityInfo']['c1']);
+    $redis->set('now_city_id', $data_weather_info['showapi_res_body']['cityInfo']['c1']);
     $today_weather_info = json_decode($today_weather_redis, true);
     return $today_weather_info;
 }
@@ -136,7 +147,6 @@ function area_to_id($city_name)
     $query = "area=$code";
 //    $bodys = "";
     $url = $host . $path . "?" . $query;
-
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -149,10 +159,8 @@ function area_to_id($city_name)
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
     }
     $out_put_info = curl_exec($curl);
+//    dump($out_put_info);
     $data = json_decode($out_put_info, true);
     $city_id = $data['showapi_res_body']['list']['0']['cityInfo']['c1'];
-    if ($city_id == null) {
-        header("location:../static/error.php?error_type=not_exist");
-    }
     return $city_id;
 }

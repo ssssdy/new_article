@@ -14,8 +14,8 @@ class Base_Cache
     function __construct()
     {
         $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $redis->select(1);
+        $redis->connect(LOCAL_IP, PORT);
+        $redis->select(REDIS_DEFAULT_DB);
         $this->redis_instance = $redis;
     }
 
@@ -38,7 +38,7 @@ class Base_Cache
             }
             return $result_res;
         } else {
-            return "Call  " . __FUNCTION__ . " method  parameter  Error !";
+            return array();
         }
     }
 
@@ -53,7 +53,7 @@ class Base_Cache
         if (is_array($key_array)) {
             return $this->redis_instance->mget($key_array);
         } else {
-            return "Call  " . __FUNCTION__ . " method  parameter  Error !";
+            return array();
         }
     }
 

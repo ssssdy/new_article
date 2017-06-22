@@ -53,7 +53,7 @@
         $news_status = $redis->is_exists($news_id);
         if ($news_status == 0) {
             $news_info = $news_model->get_one_news_info($news_id);
-            $redis->set($news_id, json_encode($news_info), SURVIVAL_TIME);
+            $redis->set($news_id, json_encode($news_info), SURVIVAL_TIME_OF_NEWS);
         }
         $news_info_redis = json_decode($redis->get($news_id), true);
         $rest_survival_time = $redis->rest_survival_time($news_id);

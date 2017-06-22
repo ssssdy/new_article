@@ -44,14 +44,12 @@
         <h3 align="center" style="font-size: 26px">实时天气</h3>
         <?php
         $redis = new Base_Cache();
-        //        $data_status_weather = $redis->is_exists('today_weather');
-        //        if ($data_status_weather == 0) {
-        //            echo "缓存中没有天气信息!";
-        //            exit;
-        //        }
-        $today_weather_redis = $redis->get('today_weather');
-        $today_weather_info = json_decode($today_weather_redis, true);
-        echo "</ul>";
+        if (($redis->is_exists('now_city_id')) == 0) {
+            $today_weather_info = get_weather_info_from_new();
+        }
+        $city_id = $redis->get('now_city_id');
+        $today_weather_info = get_weather_info_from_cache($city_id);
+//        dump($today_weather_info);
         ?>
         <div>
             <div>
@@ -59,18 +57,19 @@
                     <input type="text" name="city_name" placeholder="请输入您要查找的城市名"/>
                     <input type="submit" value="切换城市"/>
                 </form>
-            <ul>
-                <li><p><strong><?= $today_weather_info['aqiDetail']['area'] ?></strong>(今天)</p></li>
-                <li>
-                    <span><?= $today_weather_info['weather'] ?></span>
-                    <span><?php echo "<img width='60' height='50' src='" . $today_weather_info['weather_pic'] . "'/>"; ?></span>
-                </li>
-                <li>空气质量:<?= $today_weather_info['aqiDetail']['quality'] ?></li>
-                <li>当前气温:<?= $today_weather_info['temperature'] ?>(<?= $today_weather_info['temperature_time'] ?>)</li>
-                <li><b>风向:</b><i><?= $today_weather_info['wind_direction'] ?></i></li>
-                <li><b>风力:</b><i><?= $today_weather_info['wind_power'] ?></i></li>
-                <li>PM2.5: <?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>
-            </ul>
+                <ul>
+                    <li><p><strong><?= $today_weather_info['aqiDetail']['area'] ?></strong>(今天)</p></li>
+                    <li>
+                        <span><?= $today_weather_info['weather'] ?></span>
+                        <span><?php echo "<img width='60' height='50' src='" . $today_weather_info['weather_pic'] . "'/>"; ?></span>
+                    </li>
+                    <li>空气质量:<?= $today_weather_info['aqiDetail']['quality'] ?></li>
+                    <li>当前气温:<?= $today_weather_info['temperature'] ?>(<?= $today_weather_info['temperature_time'] ?>)
+                    </li>
+                    <li><b>风向:</b><i><?= $today_weather_info['wind_direction'] ?></i></li>
+                    <li><b>风力:</b><i><?= $today_weather_info['wind_power'] ?></i></li>
+                    <li>PM2.5: <?= $today_weather_info['aqiDetail']['pm2_5']; ?></li>
+                </ul>
             </div>
         </div>
         <br/>

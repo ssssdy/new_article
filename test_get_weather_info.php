@@ -25,17 +25,16 @@ if (1 == strpos("$" . $host, "https://")) {
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 }
 $out_put = curl_exec($curl);
-$info = curl_getinfo($curl);
 curl_close($curl);
-dump($info);
 dump($out_put);
 $data = json_decode($out_put, true);
 $redis = new Base_Cache();
-$redis->set('today_weather', json_encode($data['showapi_res_body']['now']), 60);
+$redis->set($data['showapi_res_body']['cityInfo']['c2'], json_encode($data['showapi_res_body']['now']), 1800);
 //$redis->set('city_info',json_encode(($data['showapi_res_body']['cityInfo'])));
 $today_weather_redis = $redis->get('today_weather');
 $today_weather_info = json_decode($today_weather_redis, true);
+dump($data);
 dump($today_weather_info);
 dump($today_weather_info['aqiDetail']['area']);
-dump($data);
+
 

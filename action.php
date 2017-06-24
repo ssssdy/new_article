@@ -1,14 +1,18 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <link href="./static/css/style.css" rel="stylesheet" type="text/css">
+    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="./lib/jquery/dist/jquery.min.js"></script>
+    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
 <?php
 require './helpers/global_helper.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
-require './cache/base_cache.class.php';
+//require './cache/base_cache.class.php';
+require './cache/weather_cache.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
@@ -48,21 +52,18 @@ switch ($_GET["action"]) {
         break;
     case "switch_city":
         $city_name = $_POST['city_name'];
-        $city_id = area_to_id($city_name);
+        $city_id = $redis->get($city_name);//判断缓存中是否已经有这个城市的名字
         if ($city_id == null) {
-            header("location:error.php?error_type=city_not_exist");
-        } else {
-            if (($redis->is_exists($city_id)) == 0) {
-                $weather_info = get_weather_info_from_new($city_id);
-            } else {
-                $weather_info = get_weather_info_from_cache($city_id);
+            $city_id = area_to_id($city_name);
+            if ($city_id == null) {
+                header("location:error.php?error_type=city_not_exist");
+                exit;
             }
-            $redis->set('now_city_id', $city_id);
-            header("Location:show_weather_info.php");
         }
+        $redis->set('now_city_id', $city_id);
+        header("Location:show_weather_info.php");
         break;
-    case
-    "add_tag":
+    case "add_tag":
         $tag_name = $_POST['tag_name'];
         if ($tag_name == null) {
             echo "<script>alert('不能添加空类别!'); window.location.href='add_tag.php';</script>";

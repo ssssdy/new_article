@@ -2,19 +2,13 @@
 function check_login()
 {
     session_start();
-    echo "<div class = 'user'>";
     if (isset($_SESSION['user_name'])) {
-        echo "欢迎 " . $_SESSION['role_name'] . "  " . $_SESSION['user_name'] . " 登录！";
-        echo "<br/>";
-        echo "<a href='../action.php?action=logout'>注销登录  </a>";
-        echo "<a href='../register.php'>  注册</a><br>";
-        echo "<a href='../show_weather_info.php'>实时天气</a>";
+        echo "<li><p class='navbar-text navbar-right'>欢迎" . $_SESSION['role_name'] . $_SESSION['user_name'] . " 登录！" . "</p></li>";
+        echo '<li><a href="../action.php?action=logout"><span class="glyphicon glyphicon-log-out"></span> 注销</a></li>';
     } else {
-        echo "您还没有登录哦！请先 ";
-        echo "<a href='../login.php'>登录 </a>";
-        echo "<a href='../register.php'>注册</a>";
+        echo '<li><a href="../register.php"><span class="glyphicon glyphicon-user"></span> 注册</a></li>';
+        echo '<li><a href="../login.php"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>';
     }
-    echo "</div>";
 }
 
 function access_limit($ip, $limit, $timeout)
@@ -74,9 +68,8 @@ function dump($var, $echo = true, $label = null, $strict = true)
 function qiniu_image_display($url)
 {
     $dir = "http://orc8koj7r.bkt.clouddn.com/";
-//    $img_model = "?imageView2/2/w/200/h/200/q/75|watermark/1/image/aHR0cHM6Ly9vanBibHkxdW4ucW5zc2wuY29tL2xvZ28ucG5n/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
-//    $img_model = "?	imageView2/1/w/200/h/200/q/75|imageslim";
-    return $dir . $url;
+    $img_model = "?imageView2/2/w/600/h/300/q/75|watermark/2/text/d3d3LnNzc3NkeS50b3A=/font/5a6L5L2T/fontsize/300/fill/IzAwMDAwMA==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
+    return $dir . $url . $img_model;
 }
 
 function seconds_to_date($seconds)
@@ -85,15 +78,6 @@ function seconds_to_date($seconds)
     $minutes = floor(($seconds / SECONDS_PER_MINUTE) % SECONDS_PER_MINUTE);
     $seconds = $seconds % SECONDS_PER_MINUTE;
     return "$hours" . "小时" . "$minutes" . "分钟" . "$seconds" . "秒";
-}
-
-//设置初始城市为武汉
-function get_weather_info_from_cache($city_id = WEATHER_DEFAULT_CITY)
-{
-    $redis = new Base_Cache();
-    $today_weather_redis = $redis->get($city_id);
-    $today_weather_info = json_decode($today_weather_redis, true);
-    return $today_weather_info;
 }
 
 function get_weather_info_from_new($area_id = WEATHER_DEFAULT_CITY)
@@ -126,7 +110,6 @@ function get_weather_info_from_new($area_id = WEATHER_DEFAULT_CITY)
     $data_weather_info = json_decode($out_put_info, true);
     $redis = new Base_Cache();
     //$data_weather_info['showapi_res_body']['cityInfo']['c1']为城市编号
-    dump($data_weather_info['showapi_res_body']['cityInfo']['c1']);
     $redis->set($data_weather_info['showapi_res_body']['cityInfo']['c1'], json_encode($data_weather_info['showapi_res_body']['now']), SURVIVAL_TIME_OF_WEATHER);
     $today_weather_redis = $redis->get($data_weather_info['showapi_res_body']['cityInfo']['c1']);
     $redis->set('now_city_id', $data_weather_info['showapi_res_body']['cityInfo']['c1']);
@@ -162,5 +145,7 @@ function area_to_id($city_name)
 //    dump($out_put_info);
     $data = json_decode($out_put_info, true);
     $city_id = $data['showapi_res_body']['list']['0']['cityInfo']['c1'];
+    $redis = new Base_Cache();
+    $redis->set($city_name, $city_id, SURVIVAL_TIME_OF_CITY_NAME);
     return $city_id;
 }

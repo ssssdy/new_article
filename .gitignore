@@ -17,6 +17,10 @@ gen
 /static/备份index.php
 
 将删除 static/test.php
-/static/test.php
+/test.php
 /wx/
 将忽略仓库 wx/
+/upload_image.php
+/test_index.php
+/test_area_to_id.php
+/lib/bootstrap-3.3.7-dist/

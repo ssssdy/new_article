@@ -15,7 +15,7 @@ class Base_Cache
     {
         $redis = new Redis();
         $redis->connect(LOCAL_IP, PORT);
-        $redis->select(REDIS_DEFAULT_DB);
+        $redis->select(1);
         $this->redis_instance = $redis;
     }
 
@@ -117,5 +117,21 @@ class Base_Cache
     function expire($key, $timeout)
     {
         return $this->redis_instance->expire($key, $timeout);
+    }
+
+    function increase_access_time($ip)
+    {
+        $key = 'access_times_rank';
+        return $this->redis_instance->zIncrBy($key, 1, $ip);
+    }
+
+    function get_access_times_range()
+    {
+        return $this->redis_instance->zRevRange('access_times_rank', 0, -1, true);
+    }
+
+    function get_access_times_rank($member)
+    {
+        return $this->redis_instance->zRevRank('access_times_rank', $member)+1;
     }
 }

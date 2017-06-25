@@ -212,10 +212,10 @@ switch ($_GET["action"]) {
 //            echo "请先登录!";
 //            exit;
 //        }
-//        if($check_zan>0){
-//            echo "您已经赞过！";
-//            exit;
-//        }
+        if($check_zan>0){
+            echo "您已经赞过！";
+            exit;
+        }
         $zan_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'zan_time' => $zan_time);
         $res = $zan_news_model->insert_zan_info($zan_arr, 'zan_of_news');
         if ($res) {

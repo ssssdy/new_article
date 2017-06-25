@@ -31,4 +31,12 @@ class News_comment_Model extends Base_Model
         $sql = "delete from news_comment WHERE id = $comment_id";
         return $this->query($sql);
     }
+
+    function num_of_news_comment($news_id)
+    {
+        $sql = "select * from news_comment where news_id = $news_id";
+        $rs = $this->query($sql);
+        $num = $this->num_of_rows($rs);
+        return $num;
+    }
 }

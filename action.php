@@ -2,21 +2,23 @@
 <html>
 <head>
     <meta charset="utf-8">
-<!--    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    <script src="./lib/jquery/dist/jquery.min.js"></script>-->
-<!--    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
+    <!--    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--    <script src="./lib/jquery/dist/jquery.min.js"></script>-->
+    <!--    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
 </head>
 <?php
 require './helpers/global_helper.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
+require './model/zan_news.class.php';
 require './cache/base_cache.class.php';
 require './model/news_comment_model.class.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
 $news_comment_model = new News_comment_Model();
+$zan_news_model = new Zan_News_Model();
 $redis = new Base_Cache();
 switch ($_GET["action"]) {
     case "add":
@@ -199,28 +201,50 @@ switch ($_GET["action"]) {
         $result = $user_model->change_admin_role($user_id, $role_type);
         header("Location:add_admin.php");
         break;
+    case "add_zan":
+        $news_id = htmlspecialchars(trim($_POST['news_id']));
+        $user_id = htmlspecialchars(trim($_POST['user_id']));
+        $user_name = htmlspecialchars(trim($_POST['user_name']));
+        $num = htmlspecialchars(trim($_POST['num']));
+        $zan_time = date("Y-m-d H:i:s", time());
+        $check_zan = $zan_news_model->check_zan_to_new($news_id, $user_id);
+//        if(empty($user_id)){
+//            echo "请先登录!";
+//            exit;
+//        }
+//        if($check_zan>0){
+//            echo "您已经赞过！";
+//            exit;
+//        }
+        $zan_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'zan_time' => $zan_time);
+        $res = $zan_news_model->insert_zan_info($zan_arr, 'zan_of_news');
+        if ($res) {
+            echo "感谢您的赞!";
+        }
+        break;
     case "add_comment":
         $news_id = htmlspecialchars(trim($_POST['news_id']));
-        $user_id= htmlspecialchars(trim($_POST['user_id']));
-        $user_name= htmlspecialchars(trim($_POST['user_name']));
+        $user_id = htmlspecialchars(trim($_POST['user_id']));
+        $user_name = htmlspecialchars(trim($_POST['user_name']));
         $create_time = date("Y-m-d H:i:s", time());
-        $comment =htmlspecialchars(trim($_POST['txt']));
-        if(empty($user_id)){
-            echo "昵称不能为空！";
+        $comment = htmlspecialchars(trim($_POST['txt']));
+        if (empty($user_id)) {
+            echo "请先登录!";
             exit;
         }
-        if(empty($comment)){
+        if (empty($comment)) {
             echo "评论内容不能为空！";
             exit;
         }
-        $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name,'comment' => $comment, 'create_time' => $create_time);
+        $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'comment' => $comment, 'create_time' => $create_time);
         $res = $news_comment_model->insert($comment_arr, 'news_comment');
-        if($res){
+        if ($res) {
             echo "发表成功!";
         }
         break;
     case "get_comment":
-        $comment = $news_comment_model->get_comment(43);
+        $news_id = $_SESSION['news_id'];
+        $comment = $news_comment_model->get_comment($news_id);
         echo json_encode($comment);
         break;
 }

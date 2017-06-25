@@ -133,4 +133,9 @@ class Base_Cache
     {
         return $this->redis_instance->zRevRank($key, $member);
     }
+
+    function set_add($key,$member)
+    {
+        return $this->redis_instance->sAdd($key,$member);
+    }
 }

@@ -74,16 +74,8 @@
         </div>
         <div class="col-md-5">
             <?php
-            $weather_cache = new Weather_cache();
-            $city_id = $weather_cache->get('now_city_id');
-            dump($city_id);
-            $today_weather_info =$weather_cache->get_weather_info_from_cache($city_id);
-            if ($today_weather_info == null) {
-                $today_weather_info = get_weather_info_from_new($city_id);
-                echo "从ＡＰＩ获取";
-            } else {
-                echo "从缓存获取";
-            }
+            $weather_cache = new Weather_Cache();
+            $today_weather_info =$weather_cache->get_weather_info_from_cache();
             ?>
             <div class="container-fluid">
                 <form action="action.php?action=switch_city" method="post">

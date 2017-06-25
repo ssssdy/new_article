@@ -53,7 +53,7 @@ class User_Model extends Base_Model
         return $news_info;
     }
 
-    function get_user_id($role_type)
+    function get_user_id_by_type($role_type)
     {
         $role_type = mysqli_real_escape_string($this->conn, $role_type);
         $sql = "select user_id from user where role_type='$role_type'";
@@ -61,6 +61,15 @@ class User_Model extends Base_Model
         $info = mysqli_fetch_array($result);
         return $info['user_id'];
     }
+    function get_user_id_by_name($user_name)
+    {
+        $user_name = mysqli_real_escape_string($this->conn, $user_name);
+        $sql = "select user_id from user where user_name='$user_name'";
+        $result = $this->query($sql);
+        $info = mysqli_fetch_array($result);
+        return $info['user_id'];
+    }
+
 
     function get_role_type($user_name)
     {

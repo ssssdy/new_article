@@ -119,19 +119,18 @@ class Base_Cache
         return $this->redis_instance->expire($key, $timeout);
     }
 
-    function increase_access_time($ip)
+    function z_increase_by($key, $value, $member)
     {
-        $key = 'access_times_rank';
-        return $this->redis_instance->zIncrBy($key, 1, $ip);
+        return $this->redis_instance->zIncrBy($key, $value, $member);
     }
 
-    function get_access_times_range()
+    function z_rev_range($key, $start, $end, $with_scores = true)
     {
-        return $this->redis_instance->zRevRange('access_times_rank', 0, -1, true);
+        return $this->redis_instance->zRevRange($key, $start, $end, $with_scores);
     }
 
-    function get_access_times_rank($member)
+    function get_ranking($key, $member)
     {
-        return $this->redis_instance->zRevRank('access_times_rank', $member)+1;
+        return $this->redis_instance->zRevRank($key, $member);
     }
 }

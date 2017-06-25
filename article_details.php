@@ -38,7 +38,9 @@
                 require './model/news_model.class.php';
                 require './model/user_model.class.php';
                 require './model/tag_model.class.php';
-                require './cache/base_cache.class.php';
+                require './model/news_comment_model.class.php';
+                require './cache/user_access_times_cache.php';
+                require './cache/news_details_cache.php';
                 check_login();
                 ?>
             </ul>
@@ -79,58 +81,96 @@
         </div>
         <div class="clearfix visible-xs"></div>
         <div class="col-md-10 table-responsive">
-            <?php
-            $news_id = $_GET['id'];
-            $news_model = new News_Model();
-            $redis = new Base_Cache();
-            $news_status = $redis->is_exists($news_id);
-            if ($news_status == 0) {
-                $news_info = $news_model->get_one_news_info($news_id);
-                $redis->set($news_id, json_encode($news_info), SURVIVAL_TIME_OF_NEWS);
-            }
-            $news_info_redis = json_decode($redis->get($news_id), true);
-            $rest_survival_time = $redis->rest_survival_time($news_id);
-            ?>
             <div class="container-fluid">
                 <div class="row">
-                    <div style="float: right" class="col-md-3">
+                    <div style="float: right;border: 1px solid #000;" class="col-md-4">
                         <?php
+                        $redis = new Access_Times_Cache();
+                        $news_details_cache = new News_Details_Cache();
                         echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
                         foreach (RATE_LIMITING_ARR as $limit => $timeout) {
-                            access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
+                            $redis->access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
                         }
+                        $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);
+                        echo $_SERVER['REMOTE_ADDR'] . "的访问次数:" . $count . "<br/>";
+                        $news_id = $_GET['id'];
+                        $_SESSION['news_id'] = $news_id;
+                        echo "缓存状态: ";
+                        $news_info_redis = $news_details_cache->show_news_details($news_id);
                         echo "<br>";
-                        echo "缓存状态:";
-                        if ($news_status == 0) {
-                            echo "先存后取" . "<br>";
-                        } else {
-                            echo "直接从缓存中读取" . "<br>";
-                        }
+                        $rest_survival_time = $news_details_cache->rest_survival_time($news_id);
                         echo "缓存有效期剩余:" . seconds_to_date($rest_survival_time) . "<br>";
                         //            echo "<button onclick='javascript:refresh_cache({$news_info_redis['id']})'>刷新缓存</button>";
                         echo "<button><a href='javascript:refresh_cache({$news_info_redis['id']})'>刷新缓存</a></button><br/>";
-                        $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);
-                        echo $_SERVER['REMOTE_ADDR']."的访问次数:".$count."<br/>";
-                        ?>经纪人告知乔治将离队让步行者感到惊讶
-
+                        ?>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <h2><b><span><?= $news_info_redis['title'] ?></span></b></h2>
                         <p style="font-size: 16px"><span>发布人:<?= $news_info_redis['author'] ?></span>&nbsp;
                             <span>发布时间:<?= date('Y-m-d', $news_info_redis['add_time']) ?></span>&nbsp;
                             <span>关键字：<span><?= $news_info_redis['keywords'] ?></span></span></p>
                         <?php echo "<td><img width='600' height='300' class='img-responsive' alt='响应式图像' src='" . qiniu_image_display($news_info_redis['image_url']) . "'/></td>"; ?>
                         <p style="font-size: 17px"><?= $news_info_redis['content'] ?></p>
+                        <div id="post">
+                            <input id="news_id" type="hidden" name="news_id" value="<?= $news_id ?>"/>
+                            <input id="user_id" type="hidden" name="user_id" value="<?= $_SESSION['user_id'] ?>"/>
+                            <input id="user_name" type="hidden" name="user_name" value="<?= $_SESSION['user_name'] ?>"/>
+                            <p>发表评论</p>
+                            <div style="float: right" id="message"></div>
+                            <textarea id="txt" name="comment_text" class="form-control" rows="3" title=""></textarea>
+                            <p class="text-right"><input class="btn btn-success" id="add" type="submit" value="提交"/></p>
+                        </div>
+                        <div id="comments">
+                            <h4>评论列表</h4>
+                            <?php
+                            $news_comment_model = new News_comment_Model();
+                            $comments = $news_comment_model->get_comment($news_id);
+                            foreach ($comments as $news_comment) {
+                                echo "<dl>";
+                                echo "<dt class='comment_head'><span class='user_name'>昵称:" . $news_comment['user_name'] . "</span>  <span>评论时间:" . $news_comment['create_time'] . "</span></dt>";
+                                echo "<dt class='comment_body'>" . $news_comment['comment'] . "</dt>";
+                                echo "</dl>";
+                            }
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
+        <script>
             function refresh_cache(key) {
                 if (confirm("确定要刷新缓存吗？")) {
                     window.location = "action.php?action=refresh_cache&key=" + key;
                 }
             }
+            //            $(document).ready(function(){
+            //                var comments = $("#comments");
+            //                $.getJSON("action.php?action=get_comment",function(json){
+            //                    $.each(json,function(index,array){
+            //                        var txt = "<p><strong>昵称"+array["user_name"]+"</strong>："+array["comment"]+"<span>"
+            //                            +array["create_time"]+"</span></p>";
+            //                        comments.append(txt);
+            //                    });
+            //                });
+            //            });
+            $("#add").click(function () {
+                var user_id = $("#user_id").val();
+                var user_name = $("#user_name").val();
+                var news_id = $("#news_id").val();
+                var txt = $("#txt").val();
+                var comments = $("#comments");
+                $.ajax({
+                    type: "POST",
+                    url: "action.php?action=add_comment",
+                    data: "user_id=" + user_id + "&txt=" + txt + "&news_id=" + news_id + "&user_name=" + user_name,
+                    success: function (msg) {
+                        var str = "<dl><dt class='comment_head'><span class='user_name'>" + user_name + "<span>刚刚评论说:</span>" + txt + "</dt><dl>";
+                        comments.append(str);
+                        $("#message").show().html(msg).fadeOut(1000);
+                        $("#txt").attr("value", "");
+                    }
+                });
+            });
         </script>
 </body>
 </html>

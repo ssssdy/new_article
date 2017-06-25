@@ -2,20 +2,21 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="./lib/jquery/dist/jquery.min.js"></script>
-    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<!--    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <script src="./lib/jquery/dist/jquery.min.js"></script>-->
+<!--    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
 </head>
 <?php
 require './helpers/global_helper.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
-//require './cache/base_cache.class.php';
-require './cache/weather_cache.php';
+require './cache/base_cache.class.php';
+require './model/news_comment_model.class.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
+$news_comment_model = new News_comment_Model();
 $redis = new Base_Cache();
 switch ($_GET["action"]) {
     case "add":
@@ -42,6 +43,7 @@ switch ($_GET["action"]) {
     case "delete_news":
         $id = $_GET['id'];
         $news_model->delete_by_news_id($id);
+        $news_comment_model->del_comment_by_news_id($id);
         $news_info = $news_model->get_one_news_info($id);
         header("Location:index.php");
         break;
@@ -99,6 +101,8 @@ switch ($_GET["action"]) {
         session_start();
         unset($_SESSION['user_name']);
         unset($_SESSION['role_type']);
+        unset($_SESSION['role_name']);
+        unset($_SESSION['user_id']);
         echo "退出登录成功！点击此处<a href='login.php'> 登录</a><a href='index.php'> 返回主页</a>";
         break;
 //    case "upload_image":
@@ -170,6 +174,7 @@ switch ($_GET["action"]) {
                     $check_user_info = mysqli_fetch_array($result);
                     $_SESSION['user_name'] = $check_user_info['user_name'];
                     $role_type = $user_model->get_role_type($check_user_info['user_name']);
+                    $_SESSION['user_id'] = $user_model->get_user_id_by_type($role_type);
                     $_SESSION['role_type'] = $role_type;
                     $_SESSION['role_name'] = $user_model->get_role_name($role_type);
                     header("refresh:0;url=index.php");
@@ -193,6 +198,30 @@ switch ($_GET["action"]) {
         $role_type = $user_model->get_role_type_by_user_id($user_id);
         $result = $user_model->change_admin_role($user_id, $role_type);
         header("Location:add_admin.php");
+        break;
+    case "add_comment":
+        $news_id = htmlspecialchars(trim($_POST['news_id']));
+        $user_id= htmlspecialchars(trim($_POST['user_id']));
+        $user_name= htmlspecialchars(trim($_POST['user_name']));
+        $create_time = date("Y-m-d H:i:s", time());
+        $comment =htmlspecialchars(trim($_POST['txt']));
+        if(empty($user_id)){
+            echo "昵称不能为空！";
+            exit;
+        }
+        if(empty($comment)){
+            echo "评论内容不能为空！";
+            exit;
+        }
+        $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name,'comment' => $comment, 'create_time' => $create_time);
+        $res = $news_comment_model->insert($comment_arr, 'news_comment');
+        if($res){
+            echo "发表成功!";
+        }
+        break;
+    case "get_comment":
+        $comment = $news_comment_model->get_comment(43);
+        echo json_encode($comment);
         break;
 }
 ?>

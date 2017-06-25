@@ -82,7 +82,8 @@ class Base_Model
         mysqli_query($this->conn, $sql);
     }
 
-    function num_of_rows($result){
+    function num_of_rows($result)
+    {
         return mysqli_num_rows($result);
     }
 }

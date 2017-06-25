@@ -61,6 +61,7 @@ class User_Model extends Base_Model
         $info = mysqli_fetch_array($result);
         return $info['user_id'];
     }
+
     function get_user_id_by_name($user_name)
     {
         $user_name = mysqli_real_escape_string($this->conn, $user_name);

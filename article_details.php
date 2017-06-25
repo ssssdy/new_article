@@ -117,13 +117,14 @@
                             //判断cookie是否设置，如果设置输出已赞，如果没有输出赞一个
                             $zan_model = new Zan_News_Model();
                             $num = $zan_model->zan_num_of_news($news_id);
-                            if(isset($_COOKIE['good'])){
+                            if (isset($_COOKIE['good'])) {
                                 echo "已赞";
-                            }else{
+                            } else {
                                 echo "赞一个";
-                            }?>
-                        </button>(<span id="num_zan"><?=$num?></span>)<span style="color: red" id="zan_message"></span>
-<!--                        文章评论-->
+                            } ?>
+                        </button>
+                        (<span id="num_zan"><?= $num ?></span>)<span style="color: red" id="zan_message"></span>
+                        <!--                        文章评论-->
                         <div id="post">
                             <input id="news_id" type="hidden" name="news_id" value="<?= $news_id ?>"/>
                             <input id="user_id" type="hidden" name="user_id" value="<?= $_SESSION['user_id'] ?>"/>
@@ -166,7 +167,7 @@
             //                    });
             //                });
             //            });
-//            文章评论
+            //            文章评论
             $("#add").click(function () {
                 var user_id = $("#user_id").val();
                 var user_name = $("#user_name").val();
@@ -185,13 +186,13 @@
                     }
                 });
             });
-//            点赞
+            //            点赞
             $("#good").click(function () {
                 var user_id = $("#user_id").val();
                 var user_name = $("#user_name").val();
                 var news_id = $("#news_id").val();
                 var num = $("#num_zan").val();
-                var new_num = num+1;
+                var new_num = num + 1;
                 $.ajax({
                     type: "POST",
                     url: "action.php?action=add_zan",

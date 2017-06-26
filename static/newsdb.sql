@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2017-06-25 22:49:21
+-- Generation Time: 2017-06-26 18:46:54
 -- 服务器版本： 5.7.18-0ubuntu0.16.04.1
 -- PHP Version: 7.0.18-0ubuntu0.16.04.1
 
@@ -78,7 +78,60 @@ INSERT INTO `news_comment` (`id`, `news_id`, `user_id`, `user_name`, `comment`, 
 (106, 43, 12, 'root', 'dd', '2017-06-25 21:18:29'),
 (107, 43, 12, 'root', 'sfsf', '2017-06-25 21:18:34'),
 (108, 43, 12, 'root', '撒大大', '2017-06-25 22:22:11'),
-(109, 43, 12, 'root', '撒大大的', '2017-06-25 22:22:14');
+(109, 43, 12, 'root', '撒大大的', '2017-06-25 22:22:14'),
+(110, 43, 12, 'root', '复古风格', '2017-06-25 23:16:51'),
+(111, 43, 12, 'root', 'dfa', '2017-06-25 23:42:25');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `news_like_info`
+--
+
+CREATE TABLE `news_like_info` (
+  `id` int(11) NOT NULL,
+  `news_id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `user_name` varchar(20) NOT NULL,
+  `like_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `news_like_info`
+--
+
+INSERT INTO `news_like_info` (`id`, `news_id`, `user_id`, `user_name`, `like_time`) VALUES
+(40, 43, 12, 'root', '2017-06-25 21:54:22'),
+(41, 43, 12, 'root', '2017-06-25 21:54:24'),
+(42, 43, 12, 'root', '2017-06-25 21:54:28'),
+(43, 43, 12, 'root', '2017-06-25 21:57:59'),
+(44, 43, 12, 'root', '2017-06-25 21:58:00'),
+(45, 43, 12, 'root', '2017-06-25 22:13:47'),
+(46, 43, 12, 'root', '2017-06-25 22:13:49'),
+(47, 43, 12, 'root', '2017-06-25 22:13:50'),
+(48, 43, 12, 'root', '2017-06-25 22:13:50'),
+(49, 43, 12, 'root', '2017-06-25 22:14:10'),
+(50, 43, 12, 'root', '2017-06-25 22:14:15'),
+(51, 43, 12, 'root', '2017-06-25 22:14:22'),
+(52, 43, 12, 'root', '2017-06-25 22:14:25'),
+(53, 43, 12, 'root', '2017-06-25 22:14:27'),
+(54, 43, 12, 'root', '2017-06-25 22:14:27'),
+(55, 43, 12, 'root', '2017-06-25 22:14:27'),
+(56, 43, 12, 'root', '2017-06-25 22:15:17'),
+(57, 43, 12, 'root', '2017-06-25 22:15:18'),
+(58, 43, 12, 'root', '2017-06-25 22:15:19'),
+(59, 43, 12, 'root', '2017-06-25 22:15:19'),
+(60, 43, 12, 'root', '2017-06-25 22:15:27'),
+(61, 43, 12, 'root', '2017-06-25 22:15:44'),
+(62, 43, 12, 'root', '2017-06-25 22:15:46'),
+(63, 43, 12, 'root', '2017-06-25 22:15:47'),
+(64, 43, 12, 'root', '2017-06-25 22:22:19'),
+(65, 43, 12, 'root', '2017-06-25 22:22:20'),
+(66, 43, 12, 'root', '2017-06-25 22:23:46'),
+(67, 43, 12, 'root', '2017-06-25 22:23:48'),
+(68, 43, 12, 'root', '2017-06-25 22:23:49'),
+(69, 43, 12, 'root', '2017-06-25 22:23:49'),
+(70, 43, 12, 'root', '2017-06-25 22:36:43');
 
 -- --------------------------------------------------------
 
@@ -212,57 +265,6 @@ INSERT INTO `user` (`user_id`, `user_name`, `password`, `phone`, `address`, `rol
 (35, 'dss', '123', '22', '11', 3),
 (36, 'kkfjds', '123', '15827398906', '', 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `zan_of_news`
---
-
-CREATE TABLE `zan_of_news` (
-  `id` int(11) NOT NULL,
-  `news_id` int(10) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `user_name` varchar(20) NOT NULL,
-  `zan_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `zan_of_news`
---
-
-INSERT INTO `zan_of_news` (`id`, `news_id`, `user_id`, `user_name`, `zan_time`) VALUES
-(40, 43, 12, 'root', '2017-06-25 21:54:22'),
-(41, 43, 12, 'root', '2017-06-25 21:54:24'),
-(42, 43, 12, 'root', '2017-06-25 21:54:28'),
-(43, 43, 12, 'root', '2017-06-25 21:57:59'),
-(44, 43, 12, 'root', '2017-06-25 21:58:00'),
-(45, 43, 12, 'root', '2017-06-25 22:13:47'),
-(46, 43, 12, 'root', '2017-06-25 22:13:49'),
-(47, 43, 12, 'root', '2017-06-25 22:13:50'),
-(48, 43, 12, 'root', '2017-06-25 22:13:50'),
-(49, 43, 12, 'root', '2017-06-25 22:14:10'),
-(50, 43, 12, 'root', '2017-06-25 22:14:15'),
-(51, 43, 12, 'root', '2017-06-25 22:14:22'),
-(52, 43, 12, 'root', '2017-06-25 22:14:25'),
-(53, 43, 12, 'root', '2017-06-25 22:14:27'),
-(54, 43, 12, 'root', '2017-06-25 22:14:27'),
-(55, 43, 12, 'root', '2017-06-25 22:14:27'),
-(56, 43, 12, 'root', '2017-06-25 22:15:17'),
-(57, 43, 12, 'root', '2017-06-25 22:15:18'),
-(58, 43, 12, 'root', '2017-06-25 22:15:19'),
-(59, 43, 12, 'root', '2017-06-25 22:15:19'),
-(60, 43, 12, 'root', '2017-06-25 22:15:27'),
-(61, 43, 12, 'root', '2017-06-25 22:15:44'),
-(62, 43, 12, 'root', '2017-06-25 22:15:46'),
-(63, 43, 12, 'root', '2017-06-25 22:15:47'),
-(64, 43, 12, 'root', '2017-06-25 22:22:19'),
-(65, 43, 12, 'root', '2017-06-25 22:22:20'),
-(66, 43, 12, 'root', '2017-06-25 22:23:46'),
-(67, 43, 12, 'root', '2017-06-25 22:23:48'),
-(68, 43, 12, 'root', '2017-06-25 22:23:49'),
-(69, 43, 12, 'root', '2017-06-25 22:23:49'),
-(70, 43, 12, 'root', '2017-06-25 22:36:43');
-
 --
 -- Indexes for dumped tables
 --
@@ -277,6 +279,12 @@ ALTER TABLE `news`
 -- Indexes for table `news_comment`
 --
 ALTER TABLE `news_comment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `news_like_info`
+--
+ALTER TABLE `news_like_info`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -314,12 +322,6 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `zan_of_news`
---
-ALTER TABLE `zan_of_news`
-  ADD PRIMARY KEY (`id`);
-
---
 -- 在导出的表使用AUTO_INCREMENT
 --
 
@@ -332,7 +334,12 @@ ALTER TABLE `news`
 -- 使用表AUTO_INCREMENT `news_comment`
 --
 ALTER TABLE `news_comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+--
+-- 使用表AUTO_INCREMENT `news_like_info`
+--
+ALTER TABLE `news_like_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 --
 -- 使用表AUTO_INCREMENT `real_news`
 --
@@ -358,11 +365,6 @@ ALTER TABLE `test`
 --
 ALTER TABLE `user`
   MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
---
--- 使用表AUTO_INCREMENT `zan_of_news`
---
-ALTER TABLE `zan_of_news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -41,7 +41,7 @@
                 require './model/news_model.class.php';
                 require './model/user_model.class.php';
                 require './model/tag_model.class.php';
-                require './cache/user_access_times_cache.php';
+                require './cache/user_access_time_cache.php';
                 check_login();
                 ?>
             </ul>
@@ -101,11 +101,11 @@
                             <tbody>
                             <tr>
                                 <?php
-                                $redis = new Access_Times_Cache();
-                                $ranking_list = $redis->get_access_times_range();
+                                $access_time_cache = new Access_time_Cache();
+                                $ranking_list = $access_time_cache->get_access_times_range();
                                 dump($ranking_list);
                                 foreach ($ranking_list as $ip => $times) {
-                                    $rank_num = $redis->get_access_times_rank($ip);
+                                    $rank_num = $access_time_cache->get_access_times_rank($ip);
                                     echo "<tr><td>$rank_num</td>";
                                     echo "<td>$ip</td>";
                                     echo "<td>$times</td></tr>";

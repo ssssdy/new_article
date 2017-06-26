@@ -39,8 +39,8 @@
                 require './model/user_model.class.php';
                 require './model/tag_model.class.php';
                 require './model/news_comment_model.class.php';
-                require './model/zan_news.class.php';
-                require './cache/user_access_times_cache.php';
+                require './model/news_like_info.class.php';
+                require './cache/user_access_time_cache.php';
                 require './cache/news_details_cache.php';
                 check_login();
                 ?>
@@ -86,12 +86,13 @@
                 <div class="row">
                     <div style="float: right;border: 1px solid #000;" class="col-md-4">
                         <?php
-                        $redis = new Access_Times_Cache();
+                        $redis = new Access_time_Cache();
                         $news_details_cache = new News_Details_Cache();
                         echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
-                        foreach (RATE_LIMITING_ARR as $limit => $timeout) {
-                            $redis->access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
-                        }
+//                        foreach (RATE_LIMITING_ARR as $limit => $timeout) {
+//                            $redis->access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
+//                        }
+                        $redis->access_limit($_SERVER['REMOTE_ADDR']);
                         $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);
                         echo $_SERVER['REMOTE_ADDR'] . "的访问次数:" . $count . "<br/>";
                         $news_id = $_GET['id'];
@@ -115,15 +116,15 @@
                         <button onclick="a();" id="good">
                             <?php
                             //判断cookie是否设置，如果设置输出已赞，如果没有输出赞一个
-                            $zan_model = new Zan_News_Model();
-                            $num = $zan_model->zan_num_of_news($news_id);
+                            $news_like_model = new News_Like_Model();
+                            $num = $news_like_model->num_of_news_like($news_id);
                             if (isset($_COOKIE['good'])) {
                                 echo "已赞";
                             } else {
                                 echo "赞一个";
                             } ?>
                         </button>
-                        (<span id="num_zan"><?= $num ?></span>)<span style="color: red" id="zan_message"></span>
+                        (<span id="news_like_num"><?= $num ?></span>)<span style="color: red" id="news_like_message"></span>
                         <!--                        文章评论-->
                         <div id="post">
                             <input id="news_id" type="hidden" name="news_id" value="<?= $news_id ?>"/>
@@ -191,14 +192,13 @@
                 var user_id = $("#user_id").val();
                 var user_name = $("#user_name").val();
                 var news_id = $("#news_id").val();
-                var num = $("#num_zan").val();
-                var new_num = num + 1;
+                var num = $("#news_like_num").val();
                 $.ajax({
                     type: "POST",
-                    url: "action.php?action=add_zan",
+                    url: "action.php?action=add_news_like",
                     data: "user_id=" + user_id + "&num=" + num + "&news_id=" + news_id + "&user_name=" + user_name,
                     success: function (msg) {
-                        $("#zan_message").show().html(msg).fadeOut(1000);
+                        $("#news_like_message").show().html(msg).fadeOut(1000);
                     }
                 });
             });

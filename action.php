@@ -11,14 +11,14 @@ require './helpers/global_helper.php';
 require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
-require './model/zan_news.class.php';
+require './model/news_like_info.class.php';
 require './cache/base_cache.class.php';
 require './model/news_comment_model.class.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
 $news_comment_model = new News_comment_Model();
-$zan_news_model = new Zan_News_Model();
+$News_Like_Model = new News_Like_Model();
 $redis = new Base_Cache();
 switch ($_GET["action"]) {
     case "add":
@@ -201,23 +201,23 @@ switch ($_GET["action"]) {
         $result = $user_model->change_admin_role($user_id, $role_type);
         header("Location:add_admin.php");
         break;
-    case "add_zan":
+    case "add_news_like":
         $news_id = htmlspecialchars(trim($_POST['news_id']));
         $user_id = htmlspecialchars(trim($_POST['user_id']));
         $user_name = htmlspecialchars(trim($_POST['user_name']));
         $num = htmlspecialchars(trim($_POST['num']));
-        $zan_time = date("Y-m-d H:i:s", time());
-        $check_zan = $zan_news_model->check_zan_to_new($news_id, $user_id);
+        $create_time = date("Y-m-d H:i:s", time());
+        $check = $News_Like_Model->check_news_like($news_id, $user_id);
 //        if(empty($user_id)){
 //            echo "请先登录!";
 //            exit;
 //        }
-        if($check_zan>0){
+        if($check>0){
             echo "您已经赞过！";
             exit;
         }
-        $zan_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'zan_time' => $zan_time);
-        $res = $zan_news_model->insert_zan_info($zan_arr, 'zan_of_news');
+        $news_like_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'like_time' => $create_time);
+        $res = $News_Like_Model->insert_news_like_info($news_like_arr, 'news_like_info');
         if ($res) {
             echo "感谢您的赞!";
         }

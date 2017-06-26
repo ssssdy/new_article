@@ -16,9 +16,6 @@ class Weather_Cache extends Base_Cache
         $today_weather_info = json_decode($today_weather_redis, true);
         if ($today_weather_redis == null) {
             $today_weather_info = get_weather_info_from_new($city_id);
-            echo "从API获取";
-        } else {
-            echo "从缓存获取";
         }
         return $today_weather_info;
     }

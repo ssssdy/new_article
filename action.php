@@ -12,14 +12,17 @@ require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
 require './model/news_like_info.class.php';
-require './cache/base_cache.class.php';
+//require './cache/base_cache.class.php';
+require './cache/news_like_info.cache.php';
 require './model/news_comment_model.class.php';
+include '/var/www/article.ssssdy.top/lib/weather/get_weather_info_from_api.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
 $news_comment_model = new News_comment_Model();
-$News_Like_Model = new News_Like_Model();
+$news_like_model = new News_Like_Model();
 $redis = new Base_Cache();
+$news_like_cache = new News_Like_Cache();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -50,9 +53,9 @@ switch ($_GET["action"]) {
         header("Location:index.php");
         break;
     case "refresh_cache":
-        $key = $_GET['key'];
-        $redis->delete($key);
-        header("Location:article_details.php?id=$key");
+        $name_of_news_like_id = $_GET['key'];
+        $redis->delete($name_of_news_like_id);
+        header("Location:article_details.php?id=$name_of_news_like_id");
         break;
     case "switch_city":
         $city_name = $_POST['city_name'];
@@ -136,6 +139,8 @@ switch ($_GET["action"]) {
             $address = $_POST["address"];
             if ($user == "" || $psw == "" || $psw_confirm == "") {
                 echo "<script>alert('请确认信息完整性！'); history.go(-1);</script>";
+            } elseif (is_cellphone($phone) == false) {
+                echo "<script>alert('手机号码格式不正确！');history.back()</script>";
             } else {
                 if ($psw == $psw_confirm) {
                     $num = $user_model->check_user_exist($user);
@@ -207,19 +212,38 @@ switch ($_GET["action"]) {
         $user_name = htmlspecialchars(trim($_POST['user_name']));
         $num = htmlspecialchars(trim($_POST['num']));
         $create_time = date("Y-m-d H:i:s", time());
-        $check = $News_Like_Model->check_news_like($news_id, $user_id);
-//        if(empty($user_id)){
-//            echo "请先登录!";
+        $news_like_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'like_time' => $create_time);
+
+        //存入数据库
+//        $check = $news_like_model->check_news_like($news_id, $user_id);
+////        if(empty($user_id)){
+////            echo "请先登录!";
+////            exit;
+////
+//        if ($check > 0) {
+//            echo "您已经赞过！";
 //            exit;
 //        }
-        if($check>0){
+//        $res = $news_like_model->insert_news_like_info($news_like_arr, 'news_like_info');
+//        if ($res) {
+//            $total_num = $news_like_model->num_of_news_like($news_id);
+//            echo $total_num;
+//        }
+
+        //用redis做缓存
+        $news_like_cache->be_liked_news_add($news_id);//存放所有被赞的new_id集合
+        $name_of_news_like_id = "like_news_user_set:$news_id";
+        $check_be_liked = $news_like_cache->check_news_be_liked($name_of_news_like_id,$user_id);
+        if($check_be_liked == 1){
             echo "您已经赞过！";
             exit;
         }
-        $news_like_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'like_time' => $create_time);
-        $res = $News_Like_Model->insert_news_like_info($news_like_arr, 'news_like_info');
-        if ($res) {
-            echo "感谢您的赞!";
+        $news_like_cache->like_news_user_add($name_of_news_like_id,$user_id);//某被赞的文章集合中加入用户
+        $news_like_info_key = $create_time.$news_id.$user_name.$user_id;// 缓存news_like_info的hash表名
+        $insert_result =$news_like_cache->insert_news_like_info_hash($news_like_info_key,$news_like_arr);
+        if($insert_result){
+            $count_news_like =$news_like_cache->count_of_news_like($name_of_news_like_id);
+            echo $count_news_like;
         }
         break;
     case "add_comment":
@@ -236,11 +260,17 @@ switch ($_GET["action"]) {
             echo "评论内容不能为空！";
             exit;
         }
+
+        // 存入mysql
+
         $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'comment' => $comment, 'create_time' => $create_time);
         $res = $news_comment_model->insert($comment_arr, 'news_comment');
         if ($res) {
             echo "发表成功!";
         }
+
+        //存入缓存
+
         break;
     case "get_comment":
         $news_id = $_SESSION['news_id'];

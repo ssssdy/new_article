@@ -95,7 +95,7 @@
                         <th>文章标题</th>
                         <th>发布时间</th>
                         <?php
-                        if (isset($_SESSION['user_name']) && $_SESSION['role_type'] >= 1) {
+                        if (isset($_SESSION['user_name']) && $_SESSION['role_type'] >= ROLE_TYPE_EDITOR) {
                             echo "<th>操作</th>";
                         }
                         ?>

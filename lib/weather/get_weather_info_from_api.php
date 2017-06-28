@@ -1,7 +1,7 @@
 <?php
+//    require_once '/var/www/article.ssssdy.top/cache/base_cache.class.php';
 function get_weather_info_from_new($area_id = WEATHER_DEFAULT_CITY)
 {
-//    require_once '/var/www/article.ssssdy.top/cache/base_cache.class.php';
     $host = "https://ali-weather.showapi.com";
     $path = "/area-to-weather";
     $method = "GET";

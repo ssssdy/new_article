@@ -62,3 +62,23 @@ function seconds_to_date($seconds)
     $seconds = $seconds % SECONDS_PER_MINUTE;
     return "$hours" . "小时" . "$minutes" . "分钟" . "$seconds" . "秒";
 }
+
+function fetch_repeat_member_in_array($array)
+{
+    $len = count($array);
+    $repeat_arr = [];
+    for ($i = 0; $i < $len; $i++) {
+        for ($j = $i + 1; $j < $len; $j++) {
+            if ($array [$i] == $array [$j]) {
+                $repeat_arr [] = $array [$i];
+                break;
+            }
+        }
+    }
+    return $repeat_arr;
+}
+
+function is_cellphone($num)//手机号码正则表达试
+{
+    return (preg_match("/^1[34578]\d{9}$/", $num)) ? true : false;
+}

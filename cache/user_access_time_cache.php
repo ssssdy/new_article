@@ -11,32 +11,32 @@ class Access_time_Cache extends Base_Cache
     function increase_access_time($ip)
     {
         $key = 'access_times_rank';
-        return $this->z_increase_by($key, 1, $ip);
+        return $this->z_increase_by($key, intval(1), $ip);
     }
 
-    function get_access_times_range()
+    function get_access_time_range()
     {
         return $this->z_rev_range('access_times_rank', 0, -1, true);
     }
 
-    function get_access_times_rank($member)
+    function get_access_time_rank($member)
     {
         return $this->get_ranking('access_times_rank', $member) + 1;
     }
 
-    function access_limit1($ip, $limit, $timeout)
-    {
-        $key = "rate.limiting:{$ip}";
-        $check = $this->increase($key);
-        if ($check == 1) {
-            $this->expire($key, $timeout);
-        } else {
-            if ($check > $limit) {
-                header("location:../error.php?error_type=rate_limiting");
-            }
-        }
-        echo $timeout . '秒内第 ' . $check . ' 次访问' . '<br>';
-    }
+//    function access_limit1($ip, $limit, $timeout)
+//    {
+//        $key = "rate.limiting:{$ip}";
+//        $check = $this->increase($key);
+//        if ($check == 1) {
+//            $this->expire($key, $timeout);
+//        } else {
+//            if ($check > $limit) {
+//                header("location:../error.php?error_type=rate_limiting");
+//            }
+//        }
+//        echo $timeout . '秒内第 ' . $check . ' 次访问' . '<br>';
+//    }
 
     function access_limit($ip)
     {

@@ -102,13 +102,13 @@
                             <tr>
                                 <?php
                                 $access_time_cache = new Access_time_Cache();
-                                $ranking_list = $access_time_cache->get_access_times_range();
+                                $ranking_list = $access_time_cache->get_access_time_range();
                                 dump($ranking_list);
-                                foreach ($ranking_list as $ip => $times) {
-                                    $rank_num = $access_time_cache->get_access_times_rank($ip);
+                                foreach ($ranking_list as $ip => $time) {
+                                    $rank_num = $access_time_cache->get_access_time_rank($ip);
                                     echo "<tr><td>$rank_num</td>";
                                     echo "<td>$ip</td>";
-                                    echo "<td>$times</td></tr>";
+                                    echo "<td>$time</td></tr>";
                                 }
                                 ?>
                             </tr>

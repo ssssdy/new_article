@@ -42,6 +42,7 @@
                 require './model/news_like_info.class.php';
                 require './cache/user_access_time_cache.php';
                 require './cache/news_details_cache.php';
+                require './cache/news_like_info.cache.php';
                 check_login();
                 ?>
             </ul>
@@ -89,9 +90,6 @@
                         $redis = new Access_time_Cache();
                         $news_details_cache = new News_Details_Cache();
                         echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
-//                        foreach (RATE_LIMITING_ARR as $limit => $timeout) {
-//                            $redis->access_limit($_SERVER['REMOTE_ADDR'], $limit, $timeout);
-//                        }
                         $redis->access_limit($_SERVER['REMOTE_ADDR']);
                         $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);
                         echo $_SERVER['REMOTE_ADDR'] . "的访问次数:" . $count . "<br/>";
@@ -113,18 +111,17 @@
                             <span>关键字：<span><?= $news_info_redis['keywords'] ?></span></span></p>
                         <?php echo "<td><img width='600' height='300' class='img-responsive' alt='响应式图像' src='" . qiniu_image_display($news_info_redis['image_url']) . "'/></td>"; ?>
                         <p style="font-size: 17px"><?= $news_info_redis['content'] ?></p>
-                        <button onclick="a();" id="good">
+                        <button class="btn btn-primary btn-xs" onclick="a();" id="good">赞一个
                             <?php
-                            //判断cookie是否设置，如果设置输出已赞，如果没有输出赞一个
-                            $news_like_model = new News_Like_Model();
-                            $num = $news_like_model->num_of_news_like($news_id);
-                            if (isset($_COOKIE['good'])) {
-                                echo "已赞";
-                            } else {
-                                echo "赞一个";
-                            } ?>
+//                            $news_like_model = new News_Like_Model();
+//                            $num = $news_like_model->num_of_news_like($news_id);
+                            $news_like_cache = new News_Like_Cache();
+                            $name_of_news_like_id = "like_news_user_set:$news_id";
+                            $num = $news_like_cache->count_of_news_like($name_of_news_like_id);
+                            ?>
                         </button>
-                        (<span id="news_like_num"><?= $num ?></span>)<span style="color: red" id="news_like_message"></span>
+                        (<span id="news_like_num"><?= $num ?></span>)
+                        <span style="color: red" id="news_like_message"></span>
                         <!--                        文章评论-->
                         <div id="post">
                             <input id="news_id" type="hidden" name="news_id" value="<?= $news_id ?>"/>
@@ -133,7 +130,7 @@
                             <p>发表评论</p>
                             <div style="float: right;color: red" id="message"></div>
                             <textarea id="txt" name="comment_text" class="form-control" rows="3" title=""></textarea>
-                            <p class="text-right"><input class="btn btn-success" id="add" type="submit" value="提交"/></p>
+                            <p class="text-right"><input class="btn btn-primary btn-xs" id="add" type="submit" value="提交"/></p>
                         </div>
                         <div id="comments">
                             <h4>评论列表</h4>
@@ -168,6 +165,7 @@
             //                    });
             //                });
             //            });
+
             //            文章评论
             $("#add").click(function () {
                 var user_id = $("#user_id").val();
@@ -197,8 +195,9 @@
                     type: "POST",
                     url: "action.php?action=add_news_like",
                     data: "user_id=" + user_id + "&num=" + num + "&news_id=" + news_id + "&user_name=" + user_name,
-                    success: function (msg) {
-                        $("#news_like_message").show().html(msg).fadeOut(1000);
+                    success: function (data) {
+                        $("#news_like_message").show().html('感谢您的赞!').fadeOut(1000);
+                        $("#news_like_num").html(data);
                     }
                 });
             });

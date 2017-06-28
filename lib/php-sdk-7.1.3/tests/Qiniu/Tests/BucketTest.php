@@ -13,10 +13,10 @@ class BucketTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         global $bucketName;
-        global $key;
+        global $name_of_news_like_id;
         global $key2;
         $this->bucketName = $bucketName;
-        $this->key = $key;
+        $this->key = $name_of_news_like_id;
         $this->key2 = $key2;
 
         global $testAuth;

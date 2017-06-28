@@ -18,3 +18,4 @@ define("WEATHER_DEFAULT_CITY", 101200101);//101200101为武汉编号
 define("RATE_LIMITING_ARR", array('3' => 3, '6' => 10));//缓存访问频率限制设置数组
 define("LOCAL_IP", '127.0.0.1');
 define(("SURVIVAL_TIME_OF_CITY_NAME"), 2592000);
+define("LIKE_COOKIE_SURVIVAL_TIME",72000000);

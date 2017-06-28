@@ -66,12 +66,13 @@ class Base_Cache
         return $this->redis_instance->hset($tableName, $field, $value);
     }
 
-    function hm_set($key, $value, $timeout = 0)
+    function hm_set($key, $array, $timeout = 0)
     {
-        $this->redis_instance->hmset($key, $value);
+        $res = $this->redis_instance->hmset($key, $array);
         if ($timeout > 0) {
             $this->redis_instance->expire($key, $timeout);
         }
+        return $res;
     }
 
     function hm_get($key, $field)
@@ -121,7 +122,7 @@ class Base_Cache
 
     function z_increase_by($key, $value, $member)
     {
-        return $this->redis_instance->zIncrBy($key, $value, $member);
+        return $this->redis_instance->zIncrBy($key, intval($value), $member);
     }
 
     function z_rev_range($key, $start, $end, $with_scores = true)
@@ -137,5 +138,13 @@ class Base_Cache
     function set_add($key, $member)
     {
         return $this->redis_instance->sAdd($key, $member);
+    }
+
+    function set_is_member($key, $member)
+    {
+        return $this->redis_instance->sIsMember($key, $member);
+    }
+    function count_of_set_member($key){
+        return $this->redis_instance->sCard($key);
     }
 }

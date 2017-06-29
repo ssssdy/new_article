@@ -89,6 +89,7 @@
                         <?php
                         $redis = new Access_time_Cache();
                         $news_details_cache = new News_Details_Cache();
+                        echo $_SESSION['user_id'];
                         echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
                         $redis->access_limit($_SERVER['REMOTE_ADDR']);
                         $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);

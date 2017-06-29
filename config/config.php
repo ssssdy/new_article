@@ -18,4 +18,9 @@ define("WEATHER_DEFAULT_CITY", 101200101);//101200101为武汉编号
 define("RATE_LIMITING_ARR", array('3' => 3, '6' => 10));//缓存访问频率限制设置数组
 define("LOCAL_IP", '127.0.0.1');
 define(("SURVIVAL_TIME_OF_CITY_NAME"), 2592000);
-define("LIKE_COOKIE_SURVIVAL_TIME",72000000);
+define("LIKE_COOKIE_SURVIVAL_TIME", 72000000);
+define("CACHE_PATH", '/var/www/article.ssssdy.top/cache/');
+define("MODEL_PATH", '/var/www/article.ssssdy.top/model/');
+define("HELPERS_PATH", '/var/www/article.ssssdy.top/helpers/');
+define("LIB_PATH", '/var/www/article.ssssdy.top/lib/');
+define("CONFIG_PATH", '/var/www/article.ssssdy.top/config/config.php/');

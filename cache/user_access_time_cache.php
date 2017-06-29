@@ -47,7 +47,7 @@ class Access_time_Cache extends Base_Cache
             $timeout_arr[] = $timeout;
         }
         for ($i = 0; $i < count($limit_arr); $i++) {
-            $key = "rate.limiting".$i.":{$ip}";
+            $key = "rate.limiting" . $i . ":{$ip}";
             $check = $this->increase($key);
             if ($check == 1) {
                 $this->expire($key, $timeout_arr[$i]);
@@ -57,7 +57,7 @@ class Access_time_Cache extends Base_Cache
                 }
             }
             echo $timeout_arr[$i] . '秒内第 ' . $check . ' 次访问' . '<br>';
-            echo "访问限制".$key."过期时间剩余:".$this->rest_survival_time($key)."<br>";
+            echo "访问限制" . $key . "过期时间剩余:" . $this->rest_survival_time($key) . "<br>";
         }
     }
 }

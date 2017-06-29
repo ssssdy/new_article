@@ -1,7 +1,7 @@
 <?php
 //require './helpers/global_helper.php';
-require '/var/www/article.ssssdy.top/model/base_model.class.php';
-require '/var/www/article.ssssdy.top/model/real_news_model.class.php';
+require MODEL_PATH . '/base_model.class.php';
+require MODEL_PATH . 'real_news_model.class.php';
 $ch = curl_init();
 //$url = 'http://news.hustonline.net/category/highlights';
 $url = 'http://hb.qq.com/news/';

@@ -1,5 +1,6 @@
 <?php
 require_once 'base_cache.class.php';
+
 class News_Like_Cache extends Base_Cache
 {
     function __construct()

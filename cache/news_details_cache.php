@@ -1,5 +1,5 @@
 <?php
-require_once '/var/www/article.ssssdy.top/model/news_model.class.php';
+require_once MODEL_PATH . 'news_model.class.php';
 require_once 'base_cache.class.php';
 
 class News_Details_Cache extends Base_Cache

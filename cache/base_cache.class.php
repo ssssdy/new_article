@@ -1,5 +1,4 @@
 <?php
-require_once '/var/www/article.ssssdy.top/config/config.php';
 
 /**
  * Created by PhpStorm.
@@ -144,7 +143,9 @@ class Base_Cache
     {
         return $this->redis_instance->sIsMember($key, $member);
     }
-    function count_of_set_member($key){
+
+    function count_of_set_member($key)
+    {
         return $this->redis_instance->sCard($key);
     }
 }

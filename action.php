@@ -2,9 +2,6 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!--    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">-->
-    <!--    <script src="./lib/jquery/dist/jquery.min.js"></script>-->
-    <!--    <script src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
 </head>
 <?php
 require './helpers/global_helper.php';
@@ -12,10 +9,9 @@ require './model/news_model.class.php';
 require './model/user_model.class.php';
 require './model/tag_model.class.php';
 require './model/news_like_info.class.php';
-//require './cache/base_cache.class.php';
 require './cache/news_like_info.cache.php';
 require './model/news_comment_model.class.php';
-include '/var/www/article.ssssdy.top/lib/weather/get_weather_info_from_api.php';
+include './lib/weather/get_weather_info_from_api.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
@@ -232,17 +228,21 @@ switch ($_GET["action"]) {
 
         //用redis做缓存
         $news_like_cache->be_liked_news_add($news_id);//存放所有被赞的new_id集合
-        $name_of_news_like_id = "like_news_user_set:$news_id";
-        $check_be_liked = $news_like_cache->check_news_be_liked($name_of_news_like_id,$user_id);
-        if($check_be_liked == 1){
+        $name_of_news_like_id = "like_news_user_set:".$news_id;
+        $check_be_liked = $news_like_cache->check_news_be_liked($name_of_news_like_id, $user_id);
+        if (empty($user_id)) {
+            echo "请先登录!";
+            exit;
+        }
+        if ($check_be_liked == 1) {
             echo "您已经赞过！";
             exit;
         }
-        $news_like_cache->like_news_user_add($name_of_news_like_id,$user_id);//某被赞的文章集合中加入用户
-        $news_like_info_key = $create_time.$news_id.$user_name.$user_id;// 缓存news_like_info的hash表名
-        $insert_result =$news_like_cache->insert_news_like_info_hash($news_like_info_key,$news_like_arr);
-        if($insert_result){
-            $count_news_like =$news_like_cache->count_of_news_like($name_of_news_like_id);
+        $news_like_cache->like_news_user_add($name_of_news_like_id, $user_id);//某被赞的文章集合中加入用户
+        $news_like_info_key = $create_time . $news_id . $user_name . $user_id;// 缓存news_like_info的hash表名
+        $insert_result = $news_like_cache->insert_news_like_info_hash($news_like_info_key, $news_like_arr);
+        if ($insert_result) {
+            $count_news_like = $news_like_cache->count_of_news_like($name_of_news_like_id);
             echo $count_news_like;
         }
         break;

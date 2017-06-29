@@ -1,6 +1,6 @@
 <?php
 require_once '/var/www/article.ssssdy.top/config/config.php';
-
+//require_once CONFIG_PATH . 'config.php';
 class Base_Model
 {
     private $host_name = HOST;

@@ -1,6 +1,6 @@
 <?php
 require_once 'base_cache.class.php';
-include '/var/www/article.ssssdy.top/lib/weather/get_weather_info_from_api.php';
+include LIB_PATH . 'weather/get_weather_info_from_api.php';
 
 class Weather_Cache extends Base_Cache
 {

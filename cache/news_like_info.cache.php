@@ -28,7 +28,7 @@ class News_Like_Cache extends Base_Cache
     function insert_news_like_info_hash($key, $array)
     {
 
-        return $this->hm_set($key, $array, 18000);
+        return $this->hm_set($key, $array, ONE_MONTH);
 
     }
 

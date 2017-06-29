@@ -83,7 +83,7 @@
                 $real_news_list_info = $real_news_model->get_real_time_news();
                 $num = count($real_news_list_info);
                 for ($i = 0; $i < $num; $i++) {
-                    $redis->r_push('real_news', $real_news_list_info[$i]['content'], SURVIVAL_TIME_OF_NEWS);
+                    $redis->r_push('real_news', $real_news_list_info[$i]['content'], ONE_DAY);
                 }
             }
             $list_length = $redis->list_length('real_news');

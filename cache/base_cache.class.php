@@ -1,4 +1,5 @@
 <?php
+require_once '/var/www/article.ssssdy.top/config/config.php';
 
 /**
  * Created by PhpStorm.
@@ -49,10 +50,11 @@ class Base_Cache
 
     function r_push($key, $value, $timeout = 0)
     {
-        $this->redis_instance->rpush($key, $value);
+        $rs = $this->redis_instance->rpush($key, $value);
         if ($timeout > 0) {
             $this->redis_instance->expire($key, $timeout);
         }
+        return $rs;
     }
 
     function l_range($key, $start, $end)
@@ -74,14 +76,18 @@ class Base_Cache
         return $res;
     }
 
-    function hm_get($key, $field)
+    function hm_get($key, $array)
     {
-        return $this->redis_instance->hmget($key, $field);
+        $value = [];
+        foreach ($array as $field) {
+            $value[] = $this->redis_instance->hGet($key, $field);
+        }
+        return $value;
     }
 
-    function h_get($table_name, $field)
+    function h_get($key, $field)
     {
-        return $this->redis_instance->hget($table_name, $field);
+        return $this->redis_instance->hget($key, $field);
     }
 
     function delete($key)

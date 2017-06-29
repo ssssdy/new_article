@@ -43,6 +43,7 @@
                 require './cache/user_access_time_cache.php';
                 require './cache/news_details_cache.php';
                 require './cache/news_like_info.cache.php';
+                require './cache/news_comment_cache.php';
                 check_login();
                 ?>
             </ul>
@@ -89,7 +90,6 @@
                         <?php
                         $redis = new Access_time_Cache();
                         $news_details_cache = new News_Details_Cache();
-                        echo $_SESSION['user_id'];
                         echo "当前用户IP:" . $_SERVER['REMOTE_ADDR'] . "<br>";
                         $redis->access_limit($_SERVER['REMOTE_ADDR']);
                         $count = $redis->increase_access_time($_SERVER['REMOTE_ADDR']);
@@ -114,8 +114,8 @@
                         <p style="font-size: 17px"><?= $news_info_redis['content'] ?></p>
                         <button class="btn btn-primary btn-xs" onclick="a();" id="good">赞一个
                             <?php
-//                            $news_like_model = new News_Like_Model();
-//                            $num = $news_like_model->num_of_news_like($news_id);
+                            //                            $news_like_model = new News_Like_Model();
+                            //                            $num = $news_like_model->num_of_news_like($news_id);
                             $news_like_cache = new News_Like_Cache();
                             $name_of_news_like_id = "like_news_user_set:$news_id";
                             $num = $news_like_cache->count_of_news_like($name_of_news_like_id);
@@ -131,14 +131,24 @@
                             <p>发表评论</p>
                             <div style="float: right;color: red" id="message"></div>
                             <textarea id="txt" name="comment_text" class="form-control" rows="3" title=""></textarea>
-                            <p class="text-right"><input class="btn btn-primary btn-xs" id="add" type="submit" value="提交"/></p>
+                            <p class="text-right"><input class="btn btn-primary btn-xs" id="add" type="submit"
+                                                         value="提交"/></p>
                         </div>
                         <div id="comments">
                             <h4>评论列表</h4>
                             <?php
-                            $news_comment_model = new News_comment_Model();
-                            $comments = $news_comment_model->get_comment($news_id);
-                            foreach ($comments as $news_comment) {
+                            //$news_comment_model = new News_comment_Model();
+                            //$comments = $news_comment_model->get_comment($news_id);
+                            //foreach ($comments as $news_comment) {
+                            //echo "<dl>";
+                            //echo "<dt class='comment_head'><span class='user_name'>昵称:" . $news_comment['user_name'] . "</span>  <span>评论时间:" . $news_comment['create_time'] . "</span></dt>";
+                            //echo "<dt class='comment_body'>" . $news_comment['comment'] . "</dt>";
+                            //echo "</dl>";
+                            //}
+                            $news_comment_cache = new News_Comment_Cache();
+                            $comment_info_list_json = $news_comment_cache->get_comment_info($news_id);
+                            foreach ($comment_info_list_json as $news_comment_info) {
+                                $news_comment= json_decode($news_comment_info,true);
                                 echo "<dl>";
                                 echo "<dt class='comment_head'><span class='user_name'>昵称:" . $news_comment['user_name'] . "</span>  <span>评论时间:" . $news_comment['create_time'] . "</span></dt>";
                                 echo "<dt class='comment_body'>" . $news_comment['comment'] . "</dt>";

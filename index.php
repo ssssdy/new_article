@@ -111,7 +111,7 @@
                         $news_info_list = $news_model->get_all_news_info();
                         $num = count($news_info_list);
                         foreach ($news_info_list as $news_info) {
-                            $redis->r_push('news_list', json_encode($news_info), SURVIVAL_TIME_OF_NEWS);
+                            $redis->r_push('news_list', json_encode($news_info), ONE_DAY);
                         }
                     }
                     $list_length = $redis->list_length('news_list');

@@ -15,7 +15,7 @@ class News_Details_Cache extends Base_Cache
         $news_info = $this->get($news_id);
         if ($news_info == null) {
             $news_info = $news_model->get_one_news_info($news_id);
-            $this->set($news_id, json_encode($news_info), SURVIVAL_TIME_OF_NEWS);
+            $this->set($news_id, json_encode($news_info), ONE_DAY);
             $news_info = $this->get($news_id);
             echo "先存后取";
         } else {

@@ -10,15 +10,17 @@ require './model/user_model.class.php';
 require './model/tag_model.class.php';
 require './model/news_like_info.class.php';
 require './cache/news_like_info.cache.php';
+require './cache/news_comment_cache.php';
 require './model/news_comment_model.class.php';
 include './lib/weather/get_weather_info_from_api.php';
 $news_model = new News_model();
 $tag_model = new Tag_Model();
 $user_model = new User_Model();
 $news_comment_model = new News_comment_Model();
-$news_like_model = new News_Like_Model();
+//$news_like_model = new News_Like_Model();
 $redis = new Base_Cache();
 $news_like_cache = new News_Like_Cache();
+$news_comment_cache = new News_Comment_Cache();
 switch ($_GET["action"]) {
     case "add":
         $tag_id = $_POST["tag_id"];
@@ -228,7 +230,7 @@ switch ($_GET["action"]) {
 
         //用redis做缓存
         $news_like_cache->be_liked_news_add($news_id);//存放所有被赞的new_id集合
-        $name_of_news_like_id = "like_news_user_set:".$news_id;
+        $name_of_news_like_id = "like_news_user_set:" . $news_id;
         $check_be_liked = $news_like_cache->check_news_be_liked($name_of_news_like_id, $user_id);
         if (empty($user_id)) {
             echo "请先登录!";
@@ -252,6 +254,7 @@ switch ($_GET["action"]) {
         $user_name = htmlspecialchars(trim($_POST['user_name']));
         $create_time = date("Y-m-d H:i:s", time());
         $comment = htmlspecialchars(trim($_POST['txt']));
+        $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'comment' => $comment, 'create_time' => $create_time);
         if (empty($user_id)) {
             echo "请先登录!";
             exit;
@@ -262,20 +265,16 @@ switch ($_GET["action"]) {
         }
 
         // 存入mysql
-
-        $comment_arr = array('news_id' => $news_id, 'user_id' => $user_id, 'user_name' => $user_name, 'comment' => $comment, 'create_time' => $create_time);
-        $res = $news_comment_model->insert($comment_arr, 'news_comment');
-        if ($res) {
-            echo "发表成功!";
-        }
+//        $res = $news_comment_model->insert($comment_arr, 'news_comment');
+//        if ($res) {
+//            echo "发表成功!";
+//        }
 
         //存入缓存
-
-        break;
-    case "get_comment":
-        $news_id = $_SESSION['news_id'];
-        $comment = $news_comment_model->get_comment($news_id);
-        echo json_encode($comment);
+        $insert_comment_result = $news_comment_cache->insert_news_comment($news_id, $comment_arr);
+        if ($insert_comment_result) {
+            echo "发表成功";
+        }
         break;
 }
 ?>

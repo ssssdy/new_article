@@ -64,6 +64,6 @@ function area_to_id($city_name)
     $data = json_decode($out_put_info, true);
     $city_id = $data['showapi_res_body']['list']['0']['cityInfo']['c1'];
     $redis = new Base_Cache();
-    $redis->set($city_name, $city_id, SURVIVAL_TIME_OF_CITY_NAME);
+    $redis->set($city_name, $city_id, ONE_MONTH);
     return $city_id;
 }

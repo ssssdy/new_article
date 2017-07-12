@@ -1,0 +1,27 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+‘.idea’
+/lib/login/
+
+/test
+/lib/php-sdk-7.1.3/
+/lib/qiniu_ueditor/
+/log/
+/static/备份index.php
+
+将删除 static/test.php
+/helpers/sort_and_search.php
+/wx/
+将忽略仓库 wx/
+/upload_image.php
+/test_index.php
+/test_area_to_id.php
+/lib/bootstrap-3.3.7-dist/
+

@@ -14,6 +14,7 @@ class Access_time_Cache extends Base_Cache
         return $this->z_increase_by($key, intval(1), $ip);
     }
 
+
     function get_access_time_range()
     {
         return $this->z_rev_range('access_times_rank', 0, -1, true);

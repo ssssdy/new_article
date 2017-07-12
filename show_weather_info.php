@@ -38,7 +38,6 @@
                 require './model/news_model.class.php';
                 require './model/user_model.class.php';
                 require './model/tag_model.class.php';
-//                require './cache/base_cache.class.php';
                 require './cache/weather_cache.php';
                 check_login();
                 ?>
